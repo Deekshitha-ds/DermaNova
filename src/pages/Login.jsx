@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import GlassCard from "../components/GlassCard.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -10,7 +11,7 @@ export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const redirectTo = location.state?.from?.pathname || "/dashboard";
 
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -63,17 +64,33 @@ export default function Login() {
                 Forgot password?
               </Link>
             </div>
+            <div className="relative w-full">
+
             <input
               id="password"
               name="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               required
               autoComplete="current-password"
               value={form.password}
               onChange={handleChange}
-              className="glass-input"
+              className="glass-input w-full pr-12"
               placeholder="••••••••"
             />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? (
+                <HiOutlineEyeOff className="w-5 h-5" />
+              ) : (
+                <HiOutlineEye className="w-5 h-5" />
+              )}
+            </button>
+
+          </div>
           </div>
 
           <button type="submit" disabled={isSubmitting} className="btn-primary w-full mt-2">

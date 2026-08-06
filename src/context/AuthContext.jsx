@@ -13,6 +13,8 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem("dermanova_access_token");
     if (!token) {
       setIsLoading(false);
+      console.log("AuthContext user:", user);
+      console.log("isAuthenticated:", !!user);
       return;
     }
     getCurrentUser()
@@ -26,10 +28,12 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
   const { data } = await loginUser({ email, password });
+  console.log("Login response:", data);
 
   localStorage.setItem("dermanova_access_token", data.access_token);
 
   const me = await getCurrentUser();
+  console.log("Current user:", me.data);
 
   setUser(me.data);
 
@@ -38,11 +42,11 @@ export function AuthProvider({ children }) {
 
   const register = async (payload) => {
   const { data } = await registerUser(payload);
-
+  console.log("Register response:", data);
   localStorage.setItem("dermanova_access_token", data.access_token);
 
   const me = await getCurrentUser();
-
+  console.log("Current user after register:", me.data);
   setUser(me.data);
 
   return me.data;

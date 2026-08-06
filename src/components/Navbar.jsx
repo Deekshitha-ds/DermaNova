@@ -44,7 +44,7 @@ export default function Navbar() {
           {isAuthenticated ? (
             <>
               <span className="hidden sm:block text-sm font-medium text-ink/70">
-                Hi, {user?.full_name?.split(" ")[0]}
+                Hello ,{user?.name?.split(" ")[0]}
               </span>
               <button
                 onClick={() => {

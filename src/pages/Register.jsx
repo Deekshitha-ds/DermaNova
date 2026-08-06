@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import GlassCard from "../components/GlassCard.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
-const initialForm = { full_name: "", email: "", password: "", confirm_password: "" };
+
+const initialForm = { name: "", email: "", password: "", confirm_password: "" };
 
 export default function Register() {
   const { register } = useAuth();
@@ -11,6 +13,8 @@ export default function Register() {
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
@@ -30,7 +34,7 @@ export default function Register() {
     setIsSubmitting(true);
     try {
       await register({
-        full_name: form.full_name,
+        name: form.name,
         email: form.email,
         password: form.password
       });
@@ -56,10 +60,10 @@ export default function Register() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="full_name" className="block text-sm font-medium mb-1.5">Full name</label>
+            <label htmlFor="name" className="block text-sm font-medium mb-1.5">Full name</label>
             <input
-              id="full_name" name="full_name" required
-              value={form.full_name} onChange={handleChange}
+              id="name" name="name" required
+              value={form.name} onChange={handleChange}
               className="glass-input" placeholder="Ananya Rao"
             />
           </div>
@@ -74,19 +78,62 @@ export default function Register() {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="password" className="block text-sm font-medium mb-1.5">Password</label>
+              <div className="relative">
+
               <input
-                id="password" name="password" type="password" required autoComplete="new-password"
-                value={form.password} onChange={handleChange}
-                className="glass-input" placeholder="••••••••"
-              />
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  autoComplete="new-password"
+                  value={form.password}
+                  onChange={handleChange}
+                  className="glass-input pr-10"
+                  placeholder="••••••••"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                >
+                  {showPassword ? (
+                    <HiOutlineEyeOff size={20} />
+                  ) : (
+                    <HiOutlineEye size={20} />
+                  )}
+                </button>
+
+              </div>
             </div>
             <div>
               <label htmlFor="confirm_password" className="block text-sm font-medium mb-1.5">Confirm</label>
+              <div className="relative">
+
               <input
-                id="confirm_password" name="confirm_password" type="password" required
-                value={form.confirm_password} onChange={handleChange}
-                className="glass-input" placeholder="••••••••"
-              />
+                  id="confirm_password"
+                  name="confirm_password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  required
+                  value={form.confirm_password}
+                  onChange={handleChange}
+                  className="glass-input pr-10"
+                  placeholder="••••••••"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                >
+                  {showConfirmPassword ? (
+                    <HiOutlineEyeOff size={20} />
+                  ) : (
+                    <HiOutlineEye size={20} />
+                  )}
+                </button>
+
+              </div>
             </div>
           </div>
 
