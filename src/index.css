@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display text-ink;
+  }
+  /* Visible keyboard focus everywhere — accessibility floor, not optional */
+  :focus-visible {
+    outline: 2px solid theme("colors.lavender.500");
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Signature glass surface used by every card in the app */
+  .glass-panel {
+    @apply bg-white/50 backdrop-blur-glass border border-white/70 rounded-glass shadow-glass;
+  }
+
+  .glass-input {
+    @apply w-full bg-white/60 border border-lavender-100 rounded-xl px-4 py-3
+           text-ink placeholder:text-ink/40 outline-none transition
+           focus:border-lavender-500 focus:bg-white/90;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3
+           font-body font-semibold text-white
+           bg-gradient-to-r from-lavender-500 to-petal-500
+           shadow-glow transition hover:brightness-105 active:scale-[0.98]
+           disabled:opacity-40 disabled:pointer-events-none;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3
+           font-body font-semibold text-lavender-700 bg-white/60 border border-lavender-100
+           transition hover:bg-white/90 disabled:opacity-40 disabled:pointer-events-none;
+  }
+
+  .eyebrow {
+    @apply font-mono text-xs tracking-[0.2em] uppercase text-lavender-700/80;
+  }
+}
+@keyframes scanLaser {
+
+    0% {
+        top: 15%;
+        opacity: .2;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 85%;
+        opacity: .2;
+    }
+
+}
+
+.animate-scanLaser{
+
+    animation:scanLaser 2s linear infinite;
+
+}
