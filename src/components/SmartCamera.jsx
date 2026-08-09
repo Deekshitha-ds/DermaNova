@@ -15,11 +15,12 @@ import {
 
 const HOLD_DURATION_MS = 1200;
 
-export default function SmartCamera({ onResult }) {
+export default function SmartCamera({ onResult,autoUpload = false, uploadOnly = false }) {
 
   /* ---------------- REFS ---------------- */
 
   const videoRef = useRef(null);
+  const streamRef = useRef(null);
   const overlayCanvasRef = useRef(null);
   const captureCanvasRef = useRef(null);
   const containerRef = useRef(null);
@@ -59,49 +60,69 @@ export default function SmartCamera({ onResult }) {
 
   useEffect(() => {
 
-    let stream;
+  if (uploadOnly) return;
 
-    async function openCamera() {
+  let stream;
+ 
+  async function openCamera() {
 
-      try {
+    try {
 
-        stream = await navigator.mediaDevices.getUserMedia({
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: "user",
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: false
+      });
 
-          video: {
+      streamRef.current = stream;
 
-            facingMode: "user",
-
-            width: { ideal: 1280 },
-
-            height: { ideal: 720 }
-
-          },
-
-          audio: false
-
-        });
-
+      if (videoRef.current) {
         videoRef.current.srcObject = stream;
 
+        await videoRef.current.play().catch(() => {});
       }
 
-      catch {
+    } catch (error) {
 
-        setCameraError("Unable to access camera.");
+      console.error("CAMERA ERROR:", error);
 
-      }
+      setCameraError("Unable to access camera.");
 
     }
 
-    openCamera();
+  }
 
-    return () => {
+  openCamera();
 
-      stream?.getTracks().forEach(track => track.stop());
+  return () => {
 
-    };
+    if (streamRef.current) {
 
-  }, []);
+      streamRef.current
+        .getTracks()
+        .forEach(track => track.stop());
+
+      streamRef.current = null;
+
+    }
+
+  };
+
+}, [uploadOnly]);
+useEffect(() => {
+
+  if (!autoUpload) return;
+
+  const timer = setTimeout(() => {
+    fileInputRef.current?.click();
+  }, 300);
+
+  return () => clearTimeout(timer);
+
+}, [autoUpload]);
 
   /* ---------------- VIDEO SIZE ---------------- */
 
@@ -121,48 +142,50 @@ export default function SmartCamera({ onResult }) {
 
   /* ---------------- CAPTURE FRAME ---------------- */
 
-  const captureFrame = useCallback(() => {
+  const captureFrame = useCallback(async () => {
+  const video = videoRef.current;
+  const canvas = captureCanvasRef.current;
 
-    const video = videoRef.current;
+  if (!video || !canvas) {
+    throw new Error("Camera or canvas is not available.");
+  }
 
-    const canvas = captureCanvasRef.current;
+  if (!video.videoWidth || !video.videoHeight) {
+    throw new Error("Camera video is not ready.");
+  }
 
-    canvas.width = video.videoWidth;
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
 
-    canvas.height = video.videoHeight;
+  const ctx = canvas.getContext("2d");
 
-    const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("Could not get canvas context.");
+  }
 
-    ctx.drawImage(
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
 
-      video,
+  const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
 
-      0,
+  if (!dataUrl || dataUrl === "data:,") {
+    throw new Error("Could not create image from camera.");
+  }
 
-      0,
+  const response = await fetch(dataUrl);
+  const blob = await response.blob();
 
-      canvas.width,
+  if (!blob || blob.size === 0) {
+    throw new Error("Captured image is empty.");
+  }
 
-      canvas.height
-
-    );
-
-    return new Promise(resolve => {
-
-      canvas.toBlob(
-
-        blob => resolve(blob),
-
-        "image/jpeg",
-
-        0.95
-
-      );
-
-    });
-
-  }, []);
-
+  return blob;
+}, []);
   /* ---------------- SEND TO BACKEND ---------------- */
 
   const handleCapture = useCallback(async () => {
@@ -180,6 +203,7 @@ export default function SmartCamera({ onResult }) {
     try {
 
       const blob = await captureFrame();
+
       setCapturedImage(URL.createObjectURL(blob));
       const faceMeta = {
 
@@ -219,18 +243,27 @@ setPhase("result");
     }
 
     catch (err) {
+  console.error("SKIN ANALYSIS ERROR:", err);
 
-      setSubmitError(
+  const backendError = err.response?.data?.detail;
 
-        err.response?.data?.message ||
+  let errorMessage = "Analysis failed.";
 
-        "Analysis failed."
+  if (Array.isArray(backendError)) {
+    errorMessage = backendError
+      .map((item) => item.msg || JSON.stringify(item))
+      .join(", ");
+  } else if (typeof backendError === "string") {
+    errorMessage = backendError;
+  } else if (err.response?.data?.message) {
+    errorMessage = err.response.data.message;
+  } else if (err.message) {
+    errorMessage = err.message;
+  }
 
-      );
-
-      setPhase("scanning");
-
-    }
+  setSubmitError(errorMessage);
+  setPhase("scanning");
+}
 
     finally {
 
@@ -538,8 +571,13 @@ const handleImageUpload = async (event) => {
   const file = event.target.files[0];
 
   if (!file) return;
-  setCapturedImage(URL.createObjectURL(file));
 
+  if (!(file instanceof Blob)) {
+    setSubmitError("Invalid image file.");
+    return;
+  }
+
+  setCapturedImage(URL.createObjectURL(file));
   try {
 
     setPhase("uploading");
@@ -565,19 +603,47 @@ const handleImageUpload = async (event) => {
 
   setPhase("result");
 
-}catch {
+}catch (err) {
+  console.error("IMAGE ANALYSIS ERROR:", err);
 
-    setSubmitError(
-      "Unable to analyze image."
-    );
+  const backendError = err.response?.data?.detail;
 
-    setPhase("scanning");
+  let errorMessage = "Unable to analyze image.";
 
+  if (Array.isArray(backendError)) {
+    errorMessage = backendError
+      .map((item) => item.msg || JSON.stringify(item))
+      .join(", ");
+  } else if (typeof backendError === "string") {
+    errorMessage = backendError;
+  } else if (err.response?.data?.message) {
+    errorMessage = err.response.data.message;
+  } else if (err.message) {
+    errorMessage = err.message;
   }
+
+  setSubmitError(errorMessage);
+  setPhase("scanning");
+}
 
 };
 return (
   <div className="w-full">
+  {uploadOnly ? (
+  <div className="min-h-[300px] flex flex-col items-center justify-center text-center">
+
+    <div className="w-12 h-12 rounded-full border-4 border-lavender-200 border-t-lavender-700 animate-spin mb-4" />
+
+    <p className="text-lg font-semibold">
+      Select an image
+    </p>
+
+    <p className="text-sm text-ink/50 mt-1">
+      Choose a clear, front-facing photo of your face.
+    </p>
+
+  </div>
+) : (
 
     <div
       ref={containerRef}
@@ -603,11 +669,10 @@ return (
 ) : (
 
 <img
-    src={processedImage || capturedImage}
-    alt="Analysis Result"
-    className="absolute inset-0 w-full h-full object-cover scale-x-[-1]"
+  src={capturedImage}
+  alt="Uploaded face"
+  className="absolute inset-0 w-full h-full object-cover"
 />
-
 )}
 
 </div>
@@ -616,21 +681,39 @@ return (
       className="absolute top-5 right-5 bg-white rounded-lg px-4 py-2 shadow-lg hover:bg-gray-100 transition"
       onClick={() => {
 
-        setCapturedImage(null);
+  setCapturedImage(null);
+  setProcessedImage(null);
+  setResult(null);
 
-        setHoldProgress(0);
+  setHoldProgress(0);
+  holdStartRef.current = null;
 
-        holdStartRef.current = null;
+  setSubmitError("");
 
-        setSubmitError("");
+  setPhase("scanning");
 
-        setPhase("scanning");
+  // Reconnect camera stream to the newly created video element
+  setTimeout(() => {
 
-        if (onResult) {
-          onResult(null);
-        }
+    if (
+      videoRef.current &&
+      streamRef.current
+    ) {
 
-      }}
+      videoRef.current.srcObject =
+        streamRef.current;
+
+      videoRef.current.play().catch(() => {});
+
+    }
+
+  }, 100);
+
+  if (onResult) {
+    onResult(null);
+  }
+
+}}
     >
       Scan Again
     </button>
@@ -742,37 +825,13 @@ return (
 
       )}
 
-      {/* Capture */}
+      
 
-      <button
+    
 
-        onClick={handleCapture}
-
-        disabled={!detection.isReady || phase === "uploading"}
-
-        className="absolute bottom-6 right-6 w-16 h-16 rounded-full bg-white shadow-xl flex items-center justify-center hover:scale-105 transition"
-
-      >
-
-        <HiOutlineCamera size={28} />
-
-      </button>
-
-      {/* Upload */}
-
-      <button
-
-        onClick={() => fileInputRef.current.click()}
-
-        className="absolute bottom-6 left-6 w-16 h-16 rounded-full bg-white shadow-xl flex items-center justify-center hover:scale-105 transition"
-
-      >
-
-        <HiOutlinePhotograph size={28} />
-
-      </button>
-
+      
     </div>
+)}
 
     {/* Hidden upload */}
 

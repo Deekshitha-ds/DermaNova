@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import GlassCard from "../components/GlassCard.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
-import { HiOutlineCamera } from "react-icons/hi";
+import { HiOutlineCamera,HiOutlinePhotograph } from "react-icons/hi";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -17,9 +17,25 @@ export default function Dashboard() {
         <GlassCard>
           <p className="eyebrow mb-2">Skin</p>
           <p className="text-ink/60 mb-4">No scan yet this week.</p>
-          <Link to="/scan/skin" className="btn-primary text-sm">
-            <HiOutlineCamera /> Scan my skin
-          </Link>
+          <div className="flex items-center gap-4">
+
+  <Link
+    to="/scan/skin"
+    className="btn-primary text-sm"
+  >
+    <HiOutlineCamera />
+    Scan my skin
+  </Link>
+
+  <Link
+    to="/scan/skin?upload=true"
+    className="btn-primary text-sm"
+    >
+    <HiOutlinePhotograph size={20} />
+    Upload an image
+  </Link>
+
+</div>
         </GlassCard>
         <GlassCard>
           <p className="eyebrow mb-2">Hair</p>
