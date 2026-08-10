@@ -77,3 +77,210 @@
     animation:scanLaser 2s linear infinite;
 
 }
+/* ==============================
+   DERMANOVA LUXURY LOGO
+============================== */
+
+.premium-logo {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Luxury circular glass */
+
+.premium-logo-orb {
+  position: relative;
+
+  width: 52px;
+  height: 52px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at 32% 25%,
+      rgba(255,255,255,0.98),
+      rgba(248,241,255,0.92) 45%,
+      rgba(239,224,250,0.88) 100%
+    );
+
+  border: 1px solid rgba(255,255,255,0.95);
+
+  box-shadow:
+    0 5px 20px rgba(107,78,145,0.13),
+    inset 0 1px 3px rgba(255,255,255,1);
+
+  overflow: hidden;
+
+  transition:
+    transform 0.5s cubic-bezier(.22,1,.36,1),
+    box-shadow 0.5s ease;
+}
+
+
+/* Logo */
+
+.premium-logo-image {
+  width: 39px;
+  height: 39px;
+
+  object-fit: contain;
+
+  position: relative;
+  z-index: 2;
+
+  transition:
+    transform 0.5s cubic-bezier(.22,1,.36,1),
+    filter 0.5s ease;
+}
+
+
+/* ==============================
+   MOVING LIGHT
+============================== */
+
+.logo-reflection {
+  position: absolute;
+
+  top: -30%;
+  left: -80%;
+
+  width: 45%;
+  height: 160%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,0.75),
+      transparent
+    );
+
+  transform: rotate(25deg);
+
+  opacity: 0;
+
+  z-index: 3;
+
+  pointer-events: none;
+}
+
+
+/* ==============================
+   HOVER
+============================== */
+
+.premium-logo:hover .premium-logo-orb {
+
+  transform: scale(1.06);
+
+  box-shadow:
+    0 8px 30px rgba(107,78,145,0.18),
+    0 0 25px rgba(207,165,225,0.18),
+    inset 0 1px 4px rgba(255,255,255,1);
+}
+
+
+.premium-logo:hover .premium-logo-image {
+
+  transform: scale(1.04);
+
+  filter:
+    drop-shadow(
+      0 0 7px
+      rgba(154,119,205,0.35)
+    );
+}
+
+
+.premium-logo:hover .logo-reflection {
+
+  animation:
+    luxuryShine 0.9s
+    cubic-bezier(.4,0,.2,1)
+    forwards;
+}
+
+
+@keyframes luxuryShine {
+
+  0% {
+    left: -80%;
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 0.7;
+  }
+
+  100% {
+    left: 140%;
+    opacity: 0;
+  }
+}
+
+
+/* ==============================
+   SINGLE PREMIUM SPARKLE
+============================== */
+
+.logo-star {
+
+  position: absolute;
+
+  top: -4px;
+  right: -3px;
+
+  font-size: 12px;
+
+  color: #c58bb8;
+
+  opacity: 0;
+
+  transform: scale(0.4);
+
+  pointer-events: none;
+
+  text-shadow:
+    0 0 5px rgba(235,181,215,0.7),
+    0 0 12px rgba(185,150,225,0.45);
+}
+
+
+.premium-logo:hover .logo-star {
+
+  animation:
+    luxurySparkle
+    0.8s
+    ease-out
+    0.15s
+    forwards;
+}
+
+
+@keyframes luxurySparkle {
+
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-20deg);
+  }
+
+  45% {
+    opacity: 1;
+    transform: scale(1.15) rotate(0);
+  }
+
+  100% {
+    opacity: 0.7;
+    transform: scale(0.9) rotate(5deg);
+  }
+}

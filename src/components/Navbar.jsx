@@ -17,10 +17,31 @@ export default function Navbar() {
   return (
     <header className="sticky top-4 z-40 mx-4 md:mx-8">
       <nav className="glass-panel !rounded-full flex items-center justify-between px-5 py-3">
-        <NavLink to="/" className="flex items-center gap-2 font-display text-lg font-semibold text-lavender-900">
-          <HiOutlineSparkles className="text-petal-500" />
-          DermaNova <span className="text-lavender-500">AI</span>
-        </NavLink>
+       
+  <NavLink
+  to="/"
+  className="flex items-center gap-3 group"
+>
+  <div className="premium-logo">
+  <div className="premium-logo-orb">
+    <img
+      src="/logo3.png"
+      alt="DermaNova AI"
+      className="premium-logo-image"
+    />
+
+    <span className="logo-reflection"></span>
+  </div>
+
+  <span className="logo-star">✦</span>
+</div>
+
+  <span className="font-display text-xl font-semibold tracking-tight">
+    <span className="text-[#4b3288]">DermaNova</span>{" "}
+    <span className="text-[#a68be8]">AI</span>
+  </span>
+</NavLink>
+         
 
         {isAuthenticated && (
           <div className="hidden md:flex items-center gap-1">

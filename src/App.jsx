@@ -14,6 +14,7 @@ export default function App() {
       <AmbientBackground />
       <Navbar />
       <main>
+      
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
