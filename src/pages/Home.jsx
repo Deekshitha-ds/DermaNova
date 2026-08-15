@@ -30,7 +30,7 @@ export default function Home() {
       </motion.p>
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
-        <Link to="/register" className="btn-primary text-base px-8 py-3.5">
+        <Link to="/scan/skin" className="btn-primary text-base px-8 py-3.5">
           <HiOutlineSparkles /> Start your free scan
         </Link>
       </motion.div>
