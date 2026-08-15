@@ -389,3 +389,33 @@
   color: #8b6bc4;
   transform: translateX(4px);
 }
+
+.footer {
+  position: relative;
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.footer:hover {
+  border-color: rgba(216, 180, 254, 0.7);
+
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.2),
+    0 0 18px rgba(196, 181, 253, 0.35),
+    0 0 35px rgba(167, 139, 250, 0.15);
+}
+.glass-panel {
+  position: relative;
+  transition: all 0.35s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(221, 214, 254, 0.9);
+
+  box-shadow:
+    0 0 5px rgba(255, 255, 255, 0.35),
+    0 0 12px rgba(196, 181, 253, 0.5),
+    0 0 30px rgba(167, 139, 250, 0.22),
+    inset 0 0 15px rgba(196, 181, 253, 0.06);
+}
