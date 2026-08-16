@@ -572,3 +572,869 @@
     transform: rotate(360deg) translateX(30px) rotate(-360deg);
   }
 }
+/* ================================
+   DERMANOVA WEB LOADER
+================================ */
+
+.web-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(124, 92, 255, 0.12),
+      transparent 35%
+    ),
+    #08070d;
+
+  color: white;
+}
+
+/* ---------------- GLOW ---------------- */
+
+.web-loader-glow {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+
+  border-radius: 50%;
+
+  filter: blur(100px);
+
+  pointer-events: none;
+}
+
+.web-loader-glow-1 {
+  background: rgba(139, 92, 246, 0.12);
+
+  animation: loaderGlowOne 5s ease-in-out infinite;
+}
+
+.web-loader-glow-2 {
+  background: rgba(217, 180, 255, 0.08);
+
+  animation: loaderGlowTwo 6s ease-in-out infinite;
+}
+
+/* ---------------- CORE ---------------- */
+
+.web-loader-core {
+  position: relative;
+
+  width: 150px;
+  height: 150px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Inner glass sphere */
+
+.web-loader-inner {
+  position: relative;
+  z-index: 5;
+
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,0.14),
+      rgba(255,255,255,0.03)
+    );
+
+  border: 1px solid rgba(255,255,255,0.2);
+
+  backdrop-filter: blur(15px);
+
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.25),
+    0 0 30px rgba(155,125,255,0.35),
+    0 0 80px rgba(155,125,255,0.15);
+
+  animation: loaderCore 2.5s ease-in-out infinite;
+}
+
+.web-loader-inner span {
+  font-family: serif;
+
+  font-size: 34px;
+  font-weight: 500;
+
+  letter-spacing: -0.05em;
+
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #c8b5ff,
+    #8b6cff
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------------- ORBITS ---------------- */
+
+.web-loader-orbit {
+  position: absolute;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(180,160,255,0.25);
+
+  transform-style: preserve-3d;
+}
+
+.orbit-1 {
+  width: 110px;
+  height: 110px;
+
+  border-top-color: rgba(190,170,255,0.9);
+
+  animation: orbitOne 3s linear infinite;
+}
+
+.orbit-2 {
+  width: 135px;
+  height: 70px;
+
+  border-right-color: rgba(190,170,255,0.8);
+
+  transform: rotateX(65deg);
+
+  animation: orbitTwo 2.5s linear infinite;
+}
+
+.orbit-3 {
+  width: 145px;
+  height: 85px;
+
+  border-left-color: rgba(255,255,255,0.7);
+
+  transform: rotateX(70deg) rotateY(35deg);
+
+  animation: orbitThree 4s linear infinite reverse;
+}
+
+/* ---------------- BRAND ---------------- */
+
+.web-loader-brand {
+  margin-top: 34px;
+
+  text-align: center;
+
+  animation: brandReveal 1.5s ease forwards;
+}
+
+.web-loader-brand h1 {
+  margin: 0;
+
+  font-family: sans-serif;
+
+  font-size: 27px;
+  font-weight: 500;
+
+  letter-spacing: 0.32em;
+
+  padding-left: 0.32em;
+
+  background: linear-gradient(
+    90deg,
+    #ffffff,
+    #cfc3ff,
+    #ffffff
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------------- SUBTITLE ---------------- */
+
+.web-loader-subtitle {
+  margin-top: 11px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 8px;
+
+  letter-spacing: 0.38em;
+
+  color: rgba(255,255,255,0.42);
+}
+
+.web-loader-subtitle span {
+  width: 18px;
+  height: 1px;
+
+  background: rgba(180,160,255,0.35);
+}
+
+/* ---------------- STATUS ---------------- */
+
+.web-loader-status {
+  position: absolute;
+
+  bottom: 48px;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  font-family: monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.2em;
+
+  color: rgba(255,255,255,0.3);
+
+  animation: statusFade 1.5s ease-in-out infinite;
+}
+
+.web-loader-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #a88cff;
+
+  box-shadow:
+    0 0 8px #a88cff,
+    0 0 15px #8b6cff;
+
+  animation: dotPulse 1s ease-in-out infinite;
+}
+
+/* ================================
+   ANIMATIONS
+================================ */
+
+@keyframes orbitOne {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbitTwo {
+  to {
+    transform: rotateX(65deg) rotateZ(360deg);
+  }
+}
+
+@keyframes orbitThree {
+  to {
+    transform: rotateX(70deg) rotateY(35deg) rotateZ(360deg);
+  }
+}
+
+@keyframes loaderCore {
+  0%, 100% {
+    transform: scale(0.95);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes loaderGlowOne {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 0.8;
+  }
+}
+
+@keyframes loaderGlowTwo {
+  0%, 100% {
+    transform: translate(30px, -20px);
+  }
+
+  50% {
+    transform: translate(-30px, 20px);
+  }
+}
+
+@keyframes brandReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    letter-spacing: 0.5em;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.32em;
+  }
+}
+
+@keyframes statusFade {
+  0%, 100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}/* =================================
+   DERMANOVA LIGHT LAVENDER LOADER
+================================= */
+
+.web-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(196, 181, 253, 0.30),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #faf9ff 0%,
+      #f5f1ff 45%,
+      #eee9ff 100%
+    );
+
+  color: #302a45;
+}
+
+
+/* =================================
+   BACKGROUND GLOW
+================================= */
+
+.web-loader-bg-glow {
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  border-radius: 50%;
+
+  background: rgba(167, 139, 250, 0.12);
+
+  filter: blur(90px);
+
+  animation: loaderBackgroundGlow 4s ease-in-out infinite;
+}
+
+
+/* =================================
+   MAIN ORB
+================================= */
+
+.web-loader-orb {
+  position: relative;
+
+  width: 150px;
+  height: 150px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* =================================
+   LOGO CONTAINER
+================================= */
+
+.web-loader-logo-wrap {
+  position: relative;
+  z-index: 5;
+
+  width: 76px;
+  height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.55);
+
+  border: 1px solid rgba(167, 139, 250, 0.25);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 10px 35px rgba(139, 92, 246, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
+
+  animation: logoFloat 2.8s ease-in-out infinite;
+}
+
+
+/* Actual logo */
+
+.web-loader-logo {
+  width: 52px;
+  height: 52px;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(0 4px 10px rgba(139, 92, 246, 0.18));
+
+  animation: logoPulse 2.8s ease-in-out infinite;
+}
+
+
+/* =================================
+   ORBIT RINGS
+================================= */
+
+.web-loader-ring {
+  position: absolute;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(139, 92, 246, 0.18);
+}
+
+
+/* First ring */
+
+.ring-one {
+  width: 105px;
+  height: 105px;
+
+  border-top-color: rgba(139, 92, 246, 0.65);
+
+  animation: ringRotate 3s linear infinite;
+}
+
+
+/* Second ring */
+
+.ring-two {
+  width: 135px;
+  height: 135px;
+
+  border-right-color: rgba(167, 139, 250, 0.55);
+
+  transform: rotateX(65deg);
+
+  animation: ringRotateTwo 4s linear infinite;
+}
+
+
+/* =================================
+   PARTICLES
+================================= */
+
+.loader-particle {
+  position: absolute;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #a78bfa;
+
+  box-shadow:
+    0 0 8px rgba(139, 92, 246, 0.55);
+
+  z-index: 6;
+}
+
+
+.particle-one {
+  top: 8px;
+  left: 68px;
+
+  animation: particleFloat 2s ease-in-out infinite;
+}
+
+
+.particle-two {
+  right: 8px;
+  top: 70px;
+
+  animation: particleFloat 2.4s ease-in-out infinite 0.3s;
+}
+
+
+.particle-three {
+  bottom: 12px;
+  left: 32px;
+
+  animation: particleFloat 2.2s ease-in-out infinite 0.6s;
+}
+
+
+.particle-four {
+  left: 5px;
+  top: 48px;
+
+  animation: particleFloat 2.6s ease-in-out infinite 0.9s;
+}
+
+
+/* =================================
+   BRAND
+================================= */
+
+.web-loader-content {
+  margin-top: 34px;
+
+  text-align: center;
+
+  animation: contentReveal 1s ease-out;
+}
+
+
+.web-loader-content h1 {
+  margin: 0;
+
+  font-size: 24px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.28em;
+
+  padding-left: 0.28em;
+
+  color: #342d4d;
+}
+
+
+.web-loader-content p {
+  margin-top: 9px;
+
+  font-size: 9px;
+
+  letter-spacing: 0.35em;
+
+  padding-left: 0.35em;
+
+  color: rgba(72, 62, 95, 0.48);
+}
+
+
+/* =================================
+   LOADING BAR
+================================= */
+
+.web-loader-track {
+  position: relative;
+
+  width: 150px;
+  height: 3px;
+
+  margin: 22px auto 0;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: rgba(139, 92, 246, 0.12);
+}
+
+
+.web-loader-bar {
+  position: absolute;
+
+  width: 45%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #a78bfa,
+    #c4b5fd,
+    transparent
+  );
+
+  animation: loadingSweep 1.4s ease-in-out infinite;
+}
+
+
+/* =================================
+   ANIMATIONS
+================================= */
+
+@keyframes ringRotate {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+@keyframes ringRotateTwo {
+
+  from {
+    transform: rotateX(65deg) rotateZ(0deg);
+  }
+
+  to {
+    transform: rotateX(65deg) rotateZ(360deg);
+  }
+
+}
+
+
+@keyframes logoFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+
+}
+
+
+@keyframes logoPulse {
+
+  0%,
+  100% {
+    transform: scale(0.96);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+
+}
+
+
+@keyframes particleFloat {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: translateY(-8px) scale(1.2);
+    opacity: 1;
+  }
+
+}
+
+
+@keyframes loaderBackgroundGlow {
+
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+
+}
+
+
+@keyframes contentReveal {
+
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+@keyframes loadingSweep {
+
+  0% {
+    transform: translateX(-150%);
+  }
+
+  100% {
+    transform: translateX(350%);
+  }
+
+}
+/* =================================
+   APP TRANSITION
+================================= */
+
+.app-hidden {
+  opacity: 0;
+}
+
+.app-visible {
+  opacity: 1;
+  animation: appReveal 0.8s ease-out;
+}
+
+@keyframes appReveal {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* =================================
+   LOADER EXIT
+================================= */
+
+.web-loader-exit {
+  animation: loaderDisappear 0.8s ease-in-out forwards;
+}
+
+.web-loader-exit .web-loader-logo-wrap {
+  animation: logoMoveToNavbar 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.web-loader-exit .web-loader-orb {
+  animation: orbExit 0.8s ease-in forwards;
+}
+
+.web-loader-exit .web-loader-content {
+  animation: contentExit 0.45s ease-out forwards;
+}
+
+
+/* Main loader fades away */
+
+@keyframes loaderDisappear {
+  0% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+
+/* Logo shrinks and travels upward */
+
+@keyframes logoMoveToNavbar {
+
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  45% {
+    transform: translate(0, -70px) scale(0.75);
+  }
+
+  100% {
+    transform: translate(0, -43vh) scale(0.38);
+  }
+
+}
+
+
+/* Hide orbital system during exit */
+
+@keyframes orbExit {
+
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  60% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(0.35);
+    opacity: 0;
+  }
+
+}
+
+
+/* Brand disappears */
+
+@keyframes contentExit {
+
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+}
