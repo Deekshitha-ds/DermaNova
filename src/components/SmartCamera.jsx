@@ -12,7 +12,7 @@ import {
   HiOutlineCamera,
   HiOutlinePhotograph
 } from "react-icons/hi";
-
+import DermaLoader from "../components/DermaLoader";
 const HOLD_DURATION_MS = 1200;
 
 export default function SmartCamera({ onResult,autoUpload = false, uploadOnly = false }) {
@@ -745,18 +745,20 @@ return (
       {/* Loading */}
 
       {phase === "uploading" && (
+  <div className="absolute inset-0 z-50 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center text-white">
 
-        <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white">
+    <DermaLoader />
 
-          <div className="w-14 h-14 rounded-full border-4 border-white/30 border-t-green-400 animate-spin mb-4" />
+    <p className="mt-6 text-lg font-semibold tracking-[0.15em] uppercase animate-pulse">
+      Analyzing Skin...
+    </p>
 
-          <p className="text-lg font-semibold">
-            Analyzing Skin...
-          </p>
+    <p className="mt-2 text-sm text-white/60">
+      DermaNova AI is examining your skin
+    </p>
 
-        </div>
-
-      )}
+  </div>
+)}
 
       {/* Camera Error */}
 

@@ -445,3 +445,130 @@
     0 0 30px rgba(167, 139, 250, 0.22),
     inset 0 0 15px rgba(196, 181, 253, 0.06);
 }
+/* ==============================
+   DERMANOVA PREMIUM AI LOADER
+============================== */
+
+.derma-loader {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Soft ambient glow */
+.derma-loader::before {
+  content: "";
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+
+  background: rgba(196, 181, 253, 0.25);
+
+  filter: blur(14px);
+
+  animation: loaderGlow 2s ease-in-out infinite;
+}
+
+/* Main orbital ring */
+.derma-loader::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+
+  border-radius: 50%;
+
+  border: 2px solid rgba(196, 181, 253, 0.18);
+
+  border-top-color: rgba(255, 255, 255, 0.95);
+  border-right-color: rgba(216, 180, 254, 0.75);
+
+  animation: loaderRotate 1.2s linear infinite;
+}
+
+/* Center */
+.derma-loader-core {
+  position: relative;
+  width: 18px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    #ffffff 0%,
+    #ddd6fe 35%,
+    #a78bfa 70%,
+    transparent 100%
+  );
+
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.8),
+    0 0 18px rgba(196, 181, 253, 0.7);
+
+  animation: loaderCore 1.5s ease-in-out infinite;
+}
+
+/* Rotating sparkle */
+.derma-loader-spark {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 6px #ffffff,
+    0 0 12px rgba(196, 181, 253, 0.9);
+
+  animation: loaderOrbit 2s linear infinite;
+}
+
+.derma-loader-spark:nth-child(2) {
+  animation-delay: -1s;
+}
+
+@keyframes loaderRotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loaderGlow {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+}
+
+@keyframes loaderCore {
+  0%,
+  100% {
+    transform: scale(0.85);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes loaderOrbit {
+  from {
+    transform: rotate(0deg) translateX(30px) rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg) translateX(30px) rotate(-360deg);
+  }
+}

@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router-dom";
 
 import GlassCard from "../components/GlassCard";
 import SmartCamera from "../components/SmartCamera";
-
 export default function FaceScan() {
 
   const [result, setResult] = useState(null);
