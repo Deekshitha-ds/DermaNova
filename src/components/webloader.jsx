@@ -1,70 +1,52 @@
-import { useEffect, useState } from "react";
-
-export default function WebLoader({ exiting }) {
-  const [target, setTarget] = useState(null);
-
-  useEffect(() => {
-    if (!exiting) return;
-
-    const navbarLogo = document.getElementById("navbar-logo");
-
-    if (!navbarLogo) return;
-
-    const rect = navbarLogo.getBoundingClientRect();
-
-    setTarget({
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2,
-      width: rect.width,
-      height: rect.height,
-    });
-  }, [exiting]);
-
+export default function WebLoader({ exiting = false }) {
   return (
     <div className={`web-loader ${exiting ? "web-loader-exit" : ""}`}>
 
-      <div className="web-loader-bg-glow" />
+      {/* Background glow */}
+      <div className="web-loader-glow" />
 
-      <div
-        className="web-loader-orb"
-        style={
-          target
-            ? {
-                "--target-x": `${target.x}px`,
-                "--target-y": `${target.y}px`,
-                "--target-width": `${target.width}px`,
-                "--target-height": `${target.height}px`,
-              }
-            : {}
-        }
-      >
+      {/* Main loader */}
+      <div className="web-loader-orb">
 
-        <div className="web-loader-ring ring-one" />
-        <div className="web-loader-ring ring-two" />
+        {/* Orbital rings */}
+        <div className="loader-ring loader-ring-one" />
+        <div className="loader-ring loader-ring-two" />
 
-        <div className="web-loader-logo-wrap">
+        {/* Logo */}
+        <div className="loader-logo">
+
           <img
             src="/logo3.png"
-            alt="DermaNova"
-            className="web-loader-logo"
+            alt="DermaNova AI"
           />
+
         </div>
 
-        <span className="loader-particle particle-one" />
-        <span className="loader-particle particle-two" />
-        <span className="loader-particle particle-three" />
-        <span className="loader-particle particle-four" />
+        {/* Small particles */}
+        <span className="loader-dot dot-one" />
+        <span className="loader-dot dot-two" />
+        <span className="loader-dot dot-three" />
+        <span className="loader-dot dot-four" />
 
       </div>
 
-      <div className="web-loader-content">
 
-        <h1>DERMANOVA</h1>
+      {/* Branding */}
+      <div className="loader-content">
 
-        <p>AI SKIN INTELLIGENCE</p>
+        <h1>
+          DermaNova
+          <span> AI</span>
+        </h1>
 
-        <div className="web-loader-track">
-          <div className="web-loader-bar" />
+        <p>
+          AI SKIN INTELLIGENCE
+        </p>
+
+
+        {/* Loading bar */}
+        <div className="loader-track">
+          <div className="loader-progress" />
         </div>
 
       </div>
