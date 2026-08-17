@@ -1382,48 +1382,46 @@
 }
 
 
-/* Logo shrinks and travels upward */
+.web-loader-exit .web-loader-orb {
+  animation: logoTravelToNavbar 0.9s
+    cubic-bezier(0.65, 0, 0.35, 1)
+    forwards;
+}
 
-@keyframes logoMoveToNavbar {
+.web-loader-exit .web-loader-content {
+  animation: contentExit 0.4s ease-out forwards;
+}
+
+.web-loader-exit .web-loader-bg-glow {
+  animation: glowExit 0.9s ease-out forwards;
+}
+
+.web-loader-exit .web-loader-ring {
+  animation: ringsExit 0.7s ease-out forwards;
+}
+
+
+@keyframes logoTravelToNavbar {
 
   0% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  45% {
-    transform: translate(0, -70px) scale(0.75);
+    transform:
+      translate(0, 0)
+      scale(1);
   }
 
   100% {
-    transform: translate(0, -43vh) scale(0.38);
+    transform:
+      translate(
+        calc(var(--target-x) - 50vw),
+        calc(var(--target-y) - 50vh)
+      )
+      scale(
+        calc(var(--target-width) / 150)
+      );
   }
 
 }
 
-
-/* Hide orbital system during exit */
-
-@keyframes orbExit {
-
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  60% {
-    transform: scale(0.8);
-    opacity: 0.5;
-  }
-
-  100% {
-    transform: scale(0.35);
-    opacity: 0;
-  }
-
-}
-
-
-/* Brand disappears */
 
 @keyframes contentExit {
 
@@ -1435,6 +1433,34 @@
   to {
     opacity: 0;
     transform: translateY(15px);
+  }
+
+}
+
+
+@keyframes glowExit {
+
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+
+}
+
+
+@keyframes ringsExit {
+
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.3);
   }
 
 }
