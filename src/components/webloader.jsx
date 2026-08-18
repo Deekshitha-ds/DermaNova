@@ -44,11 +44,17 @@ export default function WebLoader({ exiting = false }) {
         </p>
 
 
-        {/* Loading bar */}
-        <div className="loader-track">
-          <div className="loader-progress" />
-        </div>
+       <div className="ai-loader-status">
 
+  <span className="ai-status-dot" />
+
+  <span className="ai-status-text">
+    INITIALIZING AI
+  </span>
+
+  <span className="ai-status-line" />
+
+</div>
       </div>
 
     </div>

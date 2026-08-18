@@ -1084,3 +1084,130 @@
   }
 
 }
+/* =========================================
+   AI STATUS
+========================================= */
+
+.ai-loader-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  margin-top: 20px;
+
+  font-size: 8px;
+  letter-spacing: 0.18em;
+
+  color: rgba(64, 52, 95, 0.45);
+}
+
+
+/* Pulsing AI indicator */
+
+.ai-status-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #a78bfa;
+
+  box-shadow:
+    0 0 0 0 rgba(167, 139, 250, 0.5);
+
+  animation: aiPulse 1.5s infinite;
+}
+
+
+/* Text */
+
+.ai-status-text {
+  white-space: nowrap;
+}
+
+
+/* Animated scanning line */
+
+.ai-status-line {
+  position: relative;
+
+  width: 45px;
+  height: 2px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: rgba(167, 139, 250, 0.12);
+}
+
+
+.ai-status-line::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -100%;
+
+  width: 70%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #a78bfa,
+    transparent
+  );
+
+  animation: aiScan 1.2s ease-in-out infinite;
+}
+
+
+/* =========================================
+   AI ANIMATIONS
+========================================= */
+
+@keyframes aiPulse {
+
+  0% {
+    transform: scale(0.7);
+    opacity: 0.4;
+
+    box-shadow:
+      0 0 0 0 rgba(167, 139, 250, 0.4);
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 1;
+
+    box-shadow:
+      0 0 0 5px rgba(167, 139, 250, 0.08);
+  }
+
+  100% {
+    transform: scale(0.7);
+    opacity: 0.4;
+
+    box-shadow:
+      0 0 0 0 rgba(167, 139, 250, 0);
+  }
+
+}
+
+
+@keyframes aiScan {
+
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 150%;
+  }
+
+}
