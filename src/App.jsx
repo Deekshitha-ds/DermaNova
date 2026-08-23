@@ -1,3 +1,4 @@
+import NovaChatbot from "./components/NovaChatbot";
 import { Route, Routes } from "react-router-dom";
 import AmbientBackground from "./components/AmbientBackground.jsx";
 import Navbar from "./components/Navbar.jsx";
@@ -7,13 +8,12 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import FaceScan from "./pages/FaceScan.jsx";
-import Footer from "./components/Footer";
 
 export default function App() {
   return (
     <>
       <AmbientBackground />
-      <Navbar />
+     <Navbar />
       <main>
       
         <Routes>
@@ -30,7 +30,7 @@ export default function App() {
           </Route>
         </Routes>
       </main>
-      <Footer />
+      <NovaChatbot />
     </>
   );
 }
