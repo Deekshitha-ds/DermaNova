@@ -1,38 +1,160 @@
+import { useEffect, useState } from "react";
+import "./WebLoader.css";
+
 export default function WebLoader({ exiting = false }) {
+  const [statusIndex, setStatusIndex] = useState(0);
+
+  const statuses = [
+    "INITIALIZING VISION ENGINE",
+    "MAPPING FACIAL FEATURES",
+    "ANALYZING SKIN SURFACE",
+    "CALIBRATING AI MODEL",
+    "DERMANOVA READY",
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStatusIndex((prev) => (prev + 1) % statuses.length);
+    }, 750);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className={`web-loader ${exiting ? "web-loader-exit" : ""}`}>
+    <div
+      className={`web-loader ${
+        exiting ? "web-loader-exit" : ""
+      }`}
+    >
 
-      {/* Background glow */}
-      <div className="web-loader-glow" />
+      {/* =====================================
+          BACKGROUND
+      ===================================== */}
 
-      {/* Main loader */}
-      <div className="web-loader-orb">
+      <div className="loader-noise" />
+
+      <div className="loader-ambient ambient-one" />
+      <div className="loader-ambient ambient-two" />
+      <div className="loader-ambient ambient-three" />
+
+
+      {/* =====================================
+          TOP BRAND LABEL
+      ===================================== */}
+
+      <div className="loader-top-label">
+        <span className="loader-live-dot" />
+        DERMA INTELLIGENCE SYSTEM
+      </div>
+
+
+      {/* =====================================
+          MAIN CORE
+      ===================================== */}
+
+      <div className="derma-core">
+
+        {/* Outer glow */}
+
+        <div className="core-glow" />
+
 
         {/* Orbital rings */}
-        <div className="loader-ring loader-ring-one" />
-        <div className="loader-ring loader-ring-two" />
 
-        {/* Logo */}
-        <div className="loader-logo">
+        <div className="orbit orbit-one">
+          <span className="orbit-point" />
+        </div>
 
-          <img
-            src="/logo3.png"
-            alt="DermaNova AI"
-          />
+        <div className="orbit orbit-two">
+          <span className="orbit-point" />
+        </div>
+
+        <div className="orbit orbit-three">
+          <span className="orbit-point" />
+        </div>
+
+
+        {/* Glass sphere */}
+
+        <div className="core-glass">
+
+          {/* Inner glow */}
+
+          <div className="core-inner-glow" />
+
+
+          {/* Facial scan grid */}
+
+          <div className="face-grid">
+
+            <div className="grid-horizontal grid-h1" />
+            <div className="grid-horizontal grid-h2" />
+            <div className="grid-horizontal grid-h3" />
+
+            <div className="grid-vertical grid-v1" />
+            <div className="grid-vertical grid-v2" />
+            <div className="grid-vertical grid-v3" />
+
+          </div>
+
+
+          {/* Face outline */}
+
+          <div className="face-outline">
+
+            <span className="face-eye eye-left" />
+            <span className="face-eye eye-right" />
+
+            <span className="face-point point-nose" />
+            <span className="face-point point-mouth" />
+
+          </div>
+
+
+          {/* Scanning beam */}
+
+          <div className="scan-beam" />
+
+
+          {/* Logo */}
+
+          <div className="logo-core">
+
+            <div className="logo-halo" />
+
+            <img
+              src="/logo3.png"
+              alt="DermaNova AI"
+            />
+
+          </div>
+
+
+          {/* Floating data points */}
+
+          <span className="data-point data-one" />
+          <span className="data-point data-two" />
+          <span className="data-point data-three" />
+          <span className="data-point data-four" />
 
         </div>
 
-        {/* Small particles */}
-        <span className="loader-dot dot-one" />
-        <span className="loader-dot dot-two" />
-        <span className="loader-dot dot-three" />
-        <span className="loader-dot dot-four" />
+
+        {/* Corner brackets */}
+
+        <div className="core-bracket bracket-tl" />
+        <div className="core-bracket bracket-tr" />
+        <div className="core-bracket bracket-bl" />
+        <div className="core-bracket bracket-br" />
 
       </div>
 
 
-      {/* Branding */}
-      <div className="loader-content">
+      {/* =====================================
+          BRANDING
+      ===================================== */}
+
+      <div className="loader-brand">
 
         <h1>
           DermaNova
@@ -43,18 +165,51 @@ export default function WebLoader({ exiting = false }) {
           AI SKIN INTELLIGENCE
         </p>
 
+      </div>
 
-       <div className="ai-loader-status">
 
-  <span className="ai-status-dot" />
+      {/* =====================================
+          STATUS
+      ===================================== */}
 
-  <span className="ai-status-text">
-    INITIALIZING AI
-  </span>
+      <div className="loader-status">
 
-  <span className="ai-status-line" />
+        <div className="status-header">
 
-</div>
+          <span className="status-pulse" />
+
+          <span>
+            {statuses[statusIndex]}
+          </span>
+
+        </div>
+
+
+        <div className="status-track">
+
+          <div className="status-progress" />
+
+        </div>
+
+      </div>
+
+
+      {/* =====================================
+          BOTTOM METADATA
+      ===================================== */}
+
+      <div className="loader-meta">
+
+        <span>VISION</span>
+
+        <i />
+
+        <span>ANALYSIS</span>
+
+        <i />
+
+        <span>PERSONALIZATION</span>
+
       </div>
 
     </div>
