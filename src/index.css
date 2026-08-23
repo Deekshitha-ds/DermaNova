@@ -416,245 +416,165 @@
   transform: translateX(4px);
 }
 
-.footer {
-  position: relative;
+/* =========================================
+   NOVA CHATBOT
+========================================= */
+
+.nova-floating-button {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 18px 12px 13px;
+
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 18px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.96),
+    rgba(236, 72, 153, 0.94)
+  );
+
+  color: white;
+
+  box-shadow:
+    0 12px 35px rgba(91, 33, 182, 0.25),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+
+  cursor: pointer;
+
   transition:
-    border-color 0.35s ease,
-    box-shadow 0.35s ease;
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.footer:hover {
-  border-color: rgba(216, 180, 254, 0.7);
+.nova-floating-button:hover {
+  transform: translateY(-3px);
 
   box-shadow:
-    0 0 8px rgba(255, 255, 255, 0.2),
-    0 0 18px rgba(196, 181, 253, 0.35),
-    0 0 35px rgba(167, 139, 250, 0.15);
-}
-.glass-panel {
-  position: relative;
-  transition: all 0.35s ease;
+    0 16px 40px rgba(91, 33, 182, 0.32),
+    0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.glass-panel:hover {
-  border-color: rgba(221, 214, 254, 0.9);
+.nova-floating-button > span {
+  width: 38px;
+  height: 38px;
 
-  box-shadow:
-    0 0 5px rgba(255, 255, 255, 0.35),
-    0 0 12px rgba(196, 181, 253, 0.5),
-    0 0 30px rgba(167, 139, 250, 0.22),
-    inset 0 0 15px rgba(196, 181, 253, 0.06);
-}
-/* ==============================
-   DERMANOVA PREMIUM AI LOADER
-============================== */
-
-.derma-loader {
-  position: relative;
-  width: 70px;
-  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* Soft ambient glow */
-.derma-loader::before {
-  content: "";
-  position: absolute;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-
-  background: rgba(196, 181, 253, 0.25);
-
-  filter: blur(14px);
-
-  animation: loaderGlow 2s ease-in-out infinite;
-}
-
-/* Main orbital ring */
-.derma-loader::after {
-  content: "";
-  position: absolute;
-  inset: 5px;
 
   border-radius: 50%;
 
-  border: 2px solid rgba(196, 181, 253, 0.18);
+  background: rgba(255, 255, 255, 0.2);
 
-  border-top-color: rgba(255, 255, 255, 0.95);
-  border-right-color: rgba(216, 180, 254, 0.75);
-
-  animation: loaderRotate 1.2s linear infinite;
+  font-size: 20px;
 }
 
-/* Center */
-.derma-loader-core {
-  position: relative;
-  width: 18px;
-  height: 18px;
-
-  border-radius: 50%;
-
-  background: radial-gradient(
-    circle,
-    #ffffff 0%,
-    #ddd6fe 35%,
-    #a78bfa 70%,
-    transparent 100%
-  );
-
-  box-shadow:
-    0 0 8px rgba(255, 255, 255, 0.8),
-    0 0 18px rgba(196, 181, 253, 0.7);
-
-  animation: loaderCore 1.5s ease-in-out infinite;
+.nova-floating-button div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-/* Rotating sparkle */
-.derma-loader-spark {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-
-  border-radius: 50%;
-
-  background: #ffffff;
-
-  box-shadow:
-    0 0 6px #ffffff,
-    0 0 12px rgba(196, 181, 253, 0.9);
-
-  animation: loaderOrbit 2s linear infinite;
+.nova-floating-button strong {
+  font-size: 14px;
 }
 
-.derma-loader-spark:nth-child(2) {
-  animation-delay: -1s;
+.nova-floating-button small {
+  font-size: 10px;
+  opacity: 0.85;
 }
 
-@keyframes loaderRotate {
-  to {
-    transform: rotate(360deg);
-  }
-}
 
-@keyframes loaderGlow {
-  0%,
-  100% {
-    transform: scale(0.85);
-    opacity: 0.5;
-  }
-
-  50% {
-    transform: scale(1.15);
-    opacity: 0.9;
-  }
-}
-
-@keyframes loaderCore {
-  0%,
-  100% {
-    transform: scale(0.85);
-  }
-
-  50% {
-    transform: scale(1.15);
-  }
-}
-
-@keyframes loaderOrbit {
-  from {
-    transform: rotate(0deg) translateX(30px) rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg) translateX(30px) rotate(-360deg);
-  }
-}
 /* =========================================
-   DERMANOVA WEB LOADER
+   CHAT WINDOW
 ========================================= */
 
-.web-loader {
+.nova-chatbot {
   position: fixed;
-  inset: 0;
 
-  z-index: 99999;
+  right: 28px;
+  bottom: 28px;
+
+  width: 380px;
+  height: 590px;
+
+  z-index: 10000;
 
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 
   overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 26px;
 
   background:
-    radial-gradient(
-      circle at center,
-      rgba(196, 181, 253, 0.22),
-      transparent 32%
-    ),
+    linear-gradient(
+      180deg,
+      rgba(250, 247, 255, 0.98),
+      rgba(255, 255, 255, 0.98)
+    );
+
+  box-shadow:
+    0 25px 70px rgba(74, 37, 122, 0.20),
+    0 5px 20px rgba(0, 0, 0, 0.08);
+
+  backdrop-filter: blur(20px);
+
+  animation: novaOpen 0.3s ease;
+}
+
+@keyframes novaOpen {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.nova-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 17px 18px;
+
+  background:
     linear-gradient(
       135deg,
-      #fbfaff,
-      #f5f1ff,
-      #eee9ff
+      rgba(139, 92, 246, 0.95),
+      rgba(236, 72, 153, 0.92)
     );
 
-  color: #40345f;
+  color: white;
 }
 
-
-/* =========================================
-   BACKGROUND GLOW
-========================================= */
-
-.web-loader-glow {
-  position: absolute;
-
-  width: 420px;
-  height: 420px;
-
-  border-radius: 50%;
-
-  background: rgba(167, 139, 250, 0.14);
-
-  filter: blur(100px);
-
-  animation: loaderGlow 4s ease-in-out infinite;
-}
-
-
-/* =========================================
-   MAIN ORB
-========================================= */
-
-.web-loader-orb {
-  position: relative;
-
-  width: 170px;
-  height: 170px;
-
+.nova-header-info {
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  z-index: 2;
+  gap: 11px;
 }
 
-
-/* =========================================
-   LOGO
-========================================= */
-
-.loader-logo {
-  position: relative;
-
-  z-index: 5;
-
-  width: 82px;
-  height: 82px;
+.nova-avatar {
+  width: 42px;
+  height: 42px;
 
   display: flex;
   align-items: center;
@@ -662,552 +582,345 @@
 
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.2);
 
-  border: 1px solid rgba(167, 139, 250, 0.28);
+  font-size: 21px;
 
-  backdrop-filter: blur(18px);
-
-  box-shadow:
-    0 10px 35px rgba(139, 92, 246, 0.12),
-    0 0 35px rgba(167, 139, 250, 0.18),
-    inset 0 1px 2px rgba(255, 255, 255, 0.95);
-
-  animation: logoFloat 3s ease-in-out infinite;
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-
-.loader-logo img {
-  width: 56px;
-  height: 56px;
-
-  object-fit: contain;
-
-  border-radius: 50%;
-
-  filter:
-    drop-shadow(
-      0 5px 12px rgba(139, 92, 246, 0.18)
-    );
-
-  animation: logoPulse 3s ease-in-out infinite;
-}
-
-
-/* =========================================
-   ORBIT RINGS
-========================================= */
-
-.loader-ring {
-  position: absolute;
-
-  border-radius: 50%;
-
-  border: 1px solid rgba(139, 92, 246, 0.18);
-}
-
-
-/* Main ring */
-
-.loader-ring-one {
-  width: 118px;
-  height: 118px;
-
-  border-top-color: rgba(139, 92, 246, 0.65);
-
-  animation:
-    ringRotate
-    3s
-    linear
-    infinite;
-}
-
-
-/* Outer tilted ring */
-
-.loader-ring-two {
-  width: 150px;
-  height: 150px;
-
-  border-right-color: rgba(167, 139, 250, 0.55);
-
-  transform: rotateX(65deg);
-
-  animation:
-    ringRotateTwo
-    4s
-    linear
-    infinite;
-}
-
-
-/* =========================================
-   PARTICLES
-========================================= */
-
-.loader-dot {
-  position: absolute;
-
-  width: 5px;
-  height: 5px;
-
-  border-radius: 50%;
-
-  background: #a78bfa;
-
-  box-shadow:
-    0 0 10px rgba(139, 92, 246, 0.55);
-}
-
-
-.dot-one {
-  top: 12px;
-  left: 82px;
-
-  animation: dotFloat 2s ease-in-out infinite;
-}
-
-
-.dot-two {
-  right: 12px;
-  top: 82px;
-
-  animation: dotFloat 2.4s ease-in-out infinite 0.3s;
-}
-
-
-.dot-three {
-  bottom: 15px;
-  left: 40px;
-
-  animation: dotFloat 2.2s ease-in-out infinite 0.6s;
-}
-
-
-.dot-four {
-  left: 10px;
-  top: 55px;
-
-  animation: dotFloat 2.5s ease-in-out infinite 0.9s;
-}
-
-
-/* =========================================
-   TEXT
-========================================= */
-
-.loader-content {
-  position: relative;
-
-  z-index: 3;
-
-  margin-top: 30px;
-
-  text-align: center;
-
-  animation:
-    contentReveal
-    0.8s
-    ease-out;
-}
-
-
-.loader-content h1 {
+.nova-header h3 {
   margin: 0;
 
-  font-family: inherit;
-
-  font-size: 25px;
-
+  font-size: 17px;
   font-weight: 600;
-
-  letter-spacing: 0.08em;
-
-  color: #40345f;
 }
 
-
-.loader-content h1 span {
-  color: #a78bfa;
+.nova-header span {
+  font-size: 10px;
+  opacity: 0.85;
 }
 
+.nova-close {
+  width: 34px;
+  height: 34px;
 
-.loader-content p {
-  margin-top: 8px;
+  border: none;
+  border-radius: 50%;
 
-  font-size: 9px;
+  background: rgba(255, 255, 255, 0.15);
 
-  font-weight: 500;
+  color: white;
 
-  letter-spacing: 0.32em;
+  font-size: 24px;
+  line-height: 1;
 
-  padding-left: 0.32em;
+  cursor: pointer;
 
-  color: rgba(64, 52, 95, 0.45);
+  transition: background 0.2s ease;
 }
 
-
-/* =========================================
-   LOADING BAR
-========================================= */
-
-.loader-track {
-  position: relative;
-
-  width: 150px;
-  height: 3px;
-
-  margin: 22px auto 0;
-
-  overflow: hidden;
-
-  border-radius: 999px;
-
-  background: rgba(139, 92, 246, 0.12);
-}
-
-
-.loader-progress {
-  position: absolute;
-
-  width: 45%;
-  height: 100%;
-
-  border-radius: inherit;
-
-  background: linear-gradient(
-    90deg,
-    transparent,
-    #a78bfa,
-    #c4b5fd,
-    transparent
-  );
-
-  animation:
-    loadingSweep
-    1.4s
-    ease-in-out
-    infinite;
+.nova-close:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 
 /* =========================================
-   ANIMATIONS
+   MESSAGE AREA
 ========================================= */
 
-@keyframes ringRotate {
+.nova-messages {
+  flex: 1;
 
-  from {
-    transform: rotate(0deg);
-  }
+  overflow-y: auto;
 
-  to {
-    transform: rotate(360deg);
-  }
+  padding: 20px 17px;
 
+  scrollbar-width: thin;
 }
 
-
-@keyframes ringRotateTwo {
-
-  from {
-    transform: rotateX(65deg) rotateZ(0deg);
-  }
-
-  to {
-    transform: rotateX(65deg) rotateZ(360deg);
-  }
-
+.nova-welcome {
+  text-align: center;
 }
 
+.nova-large-icon {
+  width: 58px;
+  height: 58px;
 
-@keyframes logoFloat {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-5px);
-  }
-
-}
-
-
-@keyframes logoPulse {
-
-  0%,
-  100% {
-    transform: scale(0.96);
-  }
-
-  50% {
-    transform: scale(1.04);
-  }
-
-}
-
-
-@keyframes dotFloat {
-
-  0%,
-  100% {
-    transform: translateY(0) scale(0.8);
-    opacity: 0.35;
-  }
-
-  50% {
-    transform: translateY(-8px) scale(1.2);
-    opacity: 1;
-  }
-
-}
-
-
-@keyframes loaderGlow {
-
-  0%,
-  100% {
-    transform: scale(0.85);
-    opacity: 0.5;
-  }
-
-  50% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-
-}
-
-
-@keyframes contentReveal {
-
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-}
-
-
-@keyframes loadingSweep {
-
-  0% {
-    transform: translateX(-150%);
-  }
-
-  100% {
-    transform: translateX(350%);
-  }
-
-}
-
-
-/* =========================================
-   EXIT
-========================================= */
-
-.web-loader-exit {
-  animation:
-    loaderExit
-    0.7s
-    ease
-    forwards;
-}
-
-
-.web-loader-exit .loader-logo {
-  animation:
-    logoExit
-    0.7s
-    ease
-    forwards;
-}
-
-
-.web-loader-exit .loader-content {
-  animation:
-    contentExit
-    0.4s
-    ease
-    forwards;
-}
-
-
-@keyframes loaderExit {
-
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-
-}
-
-
-@keyframes logoExit {
-
-  0% {
-    transform: scale(1);
-  }
-
-  60% {
-    transform: scale(1.06);
-  }
-
-  100% {
-    transform: scale(0.85);
-  }
-
-}
-
-
-@keyframes contentExit {
-
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-}
-/* =========================================
-   AI STATUS
-========================================= */
-
-.ai-loader-status {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
 
-  margin-top: 20px;
+  margin: 4px auto 12px;
 
-  font-size: 8px;
-  letter-spacing: 0.18em;
+  border-radius: 18px;
 
-  color: rgba(64, 52, 95, 0.45);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.13),
+      rgba(236, 72, 153, 0.13)
+    );
+
+  font-size: 28px;
 }
 
+.nova-welcome h2 {
+  margin: 0 0 7px;
 
-/* Pulsing AI indicator */
-
-.ai-status-dot {
-  width: 5px;
-  height: 5px;
-
-  border-radius: 50%;
-
-  background: #a78bfa;
-
-  box-shadow:
-    0 0 0 0 rgba(167, 139, 250, 0.5);
-
-  animation: aiPulse 1.5s infinite;
+  font-size: 21px;
+  color: #39224d;
 }
 
+.nova-welcome > p {
+  margin: 0 auto 18px;
 
-/* Text */
+  max-width: 300px;
 
-.ai-status-text {
-  white-space: nowrap;
+  color: #71677a;
+
+  font-size: 12px;
+  line-height: 1.6;
 }
 
+.nova-question-label {
+  display: block;
 
-/* Animated scanning line */
+  margin-bottom: 11px;
 
-.ai-status-line {
-  position: relative;
+  color: #6c6075;
 
-  width: 45px;
-  height: 2px;
-
-  overflow: hidden;
-
-  border-radius: 999px;
-
-  background: rgba(167, 139, 250, 0.12);
-}
-
-
-.ai-status-line::after {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  left: -100%;
-
-  width: 70%;
-  height: 100%;
-
-  border-radius: inherit;
-
-  background: linear-gradient(
-    90deg,
-    transparent,
-    #a78bfa,
-    transparent
-  );
-
-  animation: aiScan 1.2s ease-in-out infinite;
+  font-size: 11px;
 }
 
 
 /* =========================================
-   AI ANIMATIONS
+   QUICK QUESTIONS
 ========================================= */
 
-@keyframes aiPulse {
+.nova-quick-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-  0% {
-    transform: scale(0.7);
-    opacity: 0.4;
+.nova-quick-options button {
+  width: 100%;
 
-    box-shadow:
-      0 0 0 0 rgba(167, 139, 250, 0.4);
-  }
+  display: flex;
+  align-items: center;
 
-  50% {
-    transform: scale(1);
-    opacity: 1;
+  gap: 10px;
 
-    box-shadow:
-      0 0 0 5px rgba(167, 139, 250, 0.08);
-  }
+  padding: 11px 13px;
 
-  100% {
-    transform: scale(0.7);
-    opacity: 0.4;
+  border: 1px solid rgba(139, 92, 246, 0.14);
+  border-radius: 13px;
 
-    box-shadow:
-      0 0 0 0 rgba(167, 139, 250, 0);
-  }
+  background: rgba(255, 255, 255, 0.75);
 
+  color: #4b3657;
+
+  font-size: 12px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.nova-quick-options button:hover {
+  transform: translateX(3px);
+
+  background: rgba(245, 239, 255, 0.95);
+
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.nova-quick-options button span {
+  font-size: 17px;
 }
 
 
-@keyframes aiScan {
+/* =========================================
+   CHAT MESSAGES
+========================================= */
 
-  0% {
-    left: -100%;
+.nova-message-row {
+  display: flex;
+
+  gap: 7px;
+
+  margin-bottom: 13px;
+}
+
+.nova-message-row.user {
+  justify-content: flex-end;
+}
+
+.nova-small-avatar {
+  flex-shrink: 0;
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: rgba(139, 92, 246, 0.12);
+
+  font-size: 13px;
+}
+
+.nova-message {
+  max-width: 78%;
+
+  padding: 10px 13px;
+
+  border-radius: 15px;
+
+  color: #4d4055;
+
+  font-size: 12px;
+  line-height: 1.55;
+
+  background: white;
+
+  border: 1px solid rgba(139, 92, 246, 0.1);
+
+  box-shadow: 0 3px 12px rgba(70, 35, 100, 0.04);
+}
+
+.nova-message-row.user .nova-message {
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #ec4899
+    );
+
+  border: none;
+
+  border-bottom-right-radius: 5px;
+}
+
+.nova-message-row.bot .nova-message {
+  border-bottom-left-radius: 5px;
+}
+
+
+/* =========================================
+   INPUT
+========================================= */
+
+.nova-input-area {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 12px;
+
+  border-top: 1px solid rgba(120, 80, 150, 0.09);
+
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.nova-input-area input {
+  flex: 1;
+
+  height: 42px;
+
+  padding: 0 14px;
+
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: 13px;
+
+  outline: none;
+
+  background: rgba(250, 248, 255, 0.9);
+
+  color: #44364c;
+
+  font-size: 12px;
+}
+
+.nova-input-area input:focus {
+  border-color: rgba(139, 92, 246, 0.4);
+
+  box-shadow:
+    0 0 0 3px rgba(139, 92, 246, 0.06);
+}
+
+.nova-input-area input::placeholder {
+  color: #9b91a1;
+}
+
+.nova-input-area > button {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  border: none;
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #ec4899
+    );
+
+  color: white;
+
+  font-size: 17px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.nova-input-area > button:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.nova-input-area > button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .nova-chatbot {
+    right: 12px;
+    bottom: 12px;
+
+    width: calc(100vw - 24px);
+    height: calc(100vh - 90px);
+
+    border-radius: 22px;
   }
 
-  100% {
-    left: 150%;
+  .nova-floating-button {
+    right: 16px;
+    bottom: 16px;
   }
 
 }
