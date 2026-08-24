@@ -1641,3 +1641,631 @@
   }
 
 }
+
+
+import { useEffect, useRef, useState } from "react";
+import {
+  HiOutlineSparkles,
+  HiOutlineX,
+  HiOutlinePaperAirplane,
+  HiOutlineTrash,
+  HiOutlineChevronDown,
+} from "react-icons/hi";
+
+const quickQuestions = [
+  {
+    icon: "🔍",
+    title: "Understand my scan",
+    text: "Explain my skin scan results",
+  },
+  {
+    icon: "🧴",
+    title: "Build my routine",
+    text: "What skincare routine should I follow?",
+  },
+  {
+    icon: "✨",
+    title: "Improve my skin",
+    text: "What can I do for healthier looking skin?",
+  },
+  {
+    icon: "💇",
+    title: "Hair & scalp",
+    text: "How can I take better care of my hair and scalp?",
+  },
+];
+
+const suggestions = [
+  "What does my skin score mean?",
+  "How should I treat acne?",
+  "What should I use in the morning?",
+];
+
+function NovaChatbot({ scanContext = null }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
+
+  const messagesRef = useRef(null);
+  const inputRef = useRef(null);
+
+  /* =====================================================
+     AUTO SCROLL
+  ===================================================== */
+
+  useEffect(() => {
+    const container = messagesRef.current;
+
+    if (!container) return;
+
+    container.scrollTo({
+      top: container.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages, isTyping]);
+
+  /* =====================================================
+     FOCUS INPUT
+  ===================================================== */
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 250);
+    }
+  }, [isOpen]);
+
+  /* =====================================================
+     SCROLL DETECTION
+  ===================================================== */
+
+  const handleMessagesScroll = () => {
+    const container = messagesRef.current;
+
+    if (!container) return;
+
+    const distanceFromBottom =
+      container.scrollHeight -
+      container.scrollTop -
+      container.clientHeight;
+
+    setShowScrollButton(distanceFromBottom > 180);
+  };
+
+  const scrollToBottom = () => {
+    messagesRef.current?.scrollTo({
+      top: messagesRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
+  /* =====================================================
+     BOT RESPONSE
+  ===================================================== */
+
+  const getBotResponse = (question) => {
+    const q = question.toLowerCase();
+
+    if (
+      q.includes("scan") ||
+      q.includes("result") ||
+      q.includes("score")
+    ) {
+      if (scanContext) {
+        return (
+          "I've got your DermaNova scan context ✨. " +
+          "I can help explain what your detected skin concerns, " +
+          "confidence scores and overall skin metrics mean. " +
+          "Keep in mind that an AI skin scan is an estimate, " +
+          "not a medical diagnosis."
+        );
+      }
+
+      return (
+        "I'd love to explain your scan ✨. " +
+        "Complete a skin scan first and I'll help you understand " +
+        "the results in simple terms."
+      );
+    }
+
+    if (
+      q.includes("routine") ||
+      q.includes("skincare") ||
+      q.includes("morning") ||
+      q.includes("night") ||
+      q.includes("moisturizer")
+    ) {
+      return (
+        "A simple routine usually has three foundations: " +
+        "gentle cleansing, moisturising and daytime sun protection. " +
+        "If you share your scan results, I can help you understand " +
+        "which concerns your routine should focus on."
+      );
+    }
+
+    if (
+      q.includes("acne") ||
+      q.includes("pimple") ||
+      q.includes("breakout")
+    ) {
+      return (
+        "Acne can be influenced by oil production, clogged pores, " +
+        "inflammation and hormonal factors. A gentle cleanser, " +
+        "non-comedogenic products and avoiding aggressive scrubbing " +
+        "can help. Persistent or severe acne is best evaluated by " +
+        "a qualified healthcare professional."
+      );
+    }
+
+    if (
+      q.includes("dry") ||
+      q.includes("dehydrated") ||
+      q.includes("hydration")
+    ) {
+      return (
+        "For dry or dehydrated-looking skin, focus on gentle cleansing " +
+        "and consistent moisturising. Ingredients that support the " +
+        "skin barrier can help reduce moisture loss."
+      );
+    }
+
+    if (
+      q.includes("dark spot") ||
+      q.includes("pigmentation") ||
+      q.includes("uneven tone")
+    ) {
+      return (
+        "For uneven tone and dark spots, daily sun protection is one " +
+        "of the most important steps. A gentle routine with ingredients " +
+        "such as niacinamide may also support a more even-looking complexion."
+      );
+    }
+
+    if (
+      q.includes("hair") ||
+      q.includes("scalp") ||
+      q.includes("dandruff")
+    ) {
+      return (
+        "Healthy hair care starts with a clean scalp and products " +
+        "suited to your hair type. Try to avoid excessive heat and " +
+        "harsh chemical treatments. Persistent scalp concerns should " +
+        "be assessed by a qualified professional."
+      );
+    }
+
+    if (
+      q.includes("hello") ||
+      q.includes("hi") ||
+      q.includes("hey")
+    ) {
+      return (
+        "Hey! I'm Nova ✨. I'm here to help you understand your " +
+        "DermaNova results, skincare routine and hair-care questions."
+      );
+    }
+
+    return (
+      "I'm Nova ✨, your DermaNova AI assistant. " +
+      "I can help you understand your skin scan, skincare routine, " +
+      "skin concerns and hair or scalp care. Try asking me about " +
+      "your scan, acne, hydration or skincare routine."
+    );
+  };
+
+  /* =====================================================
+     SEND MESSAGE
+  ===================================================== */
+
+  const sendMessage = (text = message) => {
+    const trimmed = text.trim();
+
+    if (!trimmed || isTyping) return;
+
+    const userMessage = {
+      id: Date.now(),
+      sender: "user",
+      text: trimmed,
+      time: new Date(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+
+    setMessage("");
+    setIsTyping(true);
+
+    /*
+      Simulated AI delay.
+
+      Later, this can be replaced with:
+      fetch("/api/chat")
+      or your FastAPI Nova endpoint.
+    */
+
+    setTimeout(() => {
+      const botMessage = {
+        id: Date.now() + 1,
+        sender: "bot",
+        text: getBotResponse(trimmed),
+        time: new Date(),
+      };
+
+      setMessages((prev) => [...prev, botMessage]);
+
+      setIsTyping(false);
+    }, 850);
+  };
+
+  /* =====================================================
+     KEYBOARD
+  ===================================================== */
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  /* =====================================================
+     CLEAR CHAT
+  ===================================================== */
+
+  const clearChat = () => {
+    setMessages([]);
+    setIsTyping(false);
+  };
+
+  /* =====================================================
+     TIME
+  ===================================================== */
+
+  const formatTime = (date) => {
+    return new Intl.DateTimeFormat("en", {
+      hour: "numeric",
+      minute: "2-digit",
+    }).format(date);
+  };
+
+  return (
+    <>
+      {/* =================================================
+          FLOATING BUTTON
+      ================================================= */}
+
+      {!isOpen && (
+        <button
+          className="nova-launcher"
+          onClick={() => setIsOpen(true)}
+          aria-label="Open Nova AI assistant"
+        >
+          <div className="nova-launcher-orb">
+            <div className="nova-launcher-ring" />
+
+            <HiOutlineSparkles />
+
+          </div>
+
+          <div className="nova-launcher-text">
+            <strong>Ask Nova</strong>
+            <span>Your skin assistant</span>
+          </div>
+
+          <div className="nova-launcher-pulse" />
+        </button>
+      )}
+
+      {/* =================================================
+          CHAT WINDOW
+      ================================================= */}
+
+      {isOpen && (
+        <div className="nova-chatbot">
+
+          {/* =================================================
+              HEADER
+          ================================================= */}
+
+          <header className="nova-header">
+
+            <div className="nova-header-left">
+
+              <div className="nova-avatar-wrapper">
+
+                <div className="nova-avatar">
+
+                  <div className="nova-avatar-glow" />
+
+                  <HiOutlineSparkles />
+
+                </div>
+
+                <span className="nova-online-dot" />
+
+              </div>
+
+              <div className="nova-header-text">
+
+                <div className="nova-title-row">
+
+                  <h3>Nova</h3>
+
+                  <span className="nova-ai-badge">
+                    AI
+                  </span>
+
+                </div>
+
+                <div className="nova-status">
+
+                  <span />
+
+                  Online · DermaNova Assistant
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div className="nova-header-actions">
+
+              {messages.length > 0 && (
+                <button
+                  onClick={clearChat}
+                  className="nova-header-button"
+                  title="Clear conversation"
+                >
+                  <HiOutlineTrash />
+                </button>
+              )}
+
+              <button
+                onClick={() => setIsOpen(false)}
+                className="nova-header-button"
+                title="Close Nova"
+              >
+                <HiOutlineX />
+              </button>
+
+            </div>
+
+          </header>
+
+
+          {/* =================================================
+              CHAT BODY
+          ================================================= */}
+
+          <div
+            ref={messagesRef}
+            onScroll={handleMessagesScroll}
+            className="nova-messages"
+          >
+
+            {/* =============================================
+                EMPTY STATE
+            ============================================= */}
+
+            {messages.length === 0 && (
+              <div className="nova-welcome">
+
+                <div className="nova-welcome-orb">
+
+                  <div className="nova-welcome-orbit" />
+
+                  <div className="nova-welcome-core">
+
+                    <HiOutlineSparkles />
+
+                  </div>
+
+                </div>
+
+                <span className="nova-eyebrow">
+                  YOUR PERSONAL AI
+                </span>
+
+                <h2>
+                  Hi, I'm Nova.
+                </h2>
+
+                <p>
+                  I can help you understand your skin,
+                  scan results, routines and hair care.
+                </p>
+
+                <div className="nova-question-label">
+                  Explore something
+                </div>
+
+                <div className="nova-quick-options">
+
+                  {quickQuestions.map((item) => (
+                    <button
+                      key={item.title}
+                      onClick={() =>
+                        sendMessage(item.text)
+                      }
+                    >
+
+                      <span className="quick-icon">
+                        {item.icon}
+                      </span>
+
+                      <span className="quick-content">
+
+                        <strong>
+                          {item.title}
+                        </strong>
+
+                        <small>
+                          {item.text}
+                        </small>
+
+                      </span>
+
+                    </button>
+                  ))}
+
+                </div>
+
+
+                {/* Suggestions */}
+
+                <div className="nova-suggestions">
+
+                  <span>
+                    Try asking
+                  </span>
+
+                  <div>
+
+                    {suggestions.map((item) => (
+                      <button
+                        key={item}
+                        onClick={() =>
+                          sendMessage(item)
+                        }
+                      >
+                        {item}
+                      </button>
+                    ))}
+
+                  </div>
+
+                </div>
+
+              </div>
+            )}
+
+
+            {/* =============================================
+                MESSAGES
+            ============================================= */}
+
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`nova-message-row ${msg.sender}`}
+              >
+
+                {msg.sender === "bot" && (
+                  <div className="nova-small-avatar">
+
+                    <HiOutlineSparkles />
+
+                  </div>
+                )}
+
+                <div className="nova-message-wrapper">
+
+                  <div className="nova-message">
+                    {msg.text}
+                  </div>
+
+                  <span className="nova-message-time">
+                    {formatTime(msg.time)}
+                  </span>
+
+                </div>
+
+              </div>
+            ))}
+
+
+            {/* =============================================
+                TYPING
+            ============================================= */}
+
+            {isTyping && (
+              <div className="nova-message-row bot">
+
+                <div className="nova-small-avatar">
+
+                  <HiOutlineSparkles />
+
+                </div>
+
+                <div className="nova-typing">
+
+                  <span />
+                  <span />
+                  <span />
+
+                </div>
+
+              </div>
+            )}
+
+          </div>
+
+
+          {/* =================================================
+              SCROLL BUTTON
+          ================================================= */}
+
+          {showScrollButton && (
+            <button
+              className="nova-scroll-button"
+              onClick={scrollToBottom}
+            >
+              <HiOutlineChevronDown />
+            </button>
+          )}
+
+
+          {/* =================================================
+              INPUT
+          ================================================= */}
+
+          <div className="nova-input-area">
+
+            <div className="nova-input-wrapper">
+
+              <textarea
+                ref={inputRef}
+                rows="1"
+                value={message}
+                placeholder="Ask Nova anything..."
+                onChange={(e) =>
+                  setMessage(e.target.value)
+                }
+                onKeyDown={handleKeyDown}
+              />
+
+              <button
+                onClick={() => sendMessage()}
+                disabled={!message.trim() || isTyping}
+                className="nova-send-button"
+                aria-label="Send message"
+              >
+                <HiOutlinePaperAirplane />
+              </button>
+
+            </div>
+
+            <div className="nova-input-footer">
+
+              <span>
+                ✦ Powered by DermaNova AI
+              </span>
+
+              <span>
+                AI responses may not always be accurate
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+    </>
+  );
+}
+
+export default NovaChatbot;
