@@ -1,5 +1,6 @@
-import NovaChatbot from "./components/NovaChatbot";
+
 import { useEffect, useState } from "react";
+import NovaChatbot from "./components/NovaChatbot";
 import { Route, Routes } from "react-router-dom";
 
 import AmbientBackground from "./components/AmbientBackground.jsx";
@@ -82,8 +83,10 @@ export default function App() {
         </main>
 
         <Footer />
+         <NovaChatbot />
 
       </div>
+      
     </>
   );
 }

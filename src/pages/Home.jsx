@@ -36,7 +36,7 @@ export default function Home() {
         </Link>
          
       </motion.div>
-      <br /><br /><br /> <br /><br /><br /><br /><br />
+      <br /><br /><br /> <br /><br /><br /><br /><br /><br /><br /><br />
 
       
    
