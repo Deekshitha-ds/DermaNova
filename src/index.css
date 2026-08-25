@@ -416,10 +416,6 @@
   transform: translateX(4px);
 }
 
-/* =========================================
-   NOVA CHATBOT
-========================================= */
-
 
 .nova-floating-button {
   position: fixed;
@@ -449,7 +445,6 @@
     0 4px 12px rgba(0, 0, 0, 0.08);
 
   cursor: pointer;
-
 
   transition:
     transform 0.25s ease,
@@ -495,125 +490,8 @@
 }
 
 
-.nova-chatbot {
-  position: fixed;
-
-  right: 28px;
-  bottom: 28px;
-
-  width: 380px;
-  height: 590px;
-
-  z-index: 10000;
-
-  display: flex;
-  flex-direction: column;
-
-  overflow: hidden;
-
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 26px;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(250, 247, 255, 0.98),
-      rgba(255, 255, 255, 0.98)
-    );
-
-  box-shadow:
-    0 25px 70px rgba(74, 37, 122, 0.20),
-    0 5px 20px rgba(0, 0, 0, 0.08);
-
-  backdrop-filter: blur(20px);
-
-  animation: novaOpen 0.3s ease;
-}
-
-@keyframes novaOpen {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.96);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-
-.nova-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 17px 18px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(139, 92, 246, 0.95),
-      rgba(236, 72, 153, 0.92)
-    );
-
-  color: white;
-}
-
-.nova-header-info {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-}
-
-.nova-avatar {
-  width: 42px;
-  height: 42px;
-}
-
-.footer {
-  position: relative;
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.nova-floating-button:hover {
-  transform: translateY(-3px);
-
-  box-shadow:
-    0 16px 40px rgba(91, 33, 182, 0.32),
-    0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.nova-floating-button > span {
-  width: 38px;
-  height: 38px;
-
-  box-shadow:
-    0 0 5px rgba(255, 255, 255, 0.35),
-    0 0 12px rgba(196, 181, 253, 0.5),
-    0 0 30px rgba(167, 139, 250, 0.22),
-    inset 0 0 15px rgba(196, 181, 253, 0.06);
-}
-
-.nova-floating-button div {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.nova-floating-button strong {
-  font-size: 14px;
-}
-
-.nova-floating-button small {
-  font-size: 10px;
-  opacity: 0.85;
-}
-
-
-/* =========================================*/
+/* =========================================
+   CHAT WINDOW*/
 
 .nova-chatbot {
   position: fixed;
@@ -664,8 +542,7 @@
 
 
 /* =========================================
-   HEADER
-========================================= */
+   HEADER*/
 
 .nova-header {
   display: flex;
@@ -684,9 +561,174 @@
   color: white;
 }
 
-/* =========================================*/
+.nova-header-info {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
 
+.nova-avatar {
+  width: 42px;
+  height: 42px;
+}
+.footer {
+  position: relative;
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
 
+.footer:hover {
+  border-color: rgba(216, 180, 254, 0.7);
+
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.2),
+    0 0 18px rgba(196, 181, 253, 0.35),
+    0 0 35px rgba(167, 139, 250, 0.15);
+}
+.glass-panel {
+  position: relative;
+  transition: all 0.35s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(221, 214, 254, 0.9);
+
+  box-shadow:
+    0 0 5px rgba(255, 255, 255, 0.35),
+    0 0 12px rgba(196, 181, 253, 0.5),
+    0 0 30px rgba(167, 139, 250, 0.22),
+    inset 0 0 15px rgba(196, 181, 253, 0.06);
+}
+/* ==============================
+   DERMANOVA PREMIUM AI LOADER*/
+
+.derma-loader {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Soft ambient glow */
+.derma-loader::before {
+  content: "";
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+
+  background: rgba(196, 181, 253, 0.25);
+
+  filter: blur(14px);
+
+  animation: loaderGlow 2s ease-in-out infinite;
+}
+
+/* Main orbital ring */
+.derma-loader::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+
+  border-radius: 50%;
+
+  border: 2px solid rgba(196, 181, 253, 0.18);
+
+  border-top-color: rgba(255, 255, 255, 0.95);
+  border-right-color: rgba(216, 180, 254, 0.75);
+
+  animation: loaderRotate 1.2s linear infinite;
+}
+
+/* Center */
+.derma-loader-core {
+  position: relative;
+  width: 18px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    #ffffff 0%,
+    #ddd6fe 35%,
+    #a78bfa 70%,
+    transparent 100%
+  );
+
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.8),
+    0 0 18px rgba(196, 181, 253, 0.7);
+
+  animation: loaderCore 1.5s ease-in-out infinite;
+}
+
+/* Rotating sparkle */
+.derma-loader-spark {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 6px #ffffff,
+    0 0 12px rgba(196, 181, 253, 0.9);
+
+  animation: loaderOrbit 2s linear infinite;
+}
+
+.derma-loader-spark:nth-child(2) {
+  animation-delay: -1s;
+}
+
+@keyframes loaderRotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loaderGlow {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+}
+
+@keyframes loaderCore {
+  0%,
+  100% {
+    transform: scale(0.85);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes loaderOrbit {
+  from {
+    transform: rotate(0deg) translateX(30px) rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg) translateX(30px) rotate(-360deg);
+  }
+}
+
+/* =========================================
+   LOGO*/
 
 .loader-logo {
   position: relative;
@@ -696,13 +738,11 @@
   width: 82px;
   height: 82px;
 
-
   display: flex;
   align-items: center;
   justify-content: center;
 
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
 }
 
 .nova-messages {
@@ -821,6 +861,8 @@
 }
 
 
+/* =========================================
+   CHAT MESSAGES*/
 
 .nova-message-row {
   display: flex;
@@ -888,6 +930,10 @@
 .nova-message-row.bot .nova-message {
   border-bottom-left-radius: 5px;
 }
+
+
+/* =========================================
+   INPUT*/
 
 
 .nova-input-area {
@@ -984,19 +1030,25 @@
 
     border-radius: 22px;
   }
-}
+
   .nova-floating-button {
     right: 16px;
     bottom: 16px;
   background: rgba(255, 255, 255, 0.72);
 
+  border: 1px solid rgba(167, 139, 250, 0.28);
 
-  font-size: 21px;
+  backdrop-filter: blur(18px);
 
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 10px 35px rgba(139, 92, 246, 0.12),
+    0 0 35px rgba(167, 139, 250, 0.18),
+    inset 0 1px 2px rgba(255, 255, 255, 0.95);
+
+  animation: logoFloat 3s ease-in-out infinite;
 }
 
-
+}
 .loader-logo img {
   width: 56px;
   height: 56px;
@@ -1015,938 +1067,128 @@
 
 
 
-
-
-/* ========================================*/
-
-.nova-messages {
-  flex: 1;
-
-  overflow-y: auto;
-
-  padding: 20px 17px;
-
-  scrollbar-width: thin;
-}
-
-.nova-welcome {
-  text-align: center;
-}
-
-.nova-large-icon {
-  width: 58px;
-  height: 58px;
-
-  display: flex;
-  align-items: center;  
-   ANIMATIONS
-
- ringRotate {
-
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-
-}
-}
-
-
-
-@keyframes logoFloat {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-5px);
-  }
-
-}
-
-
-@keyframes logoPulse {
-  0%,
-  100% {
-    transform: scale(0.96);
-  }
-
-  50% {
-    transform: scale(1.04);
-  }
-
-}
-
-
-@keyframes dotFloat {
-
-  0%,
-  100% {
-    transform: translateY(0) scale(0.8);
-    opacity: 0.35;
-  }
-
-  50% {
-    transform: translateY(-8px) scale(1.2);
-    opacity: 1;
-  }
-
-}
-
-
-@keyframes loaderGlow {
-
-  0%,
-  100% {
-    transform: scale(0.85);
-    opacity: 0.5;
-  }
-
-  50% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-
-}
-
-
-@keyframes contentReveal {
-
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-}
-
-
-@keyframes loadingSweep {
-
-  0% {
-    transform: translateX(-150%);
-  }
-
-  100% {
-    transform: translateX(350%);
-  }
-
-}
-
-
-
 /* =========================================
-   CHAT MESSAGES
-========================================= */
+   AI STATUS*/
 
-.nova-message-row {
-  display: flex;
-
-  gap: 7px;
-
-  margin-bottom: 13px;
-}
-
-.nova-message-row.user {
-  justify-content: flex-end;
-}
-
-.nova-small-avatar {
-  flex-shrink: 0;
-
-  width: 28px;
-  height: 28px;
-
+.ai-loader-status {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+
+  margin-top: 20px;
+
+  font-size: 8px;
+  letter-spacing: 0.18em;
+
+  color: rgba(64, 52, 95, 0.45);
+}
+
+
+/* Pulsing AI indicator */
+
+.ai-status-dot {
+  width: 5px;
+  height: 5px;
 
   border-radius: 50%;
 
-  background: rgba(139, 92, 246, 0.12);
-
-  font-size: 13px;
-}
-
-.nova-message {
-  max-width: 78%;
-
-  padding: 10px 13px;
-
-  border-radius: 15px;
-
-  color: #4d4055;
-
-  font-size: 12px;
-  line-height: 1.55;
-
-  background: white;
-
-  border: 1px solid rgba(139, 92, 246, 0.1);
-
-  box-shadow: 0 3px 12px rgba(70, 35, 100, 0.04);
-}
-
-.nova-message-row.user .nova-message {
-  color: white;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8b5cf6,
-      #ec4899
-    );
-
-  border: none;
-
-  border-bottom-right-radius: 5px;
-}
-
-.nova-message-row.bot .nova-message {
-  border-bottom-left-radius: 5px;
-}
-
-
-/* =========================================
-   INPUT
-========================================= */
-
-.nova-input-area {
-  display: flex;
-  align-items: center;
-
-  gap: 8px;
-
-  padding: 12px;
-
-  border-top: 1px solid rgba(120, 80, 150, 0.09);
-
-  background: rgba(255, 255, 255, 0.75);
-}
-
-.nova-input-area input {
-  flex: 1;
-
-  height: 42px;
-
-  padding: 0 14px;
-
-  border: 1px solid rgba(139, 92, 246, 0.15);
-  border-radius: 13px;
-
-  outline: none;
-
-  background: rgba(250, 248, 255, 0.9);
-
-  color: #44364c;
-
-  font-size: 12px;
-}
-
-.nova-input-area input:focus {
-  border-color: rgba(139, 92, 246, 0.4);
+  background: #a78bfa;
 
   box-shadow:
-    0 0 0 3px rgba(139, 92, 246, 0.06);
+    0 0 0 0 rgba(167, 139, 250, 0.5);
+
+  animation: aiPulse 1.5s infinite;
 }
 
-.nova-input-area input::placeholder {
-  color: #9b91a1;
+
+/* Text */
+
+.ai-status-text {
+  white-space: nowrap;
 }
 
-.nova-input-area > button {
-  width: 42px;
-  height: 42px;
 
-  flex-shrink: 0;
+/* Animated scanning line */
 
-  border: none;
-  border-radius: 13px;
+.ai-status-line {
+  position: relative;
 
-  background:
-    linear-gradient(
-      135deg,
-      #8b5cf6,
-      #ec4899
-    );
+  width: 45px;
+  height: 2px;
 
-  color: white;
+  overflow: hidden;
 
-  font-size: 17px;
+  border-radius: 999px;
 
-  cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s ease;
+  background: rgba(167, 139, 250, 0.12);
 }
 
-.nova-input-area > button:hover:not(:disabled) {
-  transform: scale(1.05);
-}
 
-.nova-input-area > button:disabled {
-  opacity: 0.4;
-  cursor: default;
+.ai-status-line::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -100%;
+
+  width: 70%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #a78bfa,
+    transparent
+  );
+
+  animation: aiScan 1.2s ease-in-out infinite;
 }
 
 
 /* =========================================
-   MOBILE
-========================================= */
+   AI ANIMATIONS*/
 
-@media (max-width: 600px) {
+@keyframes aiPulse {
 
-  .nova-chatbot {
-    right: 12px;
-    bottom: 12px;
+  0% {
+    transform: scale(0.7);
+    opacity: 0.4;
 
-    width: calc(100vw - 24px);
-    height: calc(100vh - 90px);
-
-    border-radius: 22px;
+    box-shadow:
+      0 0 0 0 rgba(167, 139, 250, 0.4);
   }
 
-  .nova-floating-button {
-    right: 16px;
-    bottom: 16px;
+  50% {
+    transform: scale(1);
+    opacity: 1;
+
+    box-shadow:
+      0 0 0 5px rgba(167, 139, 250, 0.08);
+  }
+
+  100% {
+    transform: scale(0.7);
+    opacity: 0.4;
+
+    box-shadow:
+      0 0 0 0 rgba(167, 139, 250, 0);
   }
 
 }
 
 
-import { useEffect, useRef, useState } from "react";
-import {
-  HiOutlineSparkles,
-  HiOutlineX,
-  HiOutlinePaperAirplane,
-  HiOutlineTrash,
-  HiOutlineChevronDown,
-} from "react-icons/hi";
+@keyframes aiScan {
 
-const quickQuestions = [
-  {
-    icon: "🔍",
-    title: "Understand my scan",
-    text: "Explain my skin scan results",
-  },
-  {
-    icon: "🧴",
-    title: "Build my routine",
-    text: "What skincare routine should I follow?",
-  },
-  {
-    icon: "✨",
-    title: "Improve my skin",
-    text: "What can I do for healthier looking skin?",
-  },
-  {
-    icon: "💇",
-    title: "Hair & scalp",
-    text: "How can I take better care of my hair and scalp?",
-  },
-];
+  0% {
+    left: -100%;
+  }
 
-const suggestions = [
-  "What does my skin score mean?",
-  "How should I treat acne?",
-  "What should I use in the morning?",
-];
+  100% {
+    left: 150%;
+  }
 
-function NovaChatbot({ scanContext = null }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [isTyping, setIsTyping] = useState(false);
-  const [showScrollButton, setShowScrollButton] = useState(false);
-
-  const messagesRef = useRef(null);
-  const inputRef = useRef(null);
-
-  /* =====================================================
-     AUTO SCROLL
-  ===================================================== */
-
-  useEffect(() => {
-    const container = messagesRef.current;
-
-    if (!container) return;
-
-    container.scrollTo({
-      top: container.scrollHeight,
-      behavior: "smooth",
-    });
-  }, [messages, isTyping]);
-
-  /* =====================================================
-     FOCUS INPUT
-  ===================================================== */
-
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 250);
-    }
-  }, [isOpen]);
-
-  /* =====================================================
-     SCROLL DETECTION
-  ===================================================== */
-
-  const handleMessagesScroll = () => {
-    const container = messagesRef.current;
-
-    if (!container) return;
-
-    const distanceFromBottom =
-      container.scrollHeight -
-      container.scrollTop -
-      container.clientHeight;
-
-    setShowScrollButton(distanceFromBottom > 180);
-  };
-
-  const scrollToBottom = () => {
-    messagesRef.current?.scrollTo({
-      top: messagesRef.current.scrollHeight,
-      behavior: "smooth",
-    });
-  };
-
-  /* =====================================================
-     BOT RESPONSE
-  ===================================================== */
-
-  const getBotResponse = (question) => {
-    const q = question.toLowerCase();
-
-    if (
-      q.includes("scan") ||
-      q.includes("result") ||
-      q.includes("score")
-    ) {
-      if (scanContext) {
-        return (
-          "I've got your DermaNova scan context ✨. " +
-          "I can help explain what your detected skin concerns, " +
-          "confidence scores and overall skin metrics mean. " +
-          "Keep in mind that an AI skin scan is an estimate, " +
-          "not a medical diagnosis."
-        );
-      }
-
-      return (
-        "I'd love to explain your scan ✨. " +
-        "Complete a skin scan first and I'll help you understand " +
-        "the results in simple terms."
-      );
-    }
-
-    if (
-      q.includes("routine") ||
-      q.includes("skincare") ||
-      q.includes("morning") ||
-      q.includes("night") ||
-      q.includes("moisturizer")
-    ) {
-      return (
-        "A simple routine usually has three foundations: " +
-        "gentle cleansing, moisturising and daytime sun protection. " +
-        "If you share your scan results, I can help you understand " +
-        "which concerns your routine should focus on."
-      );
-    }
-
-    if (
-      q.includes("acne") ||
-      q.includes("pimple") ||
-      q.includes("breakout")
-    ) {
-      return (
-        "Acne can be influenced by oil production, clogged pores, " +
-        "inflammation and hormonal factors. A gentle cleanser, " +
-        "non-comedogenic products and avoiding aggressive scrubbing " +
-        "can help. Persistent or severe acne is best evaluated by " +
-        "a qualified healthcare professional."
-      );
-    }
-
-    if (
-      q.includes("dry") ||
-      q.includes("dehydrated") ||
-      q.includes("hydration")
-    ) {
-      return (
-        "For dry or dehydrated-looking skin, focus on gentle cleansing " +
-        "and consistent moisturising. Ingredients that support the " +
-        "skin barrier can help reduce moisture loss."
-      );
-    }
-
-    if (
-      q.includes("dark spot") ||
-      q.includes("pigmentation") ||
-      q.includes("uneven tone")
-    ) {
-      return (
-        "For uneven tone and dark spots, daily sun protection is one " +
-        "of the most important steps. A gentle routine with ingredients " +
-        "such as niacinamide may also support a more even-looking complexion."
-      );
-    }
-
-    if (
-      q.includes("hair") ||
-      q.includes("scalp") ||
-      q.includes("dandruff")
-    ) {
-      return (
-        "Healthy hair care starts with a clean scalp and products " +
-        "suited to your hair type. Try to avoid excessive heat and " +
-        "harsh chemical treatments. Persistent scalp concerns should " +
-        "be assessed by a qualified professional."
-      );
-    }
-
-    if (
-      q.includes("hello") ||
-      q.includes("hi") ||
-      q.includes("hey")
-    ) {
-      return (
-        "Hey! I'm Nova ✨. I'm here to help you understand your " +
-        "DermaNova results, skincare routine and hair-care questions."
-      );
-    }
-
-    return (
-      "I'm Nova ✨, your DermaNova AI assistant. " +
-      "I can help you understand your skin scan, skincare routine, " +
-      "skin concerns and hair or scalp care. Try asking me about " +
-      "your scan, acne, hydration or skincare routine."
-    );
-  };
-
-  /* =====================================================
-     SEND MESSAGE
-  ===================================================== */
-
-  const sendMessage = (text = message) => {
-    const trimmed = text.trim();
-
-    if (!trimmed || isTyping) return;
-
-    const userMessage = {
-      id: Date.now(),
-      sender: "user",
-      text: trimmed,
-      time: new Date(),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-
-    setMessage("");
-    setIsTyping(true);
-
-    /*
-      Simulated AI delay.
-
-      Later, this can be replaced with:
-      fetch("/api/chat")
-      or your FastAPI Nova endpoint.
-    */
-
-    setTimeout(() => {
-      const botMessage = {
-        id: Date.now() + 1,
-        sender: "bot",
-        text: getBotResponse(trimmed),
-        time: new Date(),
-      };
-
-      setMessages((prev) => [...prev, botMessage]);
-
-      setIsTyping(false);
-    }, 850);
-  };
-
-  /* =====================================================
-     KEYBOARD
-  ===================================================== */
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
-
-  /* =====================================================
-     CLEAR CHAT
-  ===================================================== */
-
-  const clearChat = () => {
-    setMessages([]);
-    setIsTyping(false);
-  };
-
-  /* =====================================================
-     TIME
-  ===================================================== */
-
-  const formatTime = (date) => {
-    return new Intl.DateTimeFormat("en", {
-      hour: "numeric",
-      minute: "2-digit",
-    }).format(date);
-  };
-
-  return (
-    <>
-      {/* =================================================
-          FLOATING BUTTON
-      ================================================= */}
-
-      {!isOpen && (
-        <button
-          className="nova-launcher"
-          onClick={() => setIsOpen(true)}
-          aria-label="Open Nova AI assistant"
-        >
-          <div className="nova-launcher-orb">
-            <div className="nova-launcher-ring" />
-
-            <HiOutlineSparkles />
-
-          </div>
-
-          <div className="nova-launcher-text">
-            <strong>Ask Nova</strong>
-            <span>Your skin assistant</span>
-          </div>
-
-          <div className="nova-launcher-pulse" />
-        </button>
-      )}
-
-      {/* =================================================
-          CHAT WINDOW
-      ================================================= */}
-
-      {isOpen && (
-        <div className="nova-chatbot">
-
-          {/* =================================================
-              HEADER
-          ================================================= */}
-
-          <header className="nova-header">
-
-            <div className="nova-header-left">
-
-              <div className="nova-avatar-wrapper">
-
-                <div className="nova-avatar">
-
-                  <div className="nova-avatar-glow" />
-
-                  <HiOutlineSparkles />
-
-                </div>
-
-                <span className="nova-online-dot" />
-
-              </div>
-
-              <div className="nova-header-text">
-
-                <div className="nova-title-row">
-
-                  <h3>Nova</h3>
-
-                  <span className="nova-ai-badge">
-                    AI
-                  </span>
-
-                </div>
-
-                <div className="nova-status">
-
-                  <span />
-
-                  Online · DermaNova Assistant
-
-                </div>
-
-              </div>
-
-            </div>
-
-            <div className="nova-header-actions">
-
-              {messages.length > 0 && (
-                <button
-                  onClick={clearChat}
-                  className="nova-header-button"
-                  title="Clear conversation"
-                >
-                  <HiOutlineTrash />
-                </button>
-              )}
-
-              <button
-                onClick={() => setIsOpen(false)}
-                className="nova-header-button"
-                title="Close Nova"
-              >
-                <HiOutlineX />
-              </button>
-
-            </div>
-
-          </header>
-
-
-          {/* =================================================
-              CHAT BODY
-          ================================================= */}
-
-          <div
-            ref={messagesRef}
-            onScroll={handleMessagesScroll}
-            className="nova-messages"
-          >
-
-            {/* =============================================
-                EMPTY STATE
-            ============================================= */}
-
-            {messages.length === 0 && (
-              <div className="nova-welcome">
-
-                <div className="nova-welcome-orb">
-
-                  <div className="nova-welcome-orbit" />
-
-                  <div className="nova-welcome-core">
-
-                    <HiOutlineSparkles />
-
-                  </div>
-
-                </div>
-
-                <span className="nova-eyebrow">
-                  YOUR PERSONAL AI
-                </span>
-
-                <h2>
-                  Hi, I'm Nova.
-                </h2>
-
-                <p>
-                  I can help you understand your skin,
-                  scan results, routines and hair care.
-                </p>
-
-                <div className="nova-question-label">
-                  Explore something
-                </div>
-
-                <div className="nova-quick-options">
-
-                  {quickQuestions.map((item) => (
-                    <button
-                      key={item.title}
-                      onClick={() =>
-                        sendMessage(item.text)
-                      }
-                    >
-
-                      <span className="quick-icon">
-                        {item.icon}
-                      </span>
-
-                      <span className="quick-content">
-
-                        <strong>
-                          {item.title}
-                        </strong>
-
-                        <small>
-                          {item.text}
-                        </small>
-
-                      </span>
-
-                    </button>
-                  ))}
-
-                </div>
-
-
-                {/* Suggestions */}
-
-                <div className="nova-suggestions">
-
-                  <span>
-                    Try asking
-                  </span>
-
-                  <div>
-
-                    {suggestions.map((item) => (
-                      <button
-                        key={item}
-                        onClick={() =>
-                          sendMessage(item)
-                        }
-                      >
-                        {item}
-                      </button>
-                    ))}
-
-                  </div>
-
-                </div>
-
-              </div>
-            )}
-
-
-            {/* =============================================
-                MESSAGES
-            ============================================= */}
-
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`nova-message-row ${msg.sender}`}
-              >
-
-                {msg.sender === "bot" && (
-                  <div className="nova-small-avatar">
-
-                    <HiOutlineSparkles />
-
-                  </div>
-                )}
-
-                <div className="nova-message-wrapper">
-
-                  <div className="nova-message">
-                    {msg.text}
-                  </div>
-
-                  <span className="nova-message-time">
-                    {formatTime(msg.time)}
-                  </span>
-
-                </div>
-
-              </div>
-            ))}
-
-
-            {/* =============================================
-                TYPING
-            ============================================= */}
-
-            {isTyping && (
-              <div className="nova-message-row bot">
-
-                <div className="nova-small-avatar">
-
-                  <HiOutlineSparkles />
-
-                </div>
-
-                <div className="nova-typing">
-
-                  <span />
-                  <span />
-                  <span />
-
-                </div>
-
-              </div>
-            )}
-
-          </div>
-
-
-          {/* =================================================
-              SCROLL BUTTON
-          ================================================= */}
-
-          {showScrollButton && (
-            <button
-              className="nova-scroll-button"
-              onClick={scrollToBottom}
-            >
-              <HiOutlineChevronDown />
-            </button>
-          )}
-
-
-          {/* =================================================
-              INPUT
-          ================================================= */}
-
-          <div className="nova-input-area">
-
-            <div className="nova-input-wrapper">
-
-              <textarea
-                ref={inputRef}
-                rows="1"
-                value={message}
-                placeholder="Ask Nova anything..."
-                onChange={(e) =>
-                  setMessage(e.target.value)
-                }
-                onKeyDown={handleKeyDown}
-              />
-
-              <button
-                onClick={() => sendMessage()}
-                disabled={!message.trim() || isTyping}
-                className="nova-send-button"
-                aria-label="Send message"
-              >
-                <HiOutlinePaperAirplane />
-              </button>
-
-            </div>
-
-            <div className="nova-input-footer">
-
-              <span>
-                ✦ Powered by DermaNova AI
-              </span>
-
-              <span>
-                AI responses may not always be accurate
-              </span>
-
-            </div>
-
-          </div>
-
-        </div>
-      )}
-    </>
-  );
 }
-
-export default NovaChatbot;

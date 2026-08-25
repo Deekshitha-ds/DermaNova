@@ -629,10 +629,15 @@ const handleImageUpload = async (event) => {
 };
 return (
   <div className="w-full">
-  {uploadOnly ? (
+  {uploadOnly && phase === "scanning" ? (
   <div className="min-h-[300px] flex flex-col items-center justify-center text-center">
 
-    <div className="w-12 h-12 rounded-full border-4 border-lavender-200 border-t-lavender-700 animate-spin mb-4" />
+    <div className="w-16 h-16 rounded-full bg-lavender-100 flex items-center justify-center mb-5">
+      <HiOutlinePhotograph
+        size={30}
+        className="text-lavender-600"
+      />
+    </div>
 
     <p className="text-lg font-semibold">
       Select an image
