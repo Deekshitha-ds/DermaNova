@@ -1,233 +1,241 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./NovaChatbot.css";
 
-const initialMessages = [
+const responses = [
   {
-    id: 1,
-    sender: "nova",
-    text: "I'm Nova, your AI skin assistant ✨",
+    keywords: ["hello", "hi", "hey", "hii", "hola"],
+    reply:
+      "Hi! I'm Nova ✨ Your AI skin assistant. Ask me anything about skincare and I'll do my best to help."
   },
+
   {
-    id: 2,
-    sender: "nova",
-    text: "Tell me what's going on with your skin, or tap the microphone and talk to me.",
+    keywords: ["who are you", "what are you", "your name"],
+    reply:
+      "I'm Nova 🌸, your DermaNova skin assistant. I can help you understand common skincare concerns, ingredients, routines, and everyday skin-care questions."
   },
+
+  {
+    keywords: ["dry skin", "dryness", "skin is dry", "dry face"],
+    reply:
+      "For dry skin, focus on gentle cleansing and regular moisturization. Look for ingredients like ceramides, glycerin, hyaluronic acid, or squalane. Avoid very hot water and harsh cleansers."
+  },
+
+  {
+    keywords: ["oily skin", "oily face", "oiliness", "too much oil"],
+    reply:
+      "Oily skin can benefit from a gentle cleanser, lightweight non-comedogenic moisturizer, and daily sunscreen. Avoid over-cleansing because it can sometimes make your skin feel even more irritated."
+  },
+
+  {
+    keywords: ["acne", "pimples", "pimple", "breakouts", "breakout"],
+    reply:
+      "For acne-prone skin, keep your routine simple: gentle cleanser, lightweight moisturizer, and sunscreen. Ingredients such as salicylic acid or benzoyl peroxide can help some people, but introduce active ingredients slowly."
+  },
+
+  {
+    keywords: ["blackheads", "whiteheads", "clogged pores", "pores"],
+    reply:
+      "Clogged pores and blackheads are often helped by gentle cleansing and ingredients such as salicylic acid. Avoid squeezing them because that can irritate the skin and increase the chance of marks."
+  },
+
+  {
+    keywords: ["dark spots", "pigmentation", "hyperpigmentation", "dark marks"],
+    reply:
+      "For dark spots, daily sunscreen is especially important because UV exposure can make pigmentation more noticeable. Ingredients such as vitamin C, niacinamide, and azelaic acid may also help over time."
+  },
+
+  {
+    keywords: ["sunscreen", "spf", "sun screen"],
+    reply:
+      "Sunscreen should generally be the last step of your morning skincare routine. Choose broad-spectrum SPF 30 or higher and apply enough to cover your face and exposed areas. Reapply when you're outdoors for extended periods."
+  },
+
+  {
+    keywords: ["moisturizer", "moisturiser", "moisturize", "moisturise"],
+    reply:
+      "Moisturizer helps support your skin barrier and reduce water loss. Even oily or acne-prone skin can benefit from one. Choose a texture that feels comfortable and look for 'non-comedogenic' if you're prone to clogged pores."
+  },
+
+  {
+    keywords: ["vitamin c", "vit c"],
+    reply:
+      "Vitamin C is commonly used in morning skincare to support brighter-looking skin and help protect against environmental stressors. Start with a gentle formulation and use sunscreen during the day."
+  },
+
+  {
+    keywords: ["niacinamide"],
+    reply:
+      "Niacinamide is a versatile skincare ingredient that can help support the skin barrier and improve the appearance of oiliness, redness, and uneven-looking skin. It is commonly used once or twice daily depending on the formulation."
+  },
+
+  {
+    keywords: ["retinol", "retinoid"],
+    reply:
+      "Retinol is a vitamin A derivative commonly used for acne and signs of skin aging. It can be irritating when you first start, so introduce it gradually and use sunscreen during the day. Avoid using multiple strong actives at once when you're beginning."
+  },
+
+  {
+    keywords: ["serum", "serums"],
+    reply:
+      "A serum is usually a lightweight product designed to deliver specific ingredients to the skin. Think of it as a targeted step rather than something everyone necessarily needs."
+  },
+
+  {
+    keywords: ["skincare routine", "skin care routine", "routine"],
+    reply:
+      "A simple routine is a great starting point 🌸 Morning: gentle cleanser → moisturizer → sunscreen. Night: gentle cleanser → treatment or serum if needed → moisturizer. You don't need a huge number of products."
+  },
+
+  {
+    keywords: ["sensitive skin", "sensitive", "irritated skin"],
+    reply:
+      "For sensitive skin, keep things simple. Choose gentle, fragrance-free products when possible and introduce one new product at a time. If something causes persistent burning, swelling, or significant irritation, stop using it."
+  },
+
+  {
+    keywords: ["exfoliate", "exfoliation", "scrub", "scrubbing"],
+    reply:
+      "You don't need to exfoliate every day. Over-exfoliation can irritate your skin barrier. If you use an exfoliating product, start slowly and avoid combining several strong exfoliating or active products at once."
+  },
+
+  {
+    keywords: ["face wash", "cleanser", "cleansing"],
+    reply:
+      "A gentle cleanser is usually enough for everyday cleansing. Avoid very hot water and harsh scrubbing. If your skin feels tight or uncomfortable after washing, your cleanser may be too drying."
+  },
+
+  {
+    keywords: ["glowing skin", "glow", "bright skin"],
+    reply:
+      "Healthy-looking skin usually comes from consistent basics rather than lots of products: gentle cleansing, moisturization, daily sunscreen, enough sleep, and avoiding unnecessary irritation."
+  },
+
+  {
+    keywords: ["morning routine", "morning skincare"],
+    reply:
+      "A simple morning routine can be: gentle cleanser → optional serum → moisturizer → sunscreen ☀️. Keep it simple and choose products that suit your skin."
+  },
+
+  {
+    keywords: ["night routine", "night skincare", "night routine"],
+    reply:
+      "A simple night routine can be: gentle cleanser → optional treatment/serum → moisturizer 🌙. If you're using an active ingredient, introduce it gradually."
+  },
+
+  {
+    keywords: ["thank you", "thanks", "thank"],
+    reply:
+      "You're welcome! 💜 I'm always happy to talk skincare with you."
+  },
+
+  {
+    keywords: ["bye", "goodbye", "good night"],
+    reply:
+      "Bye! 🌸 Take care of your skin and remember — consistency matters more than having a shelf full of products."
+  }
 ];
 
-const quickPrompts = [
-  "My skin feels very dry lately",
-  "I have frequent breakouts",
-  "How can I build a simple routine?",
-];
+function getNovaReply(message) {
+  const text = message.toLowerCase().trim();
 
-function NovaIcon() {
+  for (const item of responses) {
+    if (item.keywords.some((keyword) => text.includes(keyword))) {
+      return item.reply;
+    }
+  }
+
   return (
-    <svg viewBox="0 0 64 64" className="nova-icon" aria-hidden="true">
-      <defs>
-        <linearGradient id="novaRobotGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f4dfff" />
-          <stop offset="50%" stopColor="#d9b8ff" />
-          <stop offset="100%" stopColor="#ffb7d9" />
-        </linearGradient>
-      </defs>
-
-      <rect
-        x="13"
-        y="17"
-        width="38"
-        height="32"
-        rx="12"
-        fill="url(#novaRobotGradient)"
-      />
-
-      <path
-        d="M32 17V11"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-
-      <circle cx="32" cy="8" r="3" fill="currentColor" />
-
-      <circle cx="24" cy="31" r="4" fill="#6f4a93" />
-      <circle cx="40" cy="31" r="4" fill="#6f4a93" />
-
-      <path
-        d="M24 40C27 43 37 43 40 40"
-        fill="none"
-        stroke="#6f4a93"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-
-      <path
-        d="M13 28H8M51 28H56"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function SendIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="M21 3L10.5 13.5M21 3L14.3 21L10.5 13.5L3 9.7L21 3Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function MicIcon({ active = false }) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <rect
-        x="8"
-        y="3"
-        width="8"
-        height="12"
-        rx="4"
-        fill={active ? "currentColor" : "none"}
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <path
-        d="M5 11C5 14.87 8.13 18 12 18C15.87 18 19 14.87 19 11"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-      <path
-        d="M12 18V22M9 22H15"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="M6 6L18 18M18 6L6 18"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function Sparkles() {
-  return (
-    <span className="nova-sparkles" aria-hidden="true">
-      <i className="sparkle sparkle-one">✦</i>
-      <i className="sparkle sparkle-two">✧</i>
-      <i className="sparkle sparkle-three">✦</i>
-    </span>
+    "Hmm, I'm not quite sure about that one yet 😊 " +
+    "You can ask me about acne, dry skin, oily skin, sunscreen, " +
+    "moisturizers, serums, ingredients, skincare routines, or common skin concerns."
   );
 }
 
 export default function NovaChatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isListening, setIsListening] = useState(false);
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState(initialMessages);
+  const [isListening, setIsListening] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const [messages, setMessages] = useState([
+    {
+      sender: "nova",
+      text:
+        "Hi, I'm Nova! ✨\nYour AI skin assistant.\nLet's talk about your skin."
+    }
+  ]);
 
   const recognitionRef = useRef(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
+      behavior: "smooth"
     });
-  }, [messages]);
+  }, [messages, isTyping]);
 
-  useEffect(() => {
-    return () => {
-      recognitionRef.current?.stop();
-    };
-  }, []);
+  const speak = (text) => {
+    if (!("speechSynthesis" in window)) return;
 
-  const addMessage = (sender, text) => {
-    setMessages((current) => [
-      ...current,
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    utterance.rate = 0.95;
+    utterance.pitch = 1.08;
+    utterance.volume = 1;
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const sendMessage = () => {
+    const text = input.trim();
+
+    if (!text || isTyping) return;
+
+    setMessages((prev) => [
+      ...prev,
       {
-        id: Date.now() + Math.random(),
-        sender,
-        text,
-      },
+        sender: "user",
+        text
+      }
     ]);
-  };
 
-  const generateNovaResponse = (userText) => {
-    const text = userText.toLowerCase();
-
-    if (text.includes("dry") || text.includes("dehydrated")) {
-      return "Dry or dehydrated skin usually benefits from a gentle cleanser, a hydrating layer, and a moisturizer that supports the skin barrier. If you tell me your current routine, I can help you simplify it.";
-    }
-
-    if (
-      text.includes("breakout") ||
-      text.includes("acne") ||
-      text.includes("pimple")
-    ) {
-      return "For frequent breakouts, consistency is usually more useful than using lots of products at once. A gentle cleanser, non-comedogenic moisturizer, and one suitable acne-focused active can be a good starting point.";
-    }
-
-    if (
-      text.includes("routine") ||
-      text.includes("skincare") ||
-      text.includes("skin care")
-    ) {
-      return "Let's keep it simple: cleanse, moisturize, and use sunscreen in the morning. Depending on your concerns, we can gradually add one targeted product rather than overwhelming your skin.";
-    }
-
-    if (
-      text.includes("sensitive") ||
-      text.includes("irritat") ||
-      text.includes("redness")
-    ) {
-      return "If your skin is feeling sensitive, I'd keep your routine gentle for now and avoid introducing several new products together. Tell me what you're currently using and what you're noticing.";
-    }
-
-    return "I can help you think through your skin concerns and build a simple routine. Tell me a little more about what you're noticing, including how long it's been happening and what products you're currently using.";
-  };
-
-  const handleSend = (text = input) => {
-    const cleanText = text.trim();
-
-    if (!cleanText) return;
-
-    addMessage("user", cleanText);
     setInput("");
+    setIsTyping(true);
 
-    window.setTimeout(() => {
-      addMessage("nova", generateNovaResponse(cleanText));
-    }, 650);
+    const reply = getNovaReply(text);
+
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "nova",
+          text: reply
+        }
+      ]);
+
+      setIsTyping(false);
+
+      speak(reply);
+    }, 700);
   };
 
-  const startVoiceRecognition = () => {
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
+  };
+
+  const startVoiceInput = () => {
     const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      addMessage(
-        "nova",
-        "Voice input isn't supported by this browser yet. You can still type your skincare question below."
+      alert(
+        "Voice input isn't supported in this browser. Please use Chrome or Edge."
       );
       return;
     }
@@ -239,8 +247,8 @@ export default function NovaChatbot() {
 
     const recognition = new SpeechRecognition();
 
-    recognition.lang = "en-US";
-    recognition.interimResults = true;
+    recognition.lang = "en-IN";
+    recognition.interimResults = false;
     recognition.continuous = false;
 
     recognition.onstart = () => {
@@ -248,20 +256,14 @@ export default function NovaChatbot() {
     };
 
     recognition.onresult = (event) => {
-      let transcript = "";
-
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        transcript += event.results[i][0].transcript;
-      }
+      const transcript =
+        event.results[0][0].transcript;
 
       setInput(transcript);
-
-      if (event.results[event.results.length - 1].isFinal) {
-        handleSend(transcript);
-      }
     };
 
-    recognition.onerror = () => {
+    recognition.onerror = (event) => {
+      console.error("Voice recognition error:", event.error);
       setIsListening(false);
     };
 
@@ -270,216 +272,179 @@ export default function NovaChatbot() {
     };
 
     recognitionRef.current = recognition;
+
     recognition.start();
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      handleSend();
+  const stopSpeaking = () => {
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+  };
+
+  const toggleChat = () => {
+    setIsOpen((prev) => !prev);
+
+    if (isOpen) {
+      stopSpeaking();
     }
   };
 
   return (
     <>
+      {/* ==============================
+          FLOATING NOVA ROBOT
+      ============================== */}
       {!isOpen && (
         <button
           className="nova-launcher"
-          onClick={() => setIsOpen(true)}
+          onClick={toggleChat}
           aria-label="Open Nova AI skin assistant"
         >
-          <span className="launcher-glow" />
-          <Sparkles />
+          <div className="nova-launcher-glow" />
 
-          <span className="launcher-robot">
-            <NovaIcon />
-          </span>
+          <div className="nova-robot">
+            <div className="nova-antenna">
+              <span />
+            </div>
 
-          <span className="launcher-status" />
+            <div className="nova-head">
+              <div className="nova-face">
+                <span className="nova-eye left" />
+                <span className="nova-eye right" />
+
+                <span className="nova-smile" />
+              </div>
+            </div>
+
+            <div className="nova-wave-hand">
+              <span>👋</span>
+            </div>
+          </div>
+
+          <span className="nova-sparkle sparkle-one">✦</span>
+          <span className="nova-sparkle sparkle-two">✧</span>
+          <span className="nova-sparkle sparkle-three">✦</span>
         </button>
       )}
 
+      {/* ==============================
+          CHAT WINDOW
+      ============================== */}
       {isOpen && (
-        <section className="nova-chatbot" aria-label="Nova AI skin assistant">
-          <div className="nova-background-glow glow-left" />
-          <div className="nova-background-glow glow-right" />
+        <div className="nova-chat-window">
 
-          <header className="nova-header">
-            <div className="nova-brand">
-              <div className="nova-mini-avatar">
-                <NovaIcon />
+          {/* HEADER */}
+          <div className="nova-chat-header">
+            <div className="nova-header-avatar">
+              <div className="mini-antenna" />
+              <div className="mini-face">
+                <span />
+                <span />
+                <b />
               </div>
+            </div>
 
-              <div>
-                <div className="nova-title-row">
-                  <h2>Nova</h2>
-                  <span className="nova-ai-pill">AI</span>
-                </div>
-
-                <div className="nova-online">
-                  <span />
-                  Skin assistant
-                </div>
-              </div>
+            <div className="nova-header-text">
+              <h3>Nova AI</h3>
+              <span>Skin assistant</span>
             </div>
 
             <button
               className="nova-close"
-              onClick={() => setIsOpen(false)}
+              onClick={toggleChat}
               aria-label="Close Nova"
             >
-              <CloseIcon />
+              ×
             </button>
-          </header>
+          </div>
 
-          <div className="nova-content">
-            <aside className="nova-voice-panel">
-              <div className="voice-intro">
-                <span className="voice-eyebrow">YOUR SKIN COMPANION</span>
-                <h3>
-                  Let's talk about
-                  <br />
-                  <em>your skin.</em>
-                </h3>
-                <p>
-                  Ask Nova anything about your skincare routine, concerns, or
-                  everyday skin habits.
-                </p>
-              </div>
+          {/* CHAT */}
+          <div className="nova-chat-body">
 
+            {messages.map((message, index) => (
               <div
-                className={`voice-orb-wrapper ${
-                  isListening ? "is-listening" : ""
+                key={index}
+                className={`nova-message-row ${
+                  message.sender === "user"
+                    ? "user-row"
+                    : "nova-row"
                 }`}
               >
-                <div className="voice-ripple ripple-one" />
-                <div className="voice-ripple ripple-two" />
-                <div className="voice-ripple ripple-three" />
-
-                <button
-                  className="voice-orb"
-                  onClick={startVoiceRecognition}
-                  aria-label={
-                    isListening
-                      ? "Stop listening"
-                      : "Start voice conversation"
-                  }
-                >
-                  <div className="orb-shine" />
-
-                  <div className="orb-robot">
-                    <NovaIcon />
+                {message.sender === "nova" && (
+                  <div className="nova-small-avatar">
+                    ✨
                   </div>
+                )}
 
-                  <span className="orb-mic">
-                    <MicIcon active={isListening} />
-                  </span>
-                </button>
-
-                <span className="voice-orb-label">
-                  {isListening ? "Listening..." : "Tap to talk"}
-                </span>
+                <div
+                  className={`nova-message ${
+                    message.sender === "user"
+                      ? "user-message"
+                      : "nova-message-bubble"
+                  }`}
+                >
+                  {message.text}
+                </div>
               </div>
+            ))}
 
-              <div className="voice-hint">
-                <span className="hint-icon">✦</span>
-                <span>
-                  {isListening
-                    ? "I'm listening to you"
-                    : "Your skin questions stay in this conversation"}
-                </span>
-              </div>
-            </aside>
-
-            <div className="nova-chat-panel">
-              <div className="chat-heading">
-                <div>
-                  <span className="chat-eyebrow">CONVERSATION</span>
-                  <h3>Hi, I'm Nova ✨</h3>
+            {isTyping && (
+              <div className="nova-message-row nova-row">
+                <div className="nova-small-avatar">
+                  ✨
                 </div>
 
-                <span className="secure-badge">
-                  <span>●</span> Ready
-                </span>
+                <div className="nova-typing">
+                  <span />
+                  <span />
+                  <span />
+                </div>
               </div>
+            )}
 
-              <div className="nova-messages">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`message-row ${
-                      message.sender === "user" ? "user-row" : "nova-row"
-                    }`}
-                  >
-                    {message.sender === "nova" && (
-                      <div className="message-avatar">
-                        <NovaIcon />
-                      </div>
-                    )}
-
-                    <div
-                      className={`message-bubble ${
-                        message.sender === "user"
-                          ? "user-bubble"
-                          : "nova-bubble"
-                      }`}
-                    >
-                      {message.text}
-                    </div>
-                  </div>
-                ))}
-
-                <div ref={messagesEndRef} />
-              </div>
-
-              <div className="quick-prompts">
-                {quickPrompts.map((prompt) => (
-                  <button
-                    key={prompt}
-                    onClick={() => handleSend(prompt)}
-                  >
-                    {prompt}
-                  </button>
-                ))}
-              </div>
-
-              <div className="nova-composer">
-                <button
-                  className={`composer-mic ${
-                    isListening ? "composer-mic-active" : ""
-                  }`}
-                  onClick={startVoiceRecognition}
-                  aria-label="Use voice input"
-                >
-                  <MicIcon active={isListening} />
-                </button>
-
-                <textarea
-                  value={input}
-                  onChange={(event) => setInput(event.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Tell Nova what's on your mind..."
-                  rows={1}
-                  aria-label="Message Nova"
-                />
-
-                <button
-                  className="composer-send"
-                  onClick={() => handleSend()}
-                  disabled={!input.trim()}
-                  aria-label="Send message"
-                >
-                  <SendIcon />
-                </button>
-              </div>
-
-              <div className="nova-disclaimer">
-                Nova provides general skincare information and isn't a
-                substitute for a dermatologist.
-              </div>
-            </div>
+            <div ref={messagesEndRef} />
           </div>
-        </section>
+
+          {/* INPUT */}
+          <div className="nova-input-area">
+
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={
+                isListening
+                  ? "Listening..."
+                  : "Ask Nova about your skin..."
+              }
+              rows={1}
+            />
+
+            <button
+              className={`nova-voice-button ${
+                isListening ? "listening" : ""
+              }`}
+              onClick={startVoiceInput}
+              aria-label="Voice input"
+            >
+              {isListening ? "🔴" : "🎙️"}
+            </button>
+
+            <button
+              className="nova-send-button"
+              onClick={sendMessage}
+              disabled={!input.trim() || isTyping}
+              aria-label="Send message"
+            >
+              ➤
+            </button>
+          </div>
+
+          <div className="nova-disclaimer">
+            Nova provides general skincare information, not a medical diagnosis.
+          </div>
+        </div>
       )}
     </>
   );

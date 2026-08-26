@@ -83,7 +83,7 @@ export default function App() {
         </main>
 
         <Footer />
-         <NovaChatbot />
+         {!isLoading && <NovaChatbot />}
 
       </div>
       
