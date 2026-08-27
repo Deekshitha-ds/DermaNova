@@ -740,12 +740,13 @@ return (
       {/* Overlay */}
 
       {phase === "scanning" && detection.isReady && (
-
-    <div
-        className="absolute left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-400 to-transparent opacity-80 animate-scanLaser"
-    />
-
+    
+    <div className="lavender-scan-line">
+    <div className="lavender-scan-glow" />
+    <div className="lavender-scan-core" />
+  </div>
 )}
+
 
       {/* Loading */}
 
