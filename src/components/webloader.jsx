@@ -38,15 +38,7 @@ export default function WebLoader({ exiting = false }) {
       <div className="loader-ambient ambient-three" />
 
 
-      {/* =====================================
-          TOP BRAND LABEL
-      ===================================== */}
-
-      <div className="loader-top-label">
-        <span className="loader-live-dot" />
-        DERMA INTELLIGENCE SYSTEM
-      </div>
-
+      
 
       {/* =====================================
           MAIN CORE
