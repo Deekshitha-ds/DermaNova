@@ -12,7 +12,8 @@ import {
   HiOutlineCamera,
   HiOutlinePhotograph
 } from "react-icons/hi";
-import DermaLoader from "../components/DermaLoader";
+import DermaLoader from "../components/dermaloader";
+import ScanResult from "./ScanResult";
 const HOLD_DURATION_MS = 1200;
 
 export default function SmartCamera({ onResult,autoUpload = false, uploadOnly = false }) {
@@ -866,179 +867,19 @@ return (
       style={{ display: "none" }}
 
     />
+ {/* Scan Result */}
 
-    {/* Error */}
-    {phase === "result" && result && (
-
-<div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
-
-    <h2 className="text-2xl font-bold mb-4">
-        Skin Analysis Result
-    </h2>
-
-    <div className="grid grid-cols-2 gap-4">
-
-        <div>
-            <p className="text-gray-500">
-                Skin Type
-            </p>
-
-            <h3 className="text-xl font-semibold">
-                {result.detected_type}
-            </h3>
-        </div>
-
-        <div>
-            <p className="text-gray-500">
-                Confidence
-            </p>
-
-            <h3 className="text-xl font-semibold">
-                {result.scores.confidence}%
-            </h3>
-        </div>
-
-        <div>
-            <p className="text-gray-500">
-                Health Score
-            </p>
-
-            <h3 className="text-xl font-semibold">
-                {Math.round(result.scores.health)}
-            </h3>
-        </div>
-
-        <div>
-            <p className="text-gray-500">
-                Hydration
-            </p>
-
-            <h3 className="text-xl font-semibold">
-                {Math.round(result.scores.hydration)}%
-            </h3>
-        </div>
-
-        <div>
-            <p className="text-gray-500">
-                Oiliness
-            </p>
-
-            <h3 className="text-xl font-semibold">
-                {Math.round(result.scores.oiliness)}%
-            </h3>
-        </div>
-
-    </div>
-
-   <div className="space-y-4">
-
-{result.detections?.map((item,index)=>{
-
-let severity="Low";
-let color="bg-green-500";
-
-if(item.confidence>=80){
-    severity="High";
-    color="bg-red-500";
-}
-else if(item.confidence>=60){
-    severity="Medium";
-    color="bg-yellow-500";
-}
-
-return(
-
-<div
-key={index}
-className="rounded-xl border p-5 shadow-sm bg-white hover:shadow-lg transition"
->
-
-<div className="flex justify-between items-center">
-
-<h3 className="text-lg font-bold">
-
-{item.issue}
-
-</h3>
-
-<span
-className={`${color} text-white px-3 py-1 rounded-full text-sm`}
->
-
-{severity}
-
-</span>
-
-</div>
-
-<p className="text-gray-500 mt-2">
-
-Confidence :
-<b> {item.confidence}%</b>
-
-</p>
-
-</div>
-
-);
-
-})}
-
-</div>
-<div className="mt-8">
-
-<h2 className="text-xl font-bold mb-4">
-
-AI Recommendation
-
-</h2>
-
-<div className="bg-blue-50 rounded-xl p-5">
-
-<ul className="space-y-2 list-disc ml-5">
-
-{result.detections?.map((item,index)=>(
-
-<li key={index}>
-
-{item.issue==="Acne" &&
-"Use a Salicylic Acid cleanser twice daily."}
-
-{item.issue==="Dark Circles" &&
-"Improve sleep and use Vitamin C based eye cream."}
-
-{item.issue==="Pigmentation" &&
-"Use SPF 50 sunscreen and Niacinamide serum."}
-
-{item.issue==="Wrinkles" &&
-"Use Retinol serum during night."}
-
-{item.issue==="Redness" &&
-"Use soothing moisturizer containing Ceramides."}
-
-</li>
-
-))}
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
-
+{phase === "result" && result && (
+  <ScanResult result={result} />
 )}
 
-    {submitError && (
+{/* Error */}
 
-      <p className="text-red-500 text-center mt-4">
-
-        {submitError}
-
-      </p>
-
-    )}
+{submitError && (
+  <p className="text-red-500 text-center mt-4">
+    {submitError}
+  </p>
+)} 
 
   </div>
 
