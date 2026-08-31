@@ -5,6 +5,23 @@ export default function ScanResult({ result }) {
   const oiliness = Math.round(result.scores?.oiliness ?? 0);
   const hydration = Math.round(result.scores?.hydration ?? 0);
   const confidence = Math.round(result.scores?.confidence ?? 0);
+  const skinMetrics = result.skin_metrics ?? {};
+
+  const unevenTone = Math.round(
+    skinMetrics.uneven_tone ?? 0
+);
+
+  const pigmentation = Math.round(
+  skinMetrics.pigmentation ?? 0
+);
+
+  const darkSpots = Math.round(
+  skinMetrics.dark_spots ?? 0
+);
+
+  const redness = Math.round(
+  skinMetrics.redness ?? 0
+);
 
   const detections = result.detections ?? [];
 
@@ -323,7 +340,79 @@ export default function ScanResult({ result }) {
         </div>
 
       </section>
+       {/* ================================================= */}
+{/* SKIN CONDITION BREAKDOWN */}
+{/* ================================================= */}
 
+<section className="relative overflow-hidden rounded-[32px] border border-lavender-200/60 bg-white/80 backdrop-blur-xl shadow-[0_18px_50px_rgba(80,60,120,0.07)] p-7 md:p-9">
+
+  {/* Decorative glow */}
+  <div className="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-lavender-200/20 blur-3xl" />
+
+  <div className="relative">
+
+    {/* Header */}
+    <div className="mb-8">
+
+      <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-lavender-600">
+        Visual Skin Analysis
+      </p>
+
+      <h3 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
+        Skin condition breakdown
+      </h3>
+
+      <p className="mt-2 text-sm text-ink/40">
+        Visual indicators identified from your facial scan
+      </p>
+
+    </div>
+
+
+    {/* Metrics */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+
+      {/* Uneven Skin Tone */}
+      <SkinConditionCard
+        title="Uneven Skin Tone"
+        value={unevenTone}
+        description="Tone consistency across the detected facial region"
+        icon="◐"
+      />
+
+
+      {/* Pigmentation */}
+      <SkinConditionCard
+        title="Pigmentation"
+        value={pigmentation}
+        description="Visible variation in skin pigmentation"
+        icon="◒"
+      />
+
+
+      {/* Dark Spots */}
+      <SkinConditionCard
+        title="Dark Spots"
+        value={darkSpots}
+        description="Localized darker areas detected in the skin"
+        icon="◉"
+      />
+
+
+      {/* Redness */}
+      <SkinConditionCard
+        title="Redness"
+        value={redness}
+        description="Visible redness detected across the facial region"
+        icon="◌"
+      />
+
+    </div>
+
+  </div>
+
+</section>
 
       {/* ================================================= */}
       {/* DETECTED CONCERNS */}
@@ -654,7 +743,130 @@ function MetricCard({
 
   );
 }
+/* ========================================================= */
+/* SKIN CONDITION CARD */
+/* ========================================================= */
 
+function SkinConditionCard({
+  title,
+  value,
+  description,
+  icon,
+}) {
+
+  const score = Math.min(
+    Math.max(Number(value) || 0, 0),
+    100
+  );
+
+  let status = "Low";
+  let statusClass =
+    "bg-emerald-50 text-emerald-600 border-emerald-100";
+
+  if (score >= 75) {
+
+    status = "High";
+
+    statusClass =
+      "bg-red-50 text-red-600 border-red-100";
+
+  } else if (score >= 50) {
+
+    status = "Moderate";
+
+    statusClass =
+      "bg-amber-50 text-amber-600 border-amber-100";
+
+  }
+
+  return (
+
+    <div className="group relative overflow-hidden rounded-2xl border border-ink/5 bg-white/90 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-lavender-200 hover:shadow-[0_15px_35px_rgba(90,70,140,0.10)]">
+
+      {/* Top shine */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-lavender-300/70 to-transparent opacity-0 group-hover:opacity-100 transition" />
+
+
+      <div className="flex items-start justify-between gap-4">
+
+        {/* Icon + title */}
+        <div className="flex items-center gap-4">
+
+          <div className="w-11 h-11 rounded-2xl bg-lavender-50 border border-lavender-100 flex items-center justify-center text-lavender-600 text-lg">
+
+            {icon}
+
+          </div>
+
+          <div>
+
+            <h4 className="font-semibold text-base text-ink">
+              {title}
+            </h4>
+
+            <p className="text-xs text-ink/35 mt-1">
+              Visual indicator
+            </p>
+
+          </div>
+
+        </div>
+
+
+        {/* Status */}
+        <span
+          className={`px-3 py-1 rounded-full border text-[10px] font-semibold ${statusClass}`}
+        >
+          {status}
+        </span>
+
+      </div>
+
+
+      {/* Score */}
+      <div className="mt-6 flex items-end justify-between">
+
+        <div>
+
+          <span className="text-3xl font-semibold tracking-tight text-ink">
+            {score}
+          </span>
+
+          <span className="ml-1 text-xs text-ink/30">
+            / 100
+          </span>
+
+        </div>
+
+        <span className="text-[10px] uppercase tracking-wider text-ink/30">
+          Indicator score
+        </span>
+
+      </div>
+
+
+      {/* Progress */}
+      <div className="mt-4 h-2 rounded-full bg-lavender-100 overflow-hidden">
+
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-lavender-400 to-lavender-600 transition-all duration-1000"
+          style={{
+            width: `${score}%`,
+          }}
+        />
+
+      </div>
+
+
+      {/* Description */}
+      <p className="mt-4 text-xs leading-5 text-ink/45">
+        {description}
+      </p>
+
+    </div>
+
+  );
+}
 
 /* ========================================================= */
 /* RECOMMENDATION */
