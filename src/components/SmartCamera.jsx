@@ -124,6 +124,22 @@ useEffect(() => {
   return () => clearTimeout(timer);
 
 }, [autoUpload]);
+useEffect(() => {
+  if (uploadOnly) return;
+  if (phase !== "scanning") return;
+
+  const video = videoRef.current;
+  const stream = streamRef.current;
+
+  if (!video || !stream) return;
+
+  video.srcObject = stream;
+
+  video.play().catch((err) => {
+    console.warn("VIDEO PLAY ERROR:", err);
+  });
+
+}, [phase, uploadOnly]);
 
   /* ---------------- VIDEO SIZE ---------------- */
 
@@ -572,6 +588,7 @@ const handleImageUpload = async (event) => {
   const file = event.target.files[0];
 
   if (!file) return;
+  event.target.value = "";
 
   if (!(file instanceof Blob)) {
     setSubmitError("Invalid image file.");
@@ -698,22 +715,7 @@ return (
 
   setPhase("scanning");
 
-  // Reconnect camera stream to the newly created video element
-  setTimeout(() => {
-
-    if (
-      videoRef.current &&
-      streamRef.current
-    ) {
-
-      videoRef.current.srcObject =
-        streamRef.current;
-
-      videoRef.current.play().catch(() => {});
-
-    }
-
-  }, 100);
+  
 
   if (onResult) {
     onResult(null);

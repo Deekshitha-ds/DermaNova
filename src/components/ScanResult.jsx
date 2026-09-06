@@ -619,22 +619,56 @@ export default function ScanResult({ result }) {
           </div>
 
 
-          {detections.length > 0 ? (
+          {result.recommendations?.length > 0 ? (
+  <div className="grid md:grid-cols-2 gap-4">
+    {result.recommendations.map((recommendation, index) => (
+      <div
+        key={index}
+        className="rounded-2xl bg-white/80 border border-lavender-100 p-5"
+      >
+        <div className="flex items-start gap-4">
 
-            <div className="grid md:grid-cols-2 gap-3">
+          <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center shrink-0">
+            <span className="text-lavender-600 text-lg">
+              ✨
+            </span>
+          </div>
 
-              {detections.map((item, index) => (
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600 mb-1">
+              {recommendation.category}
+            </p>
 
-                <Recommendation
-                  key={index}
-                  issue={item.issue}
-                />
+            <h4 className="font-semibold text-ink mb-1">
+              {recommendation.title}
+            </h4>
 
-              ))}
+            <p className="text-sm text-ink/60 leading-6">
+              {recommendation.description}
+            </p>
+          </div>
 
-            </div>
+        </div>
+      </div>
+    ))}
+  </div>
+) : (
+  <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
+    <div className="flex gap-3">
 
-          ) : (
+      <span className="text-lavender-600">
+        ✓
+      </span>
+
+      <p className="text-sm text-ink/60 leading-6">
+        Maintain a consistent skincare routine, stay hydrated,
+        use daily sun protection, and continue monitoring your
+        skin regularly.
+      </p>
+
+    </div>
+  </div>
+)}
 
             <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
 
@@ -654,7 +688,7 @@ export default function ScanResult({ result }) {
 
             </div>
 
-          )}
+          
 
         </div>
 
