@@ -78,6 +78,12 @@ export default function ScanResult({ result }) {
     if (score >= 50) return "Needs Attention";
     return "Needs Care";
   };
+  const fullRecommendation = result.full_recommendation ?? {};
+
+  const routine = fullRecommendation.routine ?? {};
+  const products = fullRecommendation.products ?? [];
+  const focus = fullRecommendation.focus ?? [];
+  const notes = fullRecommendation.notes ?? [];
 
   return (
     <div className="mt-10 space-y-6">
@@ -619,57 +625,251 @@ export default function ScanResult({ result }) {
           </div>
 
 
-          {result.recommendations?.length > 0 ? (
-  <div className="grid md:grid-cols-2 gap-4">
-    {result.recommendations.map((recommendation, index) => (
-      <div
-        key={index}
-        className="rounded-2xl bg-white/80 border border-lavender-100 p-5"
-      >
-        <div className="flex items-start gap-4">
+          {result.full_recommendation ? (
+  <div className="space-y-5">
 
-          <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center shrink-0">
-            <span className="text-lavender-600 text-lg">
-              ✨
-            </span>
+    {/* MORNING + EVENING ROUTINE */}
+    <div className="grid md:grid-cols-2 gap-4">
+
+      {/* Morning */}
+      <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center">
+            <span className="text-lg">🌅</span>
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600 mb-1">
-              {recommendation.category}
+            <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600">
+              Morning
             </p>
-
-            <h4 className="font-semibold text-ink mb-1">
-              {recommendation.title}
+            <h4 className="font-semibold text-ink">
+              Morning Routine
             </h4>
-
-            <p className="text-sm text-ink/60 leading-6">
-              {recommendation.description}
-            </p>
           </div>
+        </div>
 
+        <div className="space-y-3">
+          {routine.morning?.map((step, index) => (
+            <div key={index} className="flex items-start gap-3">
+              <span className="w-6 h-6 rounded-full bg-lavender-100 text-lavender-600 text-xs font-semibold flex items-center justify-center shrink-0">
+                {index + 1}
+              </span>
+
+              <p className="text-sm text-ink/70 leading-6">
+                {step}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
-    ))}
-  </div>
-) : (
-  <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
-    <div className="flex gap-3">
 
-      <span className="text-lavender-600">
-        ✓
-      </span>
 
-      <p className="text-sm text-ink/60 leading-6">
-        Maintain a consistent skincare routine, stay hydrated,
-        use daily sun protection, and continue monitoring your
-        skin regularly.
-      </p>
+      {/* Evening */}
+      <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center">
+            <span className="text-lg">🌙</span>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600">
+              Evening
+            </p>
+            <h4 className="font-semibold text-ink">
+              Evening Routine
+            </h4>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {routine.evening?.map((step, index) => (
+            <div key={index} className="flex items-start gap-3">
+              <span className="w-6 h-6 rounded-full bg-lavender-100 text-lavender-600 text-xs font-semibold flex items-center justify-center shrink-0">
+                {index + 1}
+              </span>
+
+              <p className="text-sm text-ink/70 leading-6">
+                {step}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
 
     </div>
-  </div>
-)}
 
+
+    {/* RECOMMENDED PRODUCTS */}
+    {products.length > 0 && (
+      <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
+
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center">
+            <span className="text-lg">🧴</span>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600">
+              Product Guidance
+            </p>
+
+            <h4 className="font-semibold text-ink">
+              Recommended Product Categories
+            </h4>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          {products.map((product, index) => (
+            <div
+              key={index}
+              className="rounded-xl bg-lavender-50/50 border border-lavender-100 p-4"
+            >
+              <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600 mb-1">
+                {product.category}
+              </p>
+
+              <h5 className="font-semibold text-ink mb-1">
+                {product.recommendation}
+              </h5>
+
+              <p className="text-sm text-ink/60 leading-6">
+                {product.reason}
+              </p>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    )}
+
+
+    {/* FOCUS AREAS */}
+    {focus.length > 0 && (
+      <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
+
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center">
+            <span className="text-lg">🎯</span>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600">
+              Personalized Focus
+            </p>
+
+            <h4 className="font-semibold text-ink">
+              Focus Areas
+            </h4>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {focus.map((item, index) => (
+            <span
+              key={index}
+              className="px-3 py-2 rounded-full bg-lavender-50 border border-lavender-100 text-sm text-lavender-700"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+
+      </div>
+    )}
+
+
+    {/* IMPORTANT NOTES */}
+    {notes.length > 0 && (
+      <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
+
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center">
+            <span className="text-lg">⚠️</span>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600">
+              Important
+            </p>
+
+            <h4 className="font-semibold text-ink">
+              Important Notes
+            </h4>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {notes.map((note, index) => (
+            <div key={index} className="flex items-start gap-3">
+              <span className="text-lavender-600 mt-1">
+                ✓
+              </span>
+
+              <p className="text-sm text-ink/60 leading-6">
+                {note}
+              </p>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    )}
+
+  </div>
+) : (
+  /* OLD FALLBACK */
+  result.recommendations?.length > 0 ? (
+    <div className="grid md:grid-cols-2 gap-4">
+      {result.recommendations.map((recommendation, index) => (
+        <div
+          key={index}
+          className="rounded-2xl bg-white/80 border border-lavender-100 p-5"
+        >
+          <div className="flex items-start gap-4">
+
+            <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center shrink-0">
+              <span className="text-lavender-600 text-lg">
+                ✨
+              </span>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600 mb-1">
+                {recommendation.category}
+              </p>
+
+              <h4 className="font-semibold text-ink mb-1">
+                {recommendation.title}
+              </h4>
+
+              <p className="text-sm text-ink/60 leading-6">
+                {recommendation.description}
+              </p>
+            </div>
+
+          </div>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
+      <div className="flex gap-3">
+
+        <span className="text-lavender-600">
+          ✓
+        </span>
+
+        <p className="text-sm text-ink/60 leading-6">
+          Maintain a consistent skincare routine, stay hydrated,
+          use daily sun protection, and continue monitoring your
+          skin regularly.
+        </p>
+
+      </div>
+    </div>
+  )
+)}
             <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
 
               <div className="flex gap-3">
