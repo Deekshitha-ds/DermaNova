@@ -40,32 +40,32 @@ export default function Register() {
     const email = form.email.trim().toLowerCase();
 
     // General email format validation
-    const emailRegex =
-      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+const emailRegex =
+  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
-    if (!emailRegex.test(email) || email.includes("..")) {
-      setError(
-        "Invalid email format. Please enter a valid email address."
-      );
-      return;
-    }
+if (!emailRegex.test(email) || email.includes("..")) {
+  setError(
+    "Invalid email format. Please enter a valid email address."
+  );
+  return;
+}
 
-    // Password validation
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+// Password validation
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
-    if (!passwordRegex.test(form.password)) {
-      setError(
-        "Password must be at least 8 characters and include an uppercase letter, lowercase letter, number, and special character."
-      );
-      return;
-    }
+if (!passwordRegex.test(form.password)) {
+  setError(
+    "Password must be at least 8 characters and include an uppercase letter, lowercase letter, number, and special character."
+  );
+  return;
+}
 
-    // Confirm password validation
-    if (form.password !== form.confirm_password) {
-      setError("Passwords do not match.");
-      return;
-    }
+// Confirm password validation
+if (form.password !== form.confirm_password) {
+  setError("Passwords do not match.");
+  return;
+}
     setIsSubmitting(true);
 
     try {
