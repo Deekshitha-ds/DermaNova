@@ -5,25 +5,69 @@ export default function ScanResult({ result }) {
   const oiliness = Math.round(result.scores?.oiliness ?? 0);
   const hydration = Math.round(result.scores?.hydration ?? 0);
   const confidence = Math.round(result.scores?.confidence ?? 0);
+
   const skinMetrics = result.skin_metrics ?? {};
+  const darkCircles = result.dark_circles ?? {};
+
+  const backendBaseUrl =
+   import.meta.env.VITE_BACKEND_URL ||
+  "http://127.0.0.1:8000";
+
+  const processedImageUrl = result.processed_image
+  ? result.processed_image.startsWith("http")
+    ? result.processed_image
+    : `${backendBaseUrl}${result.processed_image}`
+  : null;
 
   const unevenTone = Math.round(
     skinMetrics.uneven_tone ?? 0
-);
+  );
 
   const pigmentation = Math.round(
-  skinMetrics.pigmentation ?? 0
-);
+    skinMetrics.pigmentation ?? 0
+  );
 
   const darkSpots = Math.round(
-  skinMetrics.dark_spots ?? 0
-);
+    skinMetrics.dark_spots ?? 0
+  );
 
   const redness = Math.round(
-  skinMetrics.redness ?? 0
+    skinMetrics.redness ?? 0
+  );
+  const darkCircleScore = Math.round(
+  darkCircles.overall ?? 0
 );
 
   const detections = result.detections ?? [];
+
+  /* ========================================================= */
+  /* RECOMMENDATION DATA */
+  /* ========================================================= */
+
+  const fullRecommendation =
+    result.full_recommendation ?? {};
+
+  const profile =
+    fullRecommendation.profile ?? {};
+
+  const routine =
+    fullRecommendation.routine ?? {};
+
+  const products =
+    fullRecommendation.products ?? [];
+
+  const focus =
+    fullRecommendation.focus ?? [];
+
+  const avoid =
+    fullRecommendation.avoid ?? [];
+
+  const notes =
+    fullRecommendation.notes ?? [];
+
+  /* ========================================================= */
+  /* SEVERITY */
+  /* ========================================================= */
 
   const getSeverity = (value) => {
     if (value >= 80) {
@@ -55,6 +99,10 @@ export default function ScanResult({ result }) {
     };
   };
 
+  /* ========================================================= */
+  /* ISSUE ICON */
+  /* ========================================================= */
+
   const getIssueIcon = (issue) => {
     const name = issue?.toLowerCase() ?? "";
 
@@ -72,10 +120,15 @@ export default function ScanResult({ result }) {
     return "✦";
   };
 
+  /* ========================================================= */
+  /* HEALTH LABEL */
+  /* ========================================================= */
+
   const getHealthLabel = (score) => {
     if (score >= 85) return "Excellent";
     if (score >= 70) return "Healthy";
     if (score >= 50) return "Needs Attention";
+
     return "Needs Care";
   };
 
@@ -87,8 +140,6 @@ export default function ScanResult({ result }) {
       {/* ================================================= */}
 
       <section className="relative overflow-hidden rounded-[32px] border border-lavender-200/70 bg-white/75 backdrop-blur-2xl shadow-[0_20px_60px_rgba(80,60,120,0.10)]">
-
-        {/* Decorative glow */}
 
         <div className="absolute -top-32 -right-20 h-72 w-72 rounded-full bg-lavender-300/20 blur-3xl" />
 
@@ -118,7 +169,9 @@ export default function ScanResult({ result }) {
 
               <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-ink">
                 Skin Analysis
-                <span className="text-lavender-600"> Report</span>
+                <span className="text-lavender-600">
+                  {" "}Report
+                </span>
               </h2>
 
               <p className="mt-2 text-sm text-ink/45">
@@ -182,7 +235,111 @@ export default function ScanResult({ result }) {
         </div>
 
       </section>
+{/* ================================================= */}
+{/* FACE VISUALIZATION */}
+{/* ================================================= */}
 
+<section className="relative overflow-hidden rounded-[32px] border border-lavender-200/60 bg-white/80 backdrop-blur-xl shadow-[0_18px_50px_rgba(80,60,120,0.08)] p-6 md:p-8">
+
+  <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-lavender-200/20 blur-3xl" />
+  <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-purple-200/15 blur-3xl" />
+
+  <div className="relative">
+
+    <div className="mb-6">
+
+      <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-lavender-600">
+        Facial Visualization
+      </p>
+
+      <h3 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
+        Your skin concerns on the face
+      </h3>
+
+      <p className="mt-2 text-sm text-ink/40">
+        Highlighted regions are generated from your facial scan.
+      </p>
+
+    </div>
+
+    {processedImageUrl ? (
+
+      <div className="grid lg:grid-cols-[minmax(0,1fr)_260px] gap-6 items-stretch">
+
+        {/* FACE IMAGE */}
+
+        <div className="relative overflow-hidden rounded-[28px] border border-lavender-100 bg-[#f7f4ff] shadow-inner">
+
+          <img
+            src={processedImageUrl}
+            alt="DermaNova facial skin analysis visualization"
+            className="block w-full max-h-[720px] object-contain"
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+            }}
+          />
+
+        </div>
+
+        {/* LEGEND */}
+
+        <div className="rounded-[24px] border border-lavender-100 bg-white/75 p-5">
+
+          <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-ink/35">
+            Detection Legend
+          </p>
+
+          <h4 className="mt-1 text-lg font-semibold text-ink">
+            What the highlights mean
+          </h4>
+
+          <div className="mt-6 space-y-4">
+
+            <LegendItem
+              color="bg-red-500"
+              title="Acne"
+              description="YOLO-detected skin lesions"
+            />
+
+            <LegendItem
+              color="bg-purple-500"
+              title="Pigmentation"
+              description="Localized darker skin regions"
+            />
+
+            <LegendItem
+              color="bg-yellow-400"
+              title="Uneven skin tone"
+              description="Local tone variation"
+            />
+
+            <LegendItem
+              color="bg-blue-500"
+              title="Dark circles"
+              description="Under-eye visual indicator"
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+
+    ) : (
+
+      <div className="rounded-2xl border border-amber-100 bg-amber-50/60 p-6 text-center">
+
+        <p className="text-sm text-amber-700">
+          Facial visualization is not available for this scan.
+        </p>
+
+      </div>
+
+    )}
+
+  </div>
+
+</section>
 
       {/* ================================================= */}
       {/* MAIN SCORE */}
@@ -207,8 +364,6 @@ export default function ScanResult({ result }) {
                 `,
               }}
             >
-
-              {/* subtle inner ring */}
 
               <div className="absolute inset-[5px] rounded-full bg-white" />
 
@@ -246,8 +401,9 @@ export default function ScanResult({ result }) {
             </h3>
 
             <p className="mt-3 max-w-xl text-sm leading-6 text-ink/50">
-              Your skin health score is based on the visual characteristics
-              identified during your DermaNova AI analysis.
+              Your skin health score is based on the visual
+              characteristics identified during your DermaNova
+              AI analysis.
             </p>
 
             <div className="mt-6 flex flex-wrap justify-center lg:justify-start gap-3">
@@ -340,79 +496,77 @@ export default function ScanResult({ result }) {
         </div>
 
       </section>
-       {/* ================================================= */}
-{/* SKIN CONDITION BREAKDOWN */}
-{/* ================================================= */}
-
-<section className="relative overflow-hidden rounded-[32px] border border-lavender-200/60 bg-white/80 backdrop-blur-xl shadow-[0_18px_50px_rgba(80,60,120,0.07)] p-7 md:p-9">
-
-  {/* Decorative glow */}
-  <div className="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-lavender-200/20 blur-3xl" />
-
-  <div className="relative">
-
-    {/* Header */}
-    <div className="mb-8">
-
-      <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-lavender-600">
-        Visual Skin Analysis
-      </p>
-
-      <h3 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
-        Skin condition breakdown
-      </h3>
-
-      <p className="mt-2 text-sm text-ink/40">
-        Visual indicators identified from your facial scan
-      </p>
-
-    </div>
 
 
-    {/* Metrics */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {/* ================================================= */}
+      {/* SKIN CONDITION BREAKDOWN */}
+      {/* ================================================= */}
+
+      <section className="relative overflow-hidden rounded-[32px] border border-lavender-200/60 bg-white/80 backdrop-blur-xl shadow-[0_18px_50px_rgba(80,60,120,0.07)] p-7 md:p-9">
+
+        <div className="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-lavender-200/20 blur-3xl" />
+
+        <div className="relative">
+
+          <div className="mb-8">
+
+            <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-lavender-600">
+              Visual Skin Analysis
+            </p>
+
+            <h3 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
+              Skin condition breakdown
+            </h3>
+
+            <p className="mt-2 text-sm text-ink/40">
+              Visual indicators identified from your facial scan
+            </p>
+
+          </div>
 
 
-      {/* Uneven Skin Tone */}
-      <SkinConditionCard
-        title="Uneven Skin Tone"
-        value={unevenTone}
-        description="Tone consistency across the detected facial region"
-        icon="◐"
-      />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
+            <SkinConditionCard
+              title="Uneven Skin Tone"
+              value={unevenTone}
+              description="Tone consistency across the detected facial region"
+              icon="◐"
+            />
 
-      {/* Pigmentation */}
-      <SkinConditionCard
-        title="Pigmentation"
-        value={pigmentation}
-        description="Visible variation in skin pigmentation"
-        icon="◒"
-      />
+            <SkinConditionCard
+              title="Pigmentation"
+              value={pigmentation}
+              description="Visible variation in skin pigmentation"
+              icon="◒"
+            />
 
+            <SkinConditionCard
+              title="Dark Spots"
+              value={darkSpots}
+              description="Localized darker areas detected in the skin"
+              icon="◉"
+            />
 
-      {/* Dark Spots */}
-      <SkinConditionCard
-        title="Dark Spots"
-        value={darkSpots}
-        description="Localized darker areas detected in the skin"
-        icon="◉"
-      />
+            <SkinConditionCard
+              title="Redness"
+              value={redness}
+              description="Visible redness detected across the facial region"
+              icon="◌"
+            />
+            <SkinConditionCard
+  title="Dark Circles"
+  value={darkCircleScore}
+  description="Under-eye visual indicator"
+  icon="◉"
+/>
 
+          </div>
 
-      {/* Redness */}
-      <SkinConditionCard
-        title="Redness"
-        value={redness}
-        description="Visible redness detected across the facial region"
-        icon="◌"
-      />
+        </div>
 
-    </div>
+      </section>
 
-  </div>
-
-</section>
 
       {/* ================================================= */}
       {/* DETECTED CONCERNS */}
@@ -428,7 +582,7 @@ export default function ScanResult({ result }) {
               AI Detection
             </p>
 
-            <h3 className="mt-1 text-2xl font-semibold tracking-tight">
+            <h3 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
               Detected concerns
             </h3>
 
@@ -445,7 +599,9 @@ export default function ScanResult({ result }) {
             </span>
 
             <span className="ml-1 text-xs text-lavender-600">
-              {detections.length === 1 ? "concern" : "concerns"}
+              {detections.length === 1
+                ? "concern"
+                : "concerns"}
             </span>
 
           </div>
@@ -485,7 +641,8 @@ export default function ScanResult({ result }) {
                 item.confidence ?? 0
               );
 
-              const severity = getSeverity(confidenceValue);
+              const severity =
+                getSeverity(confidenceValue);
 
               return (
 
@@ -501,9 +658,7 @@ export default function ScanResult({ result }) {
                     <div className="flex items-center gap-4">
 
                       <div className="w-12 h-12 rounded-2xl bg-lavender-50 border border-lavender-100 flex items-center justify-center text-lavender-600 text-lg">
-
                         {getIssueIcon(item.issue)}
-
                       </div>
 
                       <div>
@@ -539,8 +694,6 @@ export default function ScanResult({ result }) {
                   </div>
 
 
-                  {/* CONFIDENCE */}
-
                   <div className="mt-6">
 
                     <div className="flex items-center justify-between mb-2">
@@ -561,7 +714,10 @@ export default function ScanResult({ result }) {
                         className="h-full rounded-full bg-gradient-to-r from-lavender-400 to-lavender-600 transition-all duration-1000"
                         style={{
                           width: `${Math.min(
-                            Math.max(confidenceValue, 0),
+                            Math.max(
+                              confidenceValue,
+                              0
+                            ),
                             100
                           )}%`,
                         }}
@@ -594,6 +750,8 @@ export default function ScanResult({ result }) {
 
         <div className="relative">
 
+          {/* HEADER */}
+
           <div className="flex items-center gap-4 mb-7">
 
             <div className="w-12 h-12 rounded-2xl bg-white border border-lavender-100 shadow-sm flex items-center justify-center">
@@ -610,7 +768,7 @@ export default function ScanResult({ result }) {
                 DermaNova Intelligence
               </p>
 
-              <h3 className="mt-1 text-2xl font-semibold">
+              <h3 className="mt-1 text-2xl font-semibold text-ink">
                 Personalized insights
               </h3>
 
@@ -619,76 +777,608 @@ export default function ScanResult({ result }) {
           </div>
 
 
-          {result.recommendations?.length > 0 ? (
-  <div className="grid md:grid-cols-2 gap-4">
-    {result.recommendations.map((recommendation, index) => (
-      <div
-        key={index}
-        className="rounded-2xl bg-white/80 border border-lavender-100 p-5"
-      >
-        <div className="flex items-start gap-4">
+          {/* ================================================= */}
+          {/* STRUCTURED RECOMMENDATION */}
+          {/* ================================================= */}
 
-          <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center shrink-0">
-            <span className="text-lavender-600 text-lg">
-              ✨
-            </span>
-          </div>
+          {result.full_recommendation ? (
 
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600 mb-1">
-              {recommendation.category}
-            </p>
+            <div className="space-y-5">
 
-            <h4 className="font-semibold text-ink mb-1">
-              {recommendation.title}
-            </h4>
 
-            <p className="text-sm text-ink/60 leading-6">
-              {recommendation.description}
-            </p>
-          </div>
+              {/* ================================================= */}
+              {/* SKIN PROFILE */}
+              {/* ================================================= */}
 
-        </div>
-      </div>
-    ))}
-  </div>
-) : (
-  <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
-    <div className="flex gap-3">
+              {profile.summary && (
 
-      <span className="text-lavender-600">
-        ✓
-      </span>
+                <div className="rounded-2xl bg-white/80 border border-lavender-100 p-6">
 
-      <p className="text-sm text-ink/60 leading-6">
-        Maintain a consistent skincare routine, stay hydrated,
-        use daily sun protection, and continue monitoring your
-        skin regularly.
-      </p>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
-    </div>
-  </div>
-)}
+                    <div>
 
-            <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-lavender-600">
+                        Your Skin Profile
+                      </p>
 
-              <div className="flex gap-3">
+                      <h4 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
+                        {profile.skin_type || result.detected_type || "Skin"}
+                        {" "}Skin
+                      </h4>
 
-                <span className="text-lavender-600">
-                  ✓
-                </span>
+                    </div>
 
-                <p className="text-sm text-ink/60 leading-6">
-                  Maintain a consistent skincare routine, stay hydrated,
-                  use daily sun protection, and continue monitoring your
-                  skin regularly.
-                </p>
+                    <div className="self-start rounded-full bg-lavender-50 border border-lavender-100 px-3 py-1.5">
+
+                      <span className="text-xs font-semibold text-lavender-700">
+                        AI Assessment
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                  <p className="mt-4 max-w-3xl text-sm leading-7 text-ink/55">
+                    {profile.summary}
+                  </p>
+
+                </div>
+
+              )}
+
+
+              {/* ================================================= */}
+              {/* MORNING + NIGHT */}
+              {/* ================================================= */}
+
+              <div className="grid md:grid-cols-2 gap-4">
+
+
+                {/* MORNING */}
+
+                <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
+
+                  <div className="flex items-center gap-3 mb-5">
+
+                    <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center">
+                      <span className="text-lg">
+                        🌅
+                      </span>
+                    </div>
+
+                    <div>
+
+                      <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600">
+                        Morning
+                      </p>
+
+                      <h4 className="font-semibold text-ink">
+                        Morning Routine
+                      </h4>
+
+                    </div>
+
+                  </div>
+
+
+                  <div className="space-y-4">
+
+                    {routine.morning?.map(
+                      (step, index) => (
+
+                        <div
+                          key={index}
+                          className="flex items-start gap-3"
+                        >
+
+                          <span className="w-7 h-7 rounded-full bg-lavender-100 text-lavender-600 text-xs font-semibold flex items-center justify-center shrink-0">
+                            {index + 1}
+                          </span>
+
+                          <div>
+
+                            <p className="text-sm font-medium text-ink leading-6">
+                              {typeof step === "object"
+                                ? step.product
+                                : step}
+                            </p>
+
+                            {typeof step === "object" &&
+                              step.purpose && (
+
+                                <p className="text-xs text-ink/45 leading-5 mt-0.5">
+                                  {step.purpose}
+                                </p>
+
+                              )}
+
+                          </div>
+
+                        </div>
+
+                      )
+                    )}
+
+                  </div>
+
+                </div>
+
+
+                {/* NIGHT */}
+
+                <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
+
+                  <div className="flex items-center gap-3 mb-5">
+
+                    <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center">
+                      <span className="text-lg">
+                        🌙
+                      </span>
+                    </div>
+
+                    <div>
+
+                      <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600">
+                        Night
+                      </p>
+
+                      <h4 className="font-semibold text-ink">
+                        Night Routine
+                      </h4>
+
+                    </div>
+
+                  </div>
+
+
+                  <div className="space-y-4">
+
+                    {routine.night?.map(
+                      (step, index) => (
+
+                        <div
+                          key={index}
+                          className="flex items-start gap-3"
+                        >
+
+                          <span className="w-7 h-7 rounded-full bg-lavender-100 text-lavender-600 text-xs font-semibold flex items-center justify-center shrink-0">
+                            {index + 1}
+                          </span>
+
+                          <div>
+
+                            <p className="text-sm font-medium text-ink leading-6">
+                              {typeof step === "object"
+                                ? step.product
+                                : step}
+                            </p>
+
+                            {typeof step === "object" &&
+                              step.purpose && (
+
+                                <p className="text-xs text-ink/45 leading-5 mt-0.5">
+                                  {step.purpose}
+                                </p>
+
+                              )}
+
+                          </div>
+
+                        </div>
+
+                      )
+                    )}
+
+                  </div>
+
+                </div>
 
               </div>
 
+
+              {/* ================================================= */}
+              {/* PRODUCTS */}
+              {/* ================================================= */}
+
+              {products.length > 0 && (
+
+                <div className="rounded-2xl bg-white/80 border border-lavender-100 p-6">
+
+                  <div className="flex items-center gap-3 mb-6">
+
+                    <div className="w-11 h-11 rounded-2xl bg-lavender-100 flex items-center justify-center">
+
+                      <span className="text-lg">
+                        🧴
+                      </span>
+
+                    </div>
+
+                    <div>
+
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-lavender-600">
+                        Curated For You
+                      </p>
+
+                      <h4 className="text-lg font-semibold text-ink">
+                        Recommended Product Categories
+                      </h4>
+
+                    </div>
+
+                  </div>
+
+
+                  <div className="grid md:grid-cols-2 gap-4">
+
+                    {products.map(
+                      (product, index) => (
+
+                        <div
+                          key={index}
+                          className="group rounded-2xl border border-lavender-100 bg-white/70 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-lavender-100/40"
+                        >
+
+                          <div className="flex items-start justify-between gap-3">
+
+                            <div>
+
+                              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-lavender-600 mb-1.5">
+                                {product.category}
+                              </p>
+
+                              <h5 className="font-semibold text-ink">
+                                {product.recommendation}
+                              </h5>
+
+                            </div>
+
+                            {product.priority && (
+
+                              <span className="shrink-0 px-2.5 py-1 rounded-full bg-lavender-50 border border-lavender-100 text-[10px] font-bold uppercase tracking-wider text-lavender-600">
+                                {product.priority}
+                              </span>
+
+                            )}
+
+                          </div>
+
+
+                          <div className="mt-4 pt-3 border-t border-lavender-100/70">
+
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-ink/35 mb-1">
+
+                              Why it's recommended
+
+                            </p>
+
+                            <p className="text-sm text-ink/55 leading-6">
+                              {product.reason}
+                            </p>
+
+                          </div>
+
+                        </div>
+
+                      )
+                    )}
+
+                  </div>
+
+                </div>
+
+              )}
+
+
+              {/* ================================================= */}
+              {/* FOCUS AREAS */}
+              {/* ================================================= */}
+
+              {focus.length > 0 && (
+
+                <div className="rounded-2xl bg-white/80 border border-lavender-100 p-6">
+
+                  <div className="flex items-center gap-3 mb-6">
+
+                    <div className="w-11 h-11 rounded-2xl bg-lavender-100 flex items-center justify-center">
+
+                      <span className="text-lg">
+                        🎯
+                      </span>
+
+                    </div>
+
+                    <div>
+
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-lavender-600">
+                        Personalized Focus
+                      </p>
+
+                      <h4 className="text-lg font-semibold text-ink">
+                        Your Focus Areas
+                      </h4>
+
+                    </div>
+
+                  </div>
+
+
+                  <div className="grid md:grid-cols-2 gap-4">
+
+                    {focus.map(
+                      (item, index) => (
+
+                        <div
+                          key={index}
+                          className="rounded-2xl border border-lavender-100 bg-white/70 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                        >
+
+                          <div className="flex items-start justify-between gap-3">
+
+                            <div className="flex items-center gap-3">
+
+                              <div className="w-9 h-9 rounded-xl bg-lavender-50 flex items-center justify-center">
+
+                                <span className="text-lavender-600">
+                                  {index === 0
+                                    ? "✦"
+                                    : "•"}
+                                </span>
+
+                              </div>
+
+                              <h5 className="font-semibold text-ink">
+                                {typeof item === "object"
+                                  ? item.title
+                                  : item}
+                              </h5>
+
+                            </div>
+
+
+                            {typeof item === "object" &&
+                              item.priority && (
+
+                                <span
+                                  className={`shrink-0 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                    item.priority === "High"
+                                      ? "bg-rose-50 text-rose-600"
+                                      : "bg-amber-50 text-amber-600"
+                                  }`}
+                                >
+                                  {item.priority}
+                                </span>
+
+                              )}
+
+                          </div>
+
+
+                          {typeof item === "object" &&
+                            item.description && (
+
+                              <p className="mt-4 text-sm text-ink/55 leading-6">
+                                {item.description}
+                              </p>
+
+                            )}
+
+                        </div>
+
+                      )
+                    )}
+
+                  </div>
+
+                </div>
+
+              )}
+
+
+              {/* ================================================= */}
+              {/* WHAT TO AVOID */}
+              {/* ================================================= */}
+
+              {avoid.length > 0 && (
+
+                <div className="rounded-2xl bg-white/80 border border-lavender-100 p-6">
+
+                  <div className="flex items-center gap-3 mb-5">
+
+                    <div className="w-11 h-11 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
+
+                      <span className="text-lg">
+                        ⚠️
+                      </span>
+
+                    </div>
+
+                    <div>
+
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-600">
+                        Routine Guidance
+                      </p>
+
+                      <h4 className="text-lg font-semibold text-ink">
+                        What to Avoid
+                      </h4>
+
+                    </div>
+
+                  </div>
+
+
+                  <div className="grid md:grid-cols-2 gap-3">
+
+                    {avoid.map(
+                      (item, index) => (
+
+                        <div
+                          key={index}
+                          className="flex items-start gap-3 rounded-xl bg-amber-50/50 border border-amber-100/70 p-4"
+                        >
+
+                          <span className="text-amber-600 font-semibold text-lg leading-5">
+                            ×
+                          </span>
+
+                          <p className="text-sm text-ink/60 leading-6">
+                            {item}
+                          </p>
+
+                        </div>
+
+                      )
+                    )}
+
+                  </div>
+
+                </div>
+
+              )}
+
+
+              {/* ================================================= */}
+              {/* IMPORTANT NOTES */}
+              {/* ================================================= */}
+
+              {notes.length > 0 && (
+
+                <div className="rounded-2xl bg-white/80 border border-lavender-100 p-6">
+
+                  <div className="flex items-center gap-3 mb-5">
+
+                    <div className="w-11 h-11 rounded-2xl bg-lavender-100 flex items-center justify-center">
+
+                      <span className="text-lg">
+                        ✧
+                      </span>
+
+                    </div>
+
+                    <div>
+
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-lavender-600">
+                        Important
+                      </p>
+
+                      <h4 className="text-lg font-semibold text-ink">
+                        Important Notes
+                      </h4>
+
+                    </div>
+
+                  </div>
+
+
+                  <div className="space-y-3">
+
+                    {notes.map(
+                      (note, index) => (
+
+                        <div
+                          key={index}
+                          className="flex items-start gap-3"
+                        >
+
+                          <span className="w-6 h-6 rounded-full bg-lavender-50 text-lavender-600 flex items-center justify-center text-xs shrink-0">
+                            ✓
+                          </span>
+
+                          <p className="text-sm text-ink/60 leading-6">
+                            {note}
+                          </p>
+
+                        </div>
+
+                      )
+                    )}
+
+                  </div>
+
+                </div>
+
+              )}
+
             </div>
 
-          
+          ) : (
+
+            /* ================================================= */
+            /* OLD FALLBACK */
+            /* ================================================= */
+
+            result.recommendations?.length > 0 ? (
+
+              <div className="grid md:grid-cols-2 gap-4">
+
+                {result.recommendations.map(
+                  (recommendation, index) => (
+
+                    <div
+                      key={index}
+                      className="rounded-2xl bg-white/80 border border-lavender-100 p-5"
+                    >
+
+                      <div className="flex items-start gap-4">
+
+                        <div className="w-10 h-10 rounded-xl bg-lavender-100 flex items-center justify-center shrink-0">
+
+                          <span className="text-lavender-600 text-lg">
+                            ✨
+                          </span>
+
+                        </div>
+
+                        <div>
+
+                          <p className="text-xs font-semibold uppercase tracking-wider text-lavender-600 mb-1">
+                            {recommendation.category}
+                          </p>
+
+                          <h4 className="font-semibold text-ink mb-1">
+                            {recommendation.title}
+                          </h4>
+
+                          <p className="text-sm text-ink/60 leading-6">
+                            {recommendation.description}
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  )
+                )}
+
+              </div>
+
+            ) : (
+
+              <div className="rounded-2xl bg-white/80 border border-lavender-100 p-5">
+
+                <div className="flex gap-3">
+
+                  <span className="text-lavender-600">
+                    ✓
+                  </span>
+
+                  <p className="text-sm text-ink/60 leading-6">
+                    Maintain a consistent skincare routine,
+                    stay hydrated, use daily sun protection,
+                    and continue monitoring your skin regularly.
+                  </p>
+
+                </div>
+
+              </div>
+
+            )
+
+          )}
 
         </div>
 
@@ -702,10 +1392,13 @@ export default function ScanResult({ result }) {
       <div className="px-4 pb-3 text-center">
 
         <p className="text-[11px] leading-5 text-ink/35 max-w-2xl mx-auto">
-          DermaNova AI provides an AI-assisted visual skin assessment.
-          Results are informational and should not be considered a medical
-          diagnosis. Consult a qualified dermatologist for persistent,
-          painful, or concerning skin conditions.
+
+          DermaNova AI provides an AI-assisted visual skin
+          assessment. Results are informational and should not
+          be considered a medical diagnosis. Consult a qualified
+          dermatologist for persistent, painful, or concerning
+          skin conditions.
+
         </p>
 
       </div>
@@ -713,7 +1406,33 @@ export default function ScanResult({ result }) {
     </div>
   );
 }
+function LegendItem({
+  color,
+  title,
+  description,
+}) {
+  return (
+    <div className="flex items-start gap-3">
 
+      <span
+        className={`mt-1.5 w-3 h-3 rounded-full shrink-0 ${color}`}
+      />
+
+      <div>
+
+        <p className="text-sm font-semibold text-ink">
+          {title}
+        </p>
+
+        <p className="mt-0.5 text-xs leading-5 text-ink/40">
+          {description}
+        </p>
+
+      </div>
+
+    </div>
+  );
+}
 
 /* ========================================================= */
 /* METRIC CARD */
@@ -738,9 +1457,7 @@ function MetricCard({
         </p>
 
         <div className="w-8 h-8 rounded-xl bg-lavender-50 text-lavender-600 flex items-center justify-center text-sm">
-
           {icon}
-
         </div>
 
       </div>
@@ -777,6 +1494,8 @@ function MetricCard({
 
   );
 }
+
+
 /* ========================================================= */
 /* SKIN CONDITION CARD */
 /* ========================================================= */
@@ -794,6 +1513,7 @@ function SkinConditionCard({
   );
 
   let status = "Low";
+
   let statusClass =
     "bg-emerald-50 text-emerald-600 border-emerald-100";
 
@@ -817,19 +1537,15 @@ function SkinConditionCard({
 
     <div className="group relative overflow-hidden rounded-2xl border border-ink/5 bg-white/90 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-lavender-200 hover:shadow-[0_15px_35px_rgba(90,70,140,0.10)]">
 
-      {/* Top shine */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-lavender-300/70 to-transparent opacity-0 group-hover:opacity-100 transition" />
 
 
       <div className="flex items-start justify-between gap-4">
 
-        {/* Icon + title */}
         <div className="flex items-center gap-4">
 
           <div className="w-11 h-11 rounded-2xl bg-lavender-50 border border-lavender-100 flex items-center justify-center text-lavender-600 text-lg">
-
             {icon}
-
           </div>
 
           <div>
@@ -847,7 +1563,6 @@ function SkinConditionCard({
         </div>
 
 
-        {/* Status */}
         <span
           className={`px-3 py-1 rounded-full border text-[10px] font-semibold ${statusClass}`}
         >
@@ -857,7 +1572,6 @@ function SkinConditionCard({
       </div>
 
 
-      {/* Score */}
       <div className="mt-6 flex items-end justify-between">
 
         <div>
@@ -879,7 +1593,6 @@ function SkinConditionCard({
       </div>
 
 
-      {/* Progress */}
       <div className="mt-4 h-2 rounded-full bg-lavender-100 overflow-hidden">
 
         <div
@@ -892,7 +1605,6 @@ function SkinConditionCard({
       </div>
 
 
-      {/* Description */}
       <p className="mt-4 text-xs leading-5 text-ink/45">
         {description}
       </p>
@@ -902,8 +1614,9 @@ function SkinConditionCard({
   );
 }
 
+
 /* ========================================================= */
-/* RECOMMENDATION */
+/* OLD RECOMMENDATION COMPONENT */
 /* ========================================================= */
 
 function Recommendation({ issue }) {

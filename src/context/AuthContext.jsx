@@ -42,14 +42,10 @@ export function AuthProvider({ children }) {
 
   const register = async (payload) => {
   const { data } = await registerUser(payload);
+
   console.log("Register response:", data);
-  localStorage.setItem("dermanova_access_token", data.access_token);
 
-  const me = await getCurrentUser();
-  console.log("Current user after register:", me.data);
-  setUser(me.data);
-
-  return me.data;
+  return data;
 };
 
   const logout = () => {

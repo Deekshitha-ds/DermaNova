@@ -233,10 +233,10 @@ useEffect(() => {
       };
 
       const { data } = await submitSkinAnalysis(
-    blob,
-    faceMeta
+          blob,
+          faceMeta,
+          "live"
 );
-
 // Save backend response
 setResult(data);
 
@@ -604,7 +604,11 @@ const handleImageUpload = async (event) => {
       captured_at: new Date().toISOString()
     };
 
-    const { data } = await submitSkinAnalysis(file, faceMeta);
+    const { data } = await submitSkinAnalysis(
+  file,
+  faceMeta,
+  "upload"
+);
     setResult(data);
 
 
