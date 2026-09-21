@@ -12,7 +12,8 @@ import {
   HiOutlineCamera,
   HiOutlinePhotograph
 } from "react-icons/hi";
-import DermaLoader from "../components/DermaLoader";
+import DermaLoader from "../components/dermaloader";
+import ScanResult from "./ScanResult";
 const HOLD_DURATION_MS = 1200;
 
 export default function SmartCamera({ onResult,autoUpload = false, uploadOnly = false }) {
@@ -123,6 +124,22 @@ useEffect(() => {
   return () => clearTimeout(timer);
 
 }, [autoUpload]);
+useEffect(() => {
+  if (uploadOnly) return;
+  if (phase !== "scanning") return;
+
+  const video = videoRef.current;
+  const stream = streamRef.current;
+
+  if (!video || !stream) return;
+
+  video.srcObject = stream;
+
+  video.play().catch((err) => {
+    console.warn("VIDEO PLAY ERROR:", err);
+  });
+
+}, [phase, uploadOnly]);
 
   /* ---------------- VIDEO SIZE ---------------- */
 
@@ -571,6 +588,7 @@ const handleImageUpload = async (event) => {
   const file = event.target.files[0];
 
   if (!file) return;
+  event.target.value = "";
 
   if (!(file instanceof Blob)) {
     setSubmitError("Invalid image file.");
@@ -629,10 +647,15 @@ const handleImageUpload = async (event) => {
 };
 return (
   <div className="w-full">
-  {uploadOnly ? (
+  {uploadOnly && phase === "scanning" ? (
   <div className="min-h-[300px] flex flex-col items-center justify-center text-center">
 
-    <div className="w-12 h-12 rounded-full border-4 border-lavender-200 border-t-lavender-700 animate-spin mb-4" />
+    <div className="w-16 h-16 rounded-full bg-lavender-100 flex items-center justify-center mb-5">
+      <HiOutlinePhotograph
+        size={30}
+        className="text-lavender-600"
+      />
+    </div>
 
     <p className="text-lg font-semibold">
       Select an image
@@ -692,22 +715,7 @@ return (
 
   setPhase("scanning");
 
-  // Reconnect camera stream to the newly created video element
-  setTimeout(() => {
-
-    if (
-      videoRef.current &&
-      streamRef.current
-    ) {
-
-      videoRef.current.srcObject =
-        streamRef.current;
-
-      videoRef.current.play().catch(() => {});
-
-    }
-
-  }, 100);
+  
 
   if (onResult) {
     onResult(null);
@@ -735,12 +743,13 @@ return (
       {/* Overlay */}
 
       {phase === "scanning" && detection.isReady && (
-
-    <div
-        className="absolute left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-400 to-transparent opacity-80 animate-scanLaser"
-    />
-
+    
+    <div className="lavender-scan-line">
+    <div className="lavender-scan-glow" />
+    <div className="lavender-scan-core" />
+  </div>
 )}
+
 
       {/* Loading */}
 
@@ -860,179 +869,19 @@ return (
       style={{ display: "none" }}
 
     />
+ {/* Scan Result */}
 
-    {/* Error */}
-    {phase === "result" && result && (
-
-<div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
-
-    <h2 className="text-2xl font-bold mb-4">
-        Skin Analysis Result
-    </h2>
-
-    <div className="grid grid-cols-2 gap-4">
-
-        <div>
-            <p className="text-gray-500">
-                Skin Type
-            </p>
-
-            <h3 className="text-xl font-semibold">
-                {result.detected_type}
-            </h3>
-        </div>
-
-        <div>
-            <p className="text-gray-500">
-                Confidence
-            </p>
-
-            <h3 className="text-xl font-semibold">
-                {result.scores.confidence}%
-            </h3>
-        </div>
-
-        <div>
-            <p className="text-gray-500">
-                Health Score
-            </p>
-
-            <h3 className="text-xl font-semibold">
-                {Math.round(result.scores.health)}
-            </h3>
-        </div>
-
-        <div>
-            <p className="text-gray-500">
-                Hydration
-            </p>
-
-            <h3 className="text-xl font-semibold">
-                {Math.round(result.scores.hydration)}%
-            </h3>
-        </div>
-
-        <div>
-            <p className="text-gray-500">
-                Oiliness
-            </p>
-
-            <h3 className="text-xl font-semibold">
-                {Math.round(result.scores.oiliness)}%
-            </h3>
-        </div>
-
-    </div>
-
-   <div className="space-y-4">
-
-{result.detections?.map((item,index)=>{
-
-let severity="Low";
-let color="bg-green-500";
-
-if(item.confidence>=80){
-    severity="High";
-    color="bg-red-500";
-}
-else if(item.confidence>=60){
-    severity="Medium";
-    color="bg-yellow-500";
-}
-
-return(
-
-<div
-key={index}
-className="rounded-xl border p-5 shadow-sm bg-white hover:shadow-lg transition"
->
-
-<div className="flex justify-between items-center">
-
-<h3 className="text-lg font-bold">
-
-{item.issue}
-
-</h3>
-
-<span
-className={`${color} text-white px-3 py-1 rounded-full text-sm`}
->
-
-{severity}
-
-</span>
-
-</div>
-
-<p className="text-gray-500 mt-2">
-
-Confidence :
-<b> {item.confidence}%</b>
-
-</p>
-
-</div>
-
-);
-
-})}
-
-</div>
-<div className="mt-8">
-
-<h2 className="text-xl font-bold mb-4">
-
-AI Recommendation
-
-</h2>
-
-<div className="bg-blue-50 rounded-xl p-5">
-
-<ul className="space-y-2 list-disc ml-5">
-
-{result.detections?.map((item,index)=>(
-
-<li key={index}>
-
-{item.issue==="Acne" &&
-"Use a Salicylic Acid cleanser twice daily."}
-
-{item.issue==="Dark Circles" &&
-"Improve sleep and use Vitamin C based eye cream."}
-
-{item.issue==="Pigmentation" &&
-"Use SPF 50 sunscreen and Niacinamide serum."}
-
-{item.issue==="Wrinkles" &&
-"Use Retinol serum during night."}
-
-{item.issue==="Redness" &&
-"Use soothing moisturizer containing Ceramides."}
-
-</li>
-
-))}
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
-
+{phase === "result" && result && (
+  <ScanResult result={result} />
 )}
 
-    {submitError && (
+{/* Error */}
 
-      <p className="text-red-500 text-center mt-4">
-
-        {submitError}
-
-      </p>
-
-    )}
+{submitError && (
+  <p className="text-red-500 text-center mt-4">
+    {submitError}
+  </p>
+)} 
 
   </div>
 

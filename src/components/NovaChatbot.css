@@ -190,7 +190,7 @@
   right: 30px;
   bottom: 30px;
 
-  width: 255px;
+  width: 350px;
   height: 500px;
 
   display: flex;
@@ -249,8 +249,8 @@
 .nova-header {
   position: relative;
 
-  height: 92px;
-  min-height: 92px;
+  height: 90px;
+  min-height: 90px;
 
   display: flex;
   align-items: center;
@@ -277,8 +277,8 @@
 .nova-header-left {
   display: flex;
   align-items: center;
-
-  gap: 13px;
+  gap: 16px;
+  min-width: 0;
 }
 
 
@@ -322,7 +322,7 @@
   display: flex;
   align-items: center;
 
-  gap: 8px;
+  gap: 7px;
 
   color: #40234d;
 
@@ -331,9 +331,10 @@
     "Times New Roman",
     serif;
 
-  font-size: 27px;
+  font-size: 20px;
   font-weight: 700;
-
+white-space: nowrap;
+line-height: 1;
   letter-spacing: -.045em;
 }
 
@@ -371,18 +372,15 @@
 .nova-subtitle {
   display: flex;
   align-items: center;
-
   gap: 7px;
 
-  margin-top: 3px;
+  margin-top: 7px;
 
-  color: rgba(255,255,255,.82);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1;
 
-  font-family:
-    Arial,
-    sans-serif;
-
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 
@@ -554,35 +552,26 @@
 ========================================================= */
 
 .nova-welcome {
-  position: relative;
-
-  z-index: 2;
-
   flex: 0 0 auto;
 
-  margin:
-    24px 34px 12px;
-
-  padding:
-    23px 20px 17px;
+  margin: 20px 28px 8px;
+  padding: 17px 18px 13px;
 
   text-align: center;
 
-  border:
-    1px solid rgba(255,255,255,.92);
-
-  border-radius: 30px;
+  border-radius: 26px;
 
   background:
     linear-gradient(
       145deg,
-      rgba(255,255,255,.78),
-      rgba(255,244,252,.62)
+      rgba(255,255,255,.82),
+      rgba(255,244,252,.65)
     );
 
+  border: 1px solid rgba(255,255,255,.9);
+
   box-shadow:
-    0 15px 40px rgba(111,58,125,.055),
-    inset 0 1px 0 white;
+    0 12px 30px rgba(111,58,125,.05);
 }
 
 
@@ -597,21 +586,19 @@
 
 
 .nova-welcome h1 {
-  margin:
-    6px 0 0;
-
-  color: #4b285c;
+  margin: 5px 0 0;
 
   font-family:
     Georgia,
     "Times New Roman",
     serif;
 
-  font-size: 31px;
+  font-size: 27px;
+  line-height: 1.1;
 
-  line-height: 1.05;
+  letter-spacing: -0.04em;
 
-  letter-spacing: -.05em;
+  color: #4b285c;
 }
 
 
@@ -623,16 +610,12 @@
 
 
 .nova-welcome p {
-  margin:
-    8px 0 0;
+  margin: 7px 0 0;
+
+  font-size: 14px;
+  line-height: 1.4;
 
   color: #78627f;
-
-  font-family:
-    Arial,
-    sans-serif;
-
-  font-size: 15px;
 }
 
 
@@ -686,37 +669,20 @@
   z-index: 2;
 
   flex: 1;
-
   min-height: 0;
 
   overflow-y: auto;
 
-  padding:
-    8px 28px 18px;
+  padding: 10px 24px 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
   scrollbar-width: thin;
-
   scrollbar-color:
-    rgba(173,117,190,.18)
+    rgba(173,117,190,.2)
     transparent;
-}
-
-
-.nova-messages::-webkit-scrollbar {
-  width: 4px;
-}
-
-
-.nova-messages::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-
-.nova-messages::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-
-  background:
-    rgba(173,117,190,.2);
 }
 
 
@@ -772,20 +738,16 @@
 
 
 .message-bubble {
-  max-width: 70%;
+  max-width: 75%;
 
-  padding:
-    11px 14px;
+  padding: 11px 14px;
 
-  border-radius: 17px;
+  font-family: Arial, sans-serif;
 
-  font-family:
-    Arial,
-    sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
 
-  font-size: 12px;
-
-  line-height: 1.55;
+  border-radius: 16px;
 }
 
 

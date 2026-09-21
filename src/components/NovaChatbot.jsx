@@ -68,19 +68,7 @@ export default function NovaChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [message, setMessage] = useState("");
-
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      type: "nova",
-      text: "Hi! I'm Nova ✨",
-    },
-    {
-      id: 2,
-      type: "nova",
-      text: "Let's talk about your skin. Tell me what's on your mind.",
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
 
   const recognitionRef = useRef(null);
   const messagesRef = useRef(null);
@@ -299,15 +287,11 @@ export default function NovaChatbot() {
 
             <div className="nova-title">
               NOVA AI
-
-              <span className="nova-ai-pill">
-                AI
-              </span>
-
               <span className="title-spark">
                 ✦
               </span>
             </div>
+            <br></br>
 
             <div className="nova-subtitle">
               <span className="status-dot" />
@@ -350,13 +334,8 @@ export default function NovaChatbot() {
 
         <section className="nova-welcome">
 
-          <div className="welcome-spark">
-            ✦
-          </div>
-
           <h1>
-            Hi, I'm Nova
-            <span>✦</span>
+            Hi, I'm Nova✦
           </h1>
 
           <p>
@@ -381,7 +360,7 @@ export default function NovaChatbot() {
           ref={messagesRef}
         >
 
-          {messages.map((item) => (
+          { messages.map((item) => (
 
             <div
               key={item.id}
