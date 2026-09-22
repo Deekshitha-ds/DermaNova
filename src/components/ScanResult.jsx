@@ -39,7 +39,97 @@ export default function ScanResult({ result }) {
 );
 
   const detections = result.detections ?? [];
+    /* ========================================================= */
+    /* GROUP DETECTIONS BY UNIQUE CONDITION */
+    /* ========================================================= */
 
+    const groupedDetections = (() => {
+      const groups = {};
+
+      detections.forEach((item) => {
+        const issueName =
+          item?.issue ||
+          item?.class_name ||
+          item?.name ||
+          item?.label ||
+          "Unknown";
+
+        const cleanName = String(issueName)
+          .trim()
+          .replace(/blackheads?/i, "Blackhead")
+          .replace(/whiteheads?/i, "Whitehead")
+          .replace(/papules?/i, "Papule")
+          .replace(/pustules?/i, "Pustule")
+          .replace(/nodules?/i, "Nodule")
+          .replace(/dark spots?/i, "Dark Spot");
+        // Normalize the name so repeated detections
+        // of the same condition are grouped together.
+        const key = cleanName.toLowerCase();
+
+        const confidenceValue = Number(
+          item?.confidence ?? 0
+        );
+
+        if (!groups[key]) {
+          groups[key] = {
+            issue: cleanName,
+            confidenceValues: [],
+          };
+        }
+
+        groups[key].confidenceValues.push(
+          confidenceValue
+        );
+      });
+
+      return Object.values(groups).map((group) => {
+        const values = group.confidenceValues;
+
+        const highestConfidence =
+  values.length > 0
+    ? Math.max(...values)
+    : 0;
+
+        return {
+          issue: group.issue,
+          confidence: Math.round(
+            Math.min(
+            Math.max(highestConfidence, 0),
+            100
+          )
+        ),
+        };
+      });
+    })();
+    const getIssueDescription = (issue) => {
+      const name = issue?.toLowerCase() ?? "";
+
+      if (name.includes("blackhead")) {
+        return "An acne type caused by clogged pores that appear dark on the skin.";
+      }
+
+      if (name.includes("whitehead")) {
+        return "An acne type caused by clogged pores that remain closed beneath the skin.";
+      }
+
+      if (name.includes("papule")) {
+        return "An inflammatory acne type that appears as small, raised bumps on the skin.";
+      }
+
+      if (name.includes("pustule")) {
+        return "An inflammatory acne type that appears as a raised bump containing visible pus.";
+      }
+
+      if (name.includes("nodule")) {
+        return "A deeper, more solid inflammatory acne type that develops beneath the skin.";
+      }
+
+      if (name.includes("dark spot")) {
+        return "A visible pigmentation concern that can remain after acne or skin inflammation.";
+      }
+
+      return "A skin concern identified during the facial analysis.";
+    };
   /* ========================================================= */
   /* RECOMMENDATION DATA */
   /* ========================================================= */
@@ -67,7 +157,7 @@ export default function ScanResult({ result }) {
 
   /* ========================================================= */
   /* SEVERITY */
-  /* ========================================================= */
+  /* ========================================================= 
 
   const getSeverity = (value) => {
     if (value >= 80) {
@@ -97,11 +187,12 @@ export default function ScanResult({ result }) {
       bg: "bg-emerald-50",
       border: "border-emerald-100",
     };
-  };
+  }; 
+*/
 
   /* ========================================================= */
   /* ISSUE ICON */
-  /* ========================================================= */
+  /* ========================================================= 
 
   const getIssueIcon = (issue) => {
     const name = issue?.toLowerCase() ?? "";
@@ -118,8 +209,8 @@ export default function ScanResult({ result }) {
     if (name.includes("pigmentation")) return "◒";
 
     return "✦";
-  };
-
+  };*/
+ 
   /* ========================================================= */
   /* HEALTH LABEL */
   /* ========================================================= */
@@ -216,15 +307,14 @@ export default function ScanResult({ result }) {
               </p>
 
               <p className="mt-1 text-sm font-semibold text-ink">
-                {detections.length}
+                {groupedDetections.length}
               </p>
             </div>
 
             <div>
-              <p className="text-[10px] uppercase tracking-[0.18em] text-ink/35">
-                AI Confidence
+              <p className="text-[10px] uppercase tracking-wider text-ink/30">
+                 confidence
               </p>
-
               <p className="mt-1 text-sm font-semibold text-ink">
                 {confidence}%
               </p>
@@ -568,164 +658,134 @@ export default function ScanResult({ result }) {
       </section>
 
 
-      {/* ================================================= */}
+            {/* ================================================= */}
       {/* DETECTED CONCERNS */}
       {/* ================================================= */}
 
       <section className="rounded-[32px] border border-lavender-200/60 bg-white/80 backdrop-blur-xl shadow-[0_18px_50px_rgba(80,60,120,0.07)] p-7 md:p-9">
 
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-7">
+        <div className="mb-7">
 
-          <div>
+          <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-lavender-600">
+            AI Detection
+          </p>
 
-            <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-lavender-600">
-              AI Detection
-            </p>
+          <h3 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
+  Acne & Skin Concerns
+</h3>
 
-            <h3 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
-              Detected concerns
-            </h3>
 
-            <p className="mt-1 text-sm text-ink/40">
-              Areas identified during your facial scan
-            </p>
 
-          </div>
-
-          <div className="self-start sm:self-auto rounded-full border border-lavender-200 bg-lavender-50 px-4 py-2">
-
-            <span className="text-sm font-semibold text-lavender-700">
-              {detections.length}
-            </span>
-
-            <span className="ml-1 text-xs text-lavender-600">
-              {detections.length === 1
-                ? "concern"
-                : "concerns"}
-            </span>
-
-          </div>
-
+          <p className="mt-1 text-sm text-ink/40">
+  Skin concerns identified from your facial scan
+</p>
         </div>
 
 
-        {detections.length === 0 ? (
+        {groupedDetections.length === 0 ? (
 
-          <div className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-emerald-50/60 p-8 text-center">
+          <div className="rounded-2xl border border-lavender-100 bg-lavender-50/40 p-7 text-center">
 
-            <div className="mx-auto w-14 h-14 rounded-full bg-white border border-emerald-100 flex items-center justify-center shadow-sm">
+            <div className="mx-auto w-12 h-12 rounded-full bg-white border border-lavender-100 flex items-center justify-center">
 
-              <span className="text-2xl text-emerald-500">
+              <span className="text-xl text-lavender-500">
                 ✓
               </span>
 
             </div>
 
-            <h4 className="mt-4 text-lg font-semibold text-emerald-700">
-              Your skin looks clear
-            </h4>
+           <h4 className="mt-4 text-base font-semibold text-ink">
+  No acne lesions detected
+</h4>
 
-            <p className="mt-2 text-sm text-emerald-700/60 max-w-md mx-auto">
-              No significant skin concerns were detected in this scan.
-            </p>
+<p className="mt-2 text-sm text-ink/45 max-w-md mx-auto">
+  No trained acne lesion types were identified in the analyzed facial region.
+  Other skin metrics are shown separately in your report.
+</p>
 
           </div>
 
         ) : (
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="space-y-4">
 
-            {detections.map((item, index) => {
+            {groupedDetections.map((item) => {
 
-              const confidenceValue = Number(
-                item.confidence ?? 0
-              );
-
-              const severity =
-                getSeverity(confidenceValue);
+             
 
               return (
 
                 <div
-                  key={index}
-                  className="group relative overflow-hidden rounded-2xl border border-ink/5 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-lavender-200 hover:shadow-[0_15px_35px_rgba(90,70,140,0.10)]"
+                  key={item.issue}
+                  className="rounded-2xl border border-lavender-100 bg-white/70 p-4 transition-all duration-300 hover:border-lavender-200 hover:shadow-[0_12px_30px_rgba(90,70,140,0.07)]"
                 >
+                
+                
+                
 
-                  <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-lavender-300/60 to-transparent opacity-0 group-hover:opacity-100 transition" />
+                  {/* CONDITION + PERCENTAGE */}
 
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center justify-between gap-5">
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center">
 
-                      <div className="w-12 h-12 rounded-2xl bg-lavender-50 border border-lavender-100 flex items-center justify-center text-lavender-600 text-lg">
-                        {getIssueIcon(item.issue)}
-                      </div>
-
+                     
                       <div>
 
-                        <h4 className="font-semibold text-lg text-ink">
+                        <h4 className="text-base font-semibold text-ink">
                           {item.issue}
                         </h4>
+                        <p className="mt-1 text-xs leading-relaxed text-ink/45 max-w-md">
+  {getIssueDescription(item.issue)}
+</p>
 
-                        <p className="text-xs text-ink/35 mt-0.5">
-                          AI-detected concern
-                        </p>
 
                       </div>
 
                     </div>
 
-                    <div
-                      className={`flex items-center gap-1.5 rounded-full border px-3 py-1 ${severity.bg} ${severity.border}`}
-                    >
 
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full ${severity.dot}`}
-                      />
+                    <div className="text-right">
 
-                      <span
-                        className={`text-[11px] font-semibold ${severity.text}`}
-                      >
-                        {severity.label}
+                      <span className="text-xl md:text-2xl font-semibold tracking-tight text-ink">
+                        {item.confidence}%
                       </span>
+                      <p className="text-[10px] uppercase tracking-wider text-ink/30">
+                        AI confidence
+                      </p>
 
                     </div>
 
                   </div>
 
 
-                  <div className="mt-6">
+                  {/* CONFIDENCE BAR */}
 
+                  <div className="mt-5">
                     <div className="flex items-center justify-between mb-2">
-
-                      <span className="text-xs text-ink/40">
+                      <span className="text-[10px] uppercase tracking-[0.14em] text-ink/30">
                         Detection confidence
                       </span>
 
-                      <span className="text-xs font-semibold text-ink">
-                        {confidenceValue.toFixed(1)}%
+                      <span className="text-[10px] text-ink/30">
+                        {item.confidence}%
                       </span>
-
                     </div>
 
-                    <div className="h-1.5 rounded-full bg-lavender-100 overflow-hidden">
-
+                    <div className="h-1 rounded-full bg-lavender-100 overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-lavender-400 to-lavender-600 transition-all duration-1000"
+                        className="h-full rounded-full bg-lavender-400"
                         style={{
-                          width: `${Math.min(
-                            Math.max(
-                              confidenceValue,
-                              0
-                            ),
-                            100
-                          )}%`,
+                          width: `${item.confidence}%`,
                         }}
                       />
-
                     </div>
-
                   </div>
+                    
+
+                    
+
+                  
 
                 </div>
 
