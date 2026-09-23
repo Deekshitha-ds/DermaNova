@@ -5,6 +5,7 @@ import { HiOutlineSparkles, HiOutlineLogout } from "react-icons/hi";
 const navItems = [
   { to: "/dashboard", label: "Dashboard" },
   { to: "/scan/skin", label: "Skin Scan" },
+  { to: "/saved-scans", label: "Saved Scans" },
   { to: "/recommendations", label: "Products" },
   { to: "/progress", label: "Progress" },
   { to: "/assistant", label: "Assistant" }

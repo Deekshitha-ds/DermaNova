@@ -15,6 +15,8 @@ import FaceScan from "./pages/FaceScan.jsx";
 
 import Footer from "./components/Footer";
 import WebLoader from "./components/WebLoader";
+import SavedScans from "./pages/SavedScans";
+import SavedScanReport from "./pages/SavedScanReport";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -71,6 +73,15 @@ export default function App() {
                 path="/dashboard"
                 element={<Dashboard />}
               />
+               <Route
+  path="/saved-scans"
+  element={<SavedScans />}
+/>
+
+<Route
+  path="/saved-scans/:reportId"
+  element={<SavedScanReport />}
+/>
 
               <Route
                 path="/scan/skin"

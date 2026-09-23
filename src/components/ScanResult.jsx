@@ -1,5 +1,31 @@
+import { useEffect, useState } from "react";
+
 export default function ScanResult({ result }) {
   if (!result) return null;
+  const [isSaved, setIsSaved] = useState(false);
+
+  const analysisId = result.analysis_id;
+
+  const saveKey = analysisId
+    ? `dermanova_saved_scan_${analysisId}`
+    : null;
+
+  useEffect(() => {
+    if (!saveKey) return;
+
+    const saved =
+      localStorage.getItem(saveKey) === "true";
+
+    setIsSaved(saved);
+  }, [saveKey]);
+
+  const handleSaveScan = () => {
+    if (!saveKey) return;
+
+    localStorage.setItem(saveKey, "true");
+
+    setIsSaved(true);
+  };
 
   const health = Math.round(result.scores?.health ?? 0);
   const oiliness = Math.round(result.scores?.oiliness ?? 0);
@@ -271,22 +297,63 @@ export default function ScanResult({ result }) {
 
             </div>
 
-            <div className="self-start md:self-center">
+           <div className="self-start md:self-center flex items-center gap-3">
 
-              <div className="flex items-center gap-2 rounded-full border border-lavender-200 bg-lavender-50/70 px-4 py-2">
+  <div className="flex items-center gap-2 rounded-full border border-lavender-200 bg-lavender-50/70 px-4 py-2">
 
-                <span className="text-lavender-600 text-sm">
-                  ✦
-                </span>
+    <span className="text-lavender-600 text-sm">
+      ✦
+    </span>
 
-                <span className="text-xs font-semibold tracking-wide text-lavender-700">
-                  DERMANOVA AI
-                </span>
+    <span className="text-xs font-semibold tracking-wide text-lavender-700">
+      DERMANOVA AI
+    </span>
 
-              </div>
+  </div>
 
-            </div>
+  <button
+    type="button"
+    onClick={handleSaveScan}
+    disabled={isSaved}
+    className={`
+      group flex items-center gap-2 rounded-full
+      border px-4 py-2
+      text-xs font-semibold
+      transition-all duration-300
+      ${
+        isSaved
+          ? "border-lavender-200 bg-lavender-50 text-lavender-700"
+          : "border-ink/10 bg-white/70 text-ink/55 hover:border-lavender-200 hover:bg-lavender-50 hover:text-lavender-700"
+      }
+    `}
+    aria-label={
+      isSaved
+        ? "Scan saved"
+        : "Save this scan"
+    }
+  >
 
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill={isSaved ? "currentColor" : "none"}
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="transition-transform duration-300 group-hover:scale-105"
+    >
+      <path d="M6 3.75A1.75 1.75 0 0 1 7.75 2h8.5A1.75 1.75 0 0 1 18 3.75v17.1a.65.65 0 0 1-1.02.53L12 17.8l-4.98 3.58A.65.65 0 0 1 6 20.85V3.75Z" />
+    </svg>
+
+    <span>
+      {isSaved ? "Saved" : "Save Scan"}
+    </span>
+
+  </button>
+
+</div>
           </div>
 
           <div className="mt-7 pt-5 border-t border-ink/5 flex flex-wrap gap-x-8 gap-y-3">
