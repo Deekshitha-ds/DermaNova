@@ -480,16 +480,25 @@ export default function Home() {
 
                   <AnimatePresence>
                     {photoStatus === "ok" && (
-                      <motion.img
+                      <motion.div
                         key="mesh"
-                        src={FACE_MESH_SRC}
-                        alt="AI facial analysis visualization"
-                        initial={{ clipPath: "inset(0 100% 0 0)", scale: 1.08 }}
-                        animate={{ clipPath: "inset(0 0% 0 0)", scale: 1 }}
+                        initial={{ clipPath: "inset(0 100% 0 0)" }}
+                        animate={{ clipPath: "inset(0 0% 0 0)" }}
                         transition={{ duration: 1.1, ease: [0.65, 0, 0.35, 1] }}
-                        className="absolute inset-0 w-full h-full object-cover mix-blend-screen"
-                        style={{ filter: "hue-rotate(75deg) saturate(1.4) brightness(1.15) contrast(1.05)" }}
-                      />
+                        className="absolute inset-0"
+                      >
+                        <img
+                          src={FACE_MESH_SRC}
+                          alt="AI facial analysis visualization"
+                          className="absolute inset-0 w-full h-full object-cover"
+                          style={{ filter: "saturate(1.15) contrast(1.05)" }}
+                        />
+                        {/* recolor via color-blend — preserves the
+                            image's own brightness/contrast, so unlike
+                            a screen/lighten blend it can never wash
+                            out to white or vanish */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-lavender-400 via-fuchsia-300 to-rose-300 mix-blend-color opacity-90" />
+                      </motion.div>
                     )}
                   </AnimatePresence>
 
