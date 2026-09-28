@@ -139,6 +139,7 @@ export default function Home() {
   const farX = useTransform(sx, [-0.5, 0.5], [-10, 10]);
   const nearX = useTransform(sx, [-0.5, 0.5], [26, -26]);
   const nearY = useTransform(sy, [-0.5, 0.5], [16, -16]);
+  const midX = useTransform(sx, [-0.5, 0.5], [6, -6]);
 
   const onMove = (e) => {
     if (reduce || !stageRef.current) return;
@@ -173,8 +174,8 @@ export default function Home() {
       {!reduce && <Petals />}
 
       {/* ================= HERO ================= */}
-      <section className="relative max-w-7xl mx-auto px-4 md:px-8 pt-14 pb-24 md:pt-20 md:pb-28">
-        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-16 lg:gap-6 items-center">
+      <section className="relative max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-16 md:pt-32 md:pb-20">
+        <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-4 items-center">
 
           {/* ---------- LEFT: copy ---------- */}
           <div className="min-w-0 text-center lg:text-left">
@@ -183,7 +184,7 @@ export default function Home() {
               <span className="h-px w-9 bg-violet-300" /> AI Skin &amp; Hair Intelligence
             </motion.p>
 
-            <h1 className="dn-serif text-5xl sm:text-6xl xl:text-7xl font-semibold leading-[1.02] tracking-tight mb-7" style={{ perspective: 600 }}>
+            <h1 className="dn-serif text-5xl sm:text-6xl xl:text-[4.5rem] font-semibold leading-[1.02] tracking-tight mb-7" style={{ perspective: 600 }}>
               {["Your", "skin,"].map((w, i) => (
                 <motion.span key={w} className="inline-block mr-4 text-violet-950"
                   initial={{ opacity: 0, y: 40, rotateX: -70 }} animate={{ opacity: 1, y: 0, rotateX: 0 }}
@@ -206,11 +207,11 @@ export default function Home() {
             </motion.p>
 
             <motion.ul initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.75 }}
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-y-3 mb-10 text-sm text-violet-950/55">
+              className="flex flex-wrap xl:flex-nowrap items-center justify-center lg:justify-start gap-y-3 mb-9 text-sm text-violet-950/55">
               {FEATURES.map(({ icon: Icon, label }, i) => (
-                <li key={label} className={`flex items-center gap-2.5 px-5 ${i > 0 ? "lg:border-l lg:border-violet-200" : "lg:pl-0"}`}>
+                <li key={label} className={`flex items-center gap-2.5 px-4 ${i > 0 ? "lg:border-l lg:border-violet-200" : "lg:pl-0"}`}>
                   <Icon className="text-2xl text-violet-400 shrink-0" />
-                  <span className="max-w-[9rem] leading-tight">{label}</span>
+                  <span className="max-w-[8rem] leading-tight">{label}</span>
                 </li>
               ))}
             </motion.ul>
@@ -237,22 +238,23 @@ export default function Home() {
 
           {/* ---------- RIGHT: 3D stage ---------- */}
           <div ref={stageRef} onMouseMove={onMove} onMouseLeave={onLeave}
-            className="relative mx-auto w-full max-w-[560px] aspect-[4/4.6]" style={{ perspective: 1300 }}>
+            className="relative mx-auto w-full max-w-[600px]" style={{ perspective: 1300, height: "clamp(420px, 74vh, 640px)" }}>
             <motion.div className="absolute inset-0" style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-              initial={{ opacity: 0, scale: 0.9, rotateY: -25 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.2 }}>
+              initial={{ opacity: 0, scale: 0.92, rotateY: -20 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.2 }}>
 
-              {/* back: glass arch + glow (deep) */}
-              <motion.div className="absolute inset-x-[8%] top-[4%] bottom-0 rounded-t-[999px] rounded-b-[3rem] border border-white/70 bg-gradient-to-b from-white/60 via-violet-100/50 to-pink-100/40 backdrop-blur-sm shadow-[0_40px_90px_-30px_rgba(124,58,237,0.5)]"
+              {/* back: soft glass disc + glow (deep) */}
+              <motion.div className="absolute right-[2%] top-[6%] aspect-square w-[88%] rounded-full border border-white/70 bg-gradient-to-br from-white/70 via-violet-100/50 to-pink-100/40 shadow-[0_40px_90px_-30px_rgba(124,58,237,0.45)]"
                 style={{ translateZ: -90, x: farX }} />
-              {!reduce && <div className="absolute inset-[14%] rounded-full bg-fuchsia-300/40 blur-3xl" style={{ transform: "translateZ(-60px)", animation: "dn-pulse 4.5s ease-in-out infinite" }} />}
+              {!reduce && <div className="absolute right-[10%] top-[16%] aspect-square w-[62%] rounded-full bg-fuchsia-300/40 blur-3xl" style={{ transform: "translateZ(-60px)", animation: "dn-pulse 4.5s ease-in-out infinite" }} />}
 
-              {/* portrait */}
-              <motion.div className="absolute inset-x-[4%] bottom-0 top-[6%] overflow-hidden rounded-t-[999px]"
-                style={{ translateZ: 0, x: useTransform(sx, [-0.5, 0.5], [6, -6]) }}>
+              {/* portrait: sized by height, never cropped into a shape */}
+              <motion.div className="absolute bottom-0 right-[6%] h-[100%] overflow-hidden"
+                style={{ aspectRatio: "930 / 1452", translateZ: 0, x: midX,
+                  maskImage: "radial-gradient(ellipse 72% 78% at 50% 44%, #000 62%, transparent 100%)",
+                  WebkitMaskImage: "radial-gradient(ellipse 72% 78% at 50% 44%, #000 62%, transparent 100%)" }}>
                 {photo === "ok" && (
                   <motion.img src={HERO_SRC} alt="Woman touching her cheek while her skin is scanned by AI" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}
-                    className="h-full w-full object-cover object-top"
-                    style={{ maskImage: "linear-gradient(to bottom, #000 78%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, #000 78%, transparent)" }} />
+                    className="h-full w-full object-contain object-bottom" />
                 )}
                 {photo === "loading" && (
                   <div className="h-full w-full bg-gradient-to-br from-violet-100 via-pink-100 to-violet-100 animate-pulse" />
@@ -264,29 +266,22 @@ export default function Home() {
                 {/* AI scan overlay */}
                 {!reduce && (
                   <>
-                    <motion.div className="absolute inset-x-0 h-1/4 bg-gradient-to-b from-transparent via-violet-300/40 to-transparent"
-                      animate={{ y: ["-30%", "420%"] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }} />
-                    <motion.div className="absolute inset-x-0 h-px bg-white shadow-[0_0_18px_4px_rgba(192,132,252,0.9)]"
-                      animate={{ top: ["8%", "78%", "8%"] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }} />
+                    <motion.div className="absolute inset-x-0 h-1/5 bg-gradient-to-b from-transparent via-violet-300/40 to-transparent"
+                      animate={{ y: ["-30%", "520%"] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }} />
+                    <motion.div className="absolute inset-x-[10%] h-px bg-white shadow-[0_0_18px_4px_rgba(192,132,252,0.9)]"
+                      animate={{ top: ["12%", "68%", "12%"] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }} />
                   </>
                 )}
               </motion.div>
 
-              {/* face-lock corner brackets (mid-depth) */}
-              <motion.div className="absolute left-[38%] top-[22%] h-[30%] w-[30%]" style={{ translateZ: 40 }}
-                {...(!reduce && { animate: { scale: [1, 1.05, 1], opacity: [0.7, 1, 0.7] }, transition: { duration: 3, repeat: Infinity } })}>
-                {["top-0 left-0 border-t-2 border-l-2", "top-0 right-0 border-t-2 border-r-2", "bottom-0 left-0 border-b-2 border-l-2", "bottom-0 right-0 border-b-2 border-r-2"].map((c) => (
-                  <span key={c} className={`absolute h-5 w-5 border-white/90 ${c}`} />
-                ))}
-              </motion.div>
 
               {/* Skin Analysis card (near) */}
-              <motion.div className="absolute left-[-6%] top-[12%] z-20 w-[60%] sm:w-[52%]" style={{ translateZ: 110, x: nearX, y: nearY }}>
+              <motion.div className="absolute left-[-4%] top-[8%] z-20 w-[54%] sm:w-[46%]" style={{ translateZ: 110, x: nearX, y: nearY }}>
                 <motion.div {...float(8, 6)} className={`${glass} p-4`}>
                   <p className="text-sm text-violet-950/60 mb-3">Skin Analysis</p>
                   <div className="flex items-center gap-4">
                     <ConfidenceRing reduce={reduce} />
-                    <ul className="space-y-2 text-[11px] text-violet-950/55">
+                    <ul className="space-y-1.5 text-[11px] text-violet-950/55">
                       {["Blackheads", "Dark Spots", "Acne", "Pores"].map((t, i) => (
                         <motion.li key={t} className="flex items-center gap-1.5" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.2 + i * 0.15 }}>
                           <HiCheck className="text-violet-500" /> {t}
@@ -297,20 +292,8 @@ export default function Home() {
                 </motion.div>
               </motion.div>
 
-              {/* Hair Analysis card (nearest) */}
-              <motion.div className="absolute right-[-8%] top-[34%] z-20 w-[52%] sm:w-[46%]" style={{ translateZ: 140, x: nearX, y: nearY }}>
-                <motion.div {...float(9, 7, 0.6)} className={`${glass} p-3.5 flex items-center gap-3`}>
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-violet-200 to-violet-400 text-white shadow-inner"><HiOutlineScissors className="text-xl" /></span>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm text-violet-950/70">Hair Analysis</p>
-                    <p className="text-[11px] text-violet-950/50 leading-snug">Healthy scalp<br />Good density</p>
-                  </div>
-                  <span className="grid h-5 w-5 place-items-center rounded-full bg-violet-500 text-white"><HiCheck className="text-xs" /></span>
-                </motion.div>
-              </motion.div>
-
               {/* Recommended card (near) */}
-              <motion.div className="absolute right-[-10%] bottom-[2%] z-20 w-[62%] sm:w-[56%]" style={{ translateZ: 100, x: nearX, y: nearY }}>
+              <motion.div className="absolute right-[-4%] bottom-[4%] z-20 w-[58%] sm:w-[48%]" style={{ translateZ: 100, x: nearX, y: nearY }}>
                 <motion.div {...float(7, 6.5, 0.3)} className={`${glass} p-4`}>
                   <p className="text-sm font-medium text-violet-950 mb-2">Recommended For You</p>
                   <div className="flex items-center gap-3">
