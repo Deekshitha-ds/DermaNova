@@ -1,0 +1,1099 @@
+/* =========================================================
+   DERMANOVA AI - HOME PAGE
+   Font is intentionally NOT changed.
+   Your existing project font will be inherited.
+   ========================================================= */
+
+.home-page {
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+
+  background:
+    radial-gradient(
+      circle at 85% 35%,
+      rgba(255, 188, 220, 0.32),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 20% 45%,
+      rgba(194, 171, 255, 0.35),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #f8f4ff 0%,
+      #eee8ff 45%,
+      #fff4f8 100%
+    );
+
+  color: #2c204c;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.home-navbar {
+  position: relative;
+  z-index: 20;
+
+  width: calc(100% - 64px);
+  height: 80px;
+
+  margin: 24px 32px 0;
+
+  padding: 0 22px 0 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: 42px;
+
+  background: rgba(255, 255, 255, 0.62);
+
+  border: 1px solid rgba(255, 255, 255, 0.8);
+
+  box-shadow:
+    0 12px 40px rgba(115, 82, 165, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+
+/* BRAND */
+
+.brand-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-logo {
+  width: 54px;
+  height: 54px;
+
+  object-fit: contain;
+
+  border-radius: 50%;
+
+  filter:
+    drop-shadow(0 5px 12px rgba(160, 116, 210, 0.18));
+}
+
+.brand-name {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: #39235f;
+}
+
+.brand-name span {
+  color: #9a72e5;
+}
+
+
+/* LOGIN */
+
+.login-button {
+  border: none;
+  cursor: pointer;
+
+  padding: 12px 22px;
+
+  min-width: 112px;
+
+  border-radius: 18px;
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  background:
+    linear-gradient(
+      135deg,
+      #9571df,
+      #ec62a3
+    );
+
+  box-shadow:
+    0 8px 20px rgba(190, 102, 190, 0.22);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 26px rgba(190, 102, 190, 0.30);
+}
+
+.login-arrow {
+  margin-left: 8px;
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero-section {
+  min-height: calc(100vh - 104px);
+
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 47% 53%;
+
+  align-items: center;
+
+  padding:
+    40px
+    32px
+    55px;
+}
+
+
+/* =========================================================
+   BACKGROUND ORBS
+   ========================================================= */
+
+.soft-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(3px);
+}
+
+.orb-one {
+  width: 420px;
+  height: 420px;
+
+  left: -190px;
+  top: 230px;
+
+  background: rgba(188, 156, 255, 0.13);
+}
+
+.orb-two {
+  width: 350px;
+  height: 350px;
+
+  right: 130px;
+  top: 80px;
+
+  background: rgba(255, 174, 215, 0.16);
+}
+
+.orb-three {
+  width: 260px;
+  height: 260px;
+
+  right: -80px;
+  bottom: -80px;
+
+  background: rgba(177, 148, 242, 0.12);
+}
+
+
+/* =========================================================
+   LEFT CONTENT
+   ========================================================= */
+
+.hero-content {
+  position: relative;
+  z-index: 5;
+
+  padding-left: 40px;
+
+  max-width: 680px;
+}
+
+
+/* EYEBROW */
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  margin-bottom: 24px;
+
+  color: #9274d5;
+
+  font-size: 13px;
+  letter-spacing: 4px;
+  font-weight: 500;
+}
+
+.eyebrow-line {
+  width: 38px;
+  height: 1px;
+
+  background: #ad91e7;
+}
+
+
+/* HEADING */
+
+.hero-content h1 {
+  margin: 0;
+
+  color: #2d204b;
+
+  font-size: clamp(60px, 5.5vw, 86px);
+
+  line-height: 0.98;
+
+  letter-spacing: -3px;
+
+  font-weight: 600;
+}
+
+.hero-content h1 span {
+  color: #e866a5;
+
+  font-style: italic;
+}
+
+
+/* DESCRIPTION */
+
+.hero-description {
+  max-width: 610px;
+
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  color: #77718d;
+
+  font-size: 17px;
+
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   FEATURE ROW
+   ========================================================= */
+
+.feature-row {
+  display: flex;
+  align-items: center;
+
+  gap: 17px;
+
+  margin-bottom: 34px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #77718d;
+
+  font-size: 13px;
+
+  line-height: 1.35;
+
+  white-space: nowrap;
+}
+
+.feature-icon {
+  width: 27px;
+  height: 27px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: #8666cf;
+
+  font-size: 17px;
+
+  background: rgba(255, 255, 255, 0.52);
+
+  border: 1px solid rgba(164, 135, 218, 0.20);
+}
+
+.hair-icon {
+  font-size: 20px;
+}
+
+.feature-divider {
+  width: 1px;
+  height: 27px;
+
+  background: rgba(142, 119, 184, 0.20);
+}
+
+
+/* =========================================================
+   SCAN BUTTON
+   ========================================================= */
+
+.scan-button {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border: none;
+
+  padding: 17px 28px;
+
+  border-radius: 18px;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #9271e0,
+      #e45fa4
+    );
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 12px 30px rgba(173, 98, 202, 0.25);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.scan-button:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 16px 35px rgba(173, 98, 202, 0.32);
+}
+
+.sparkle {
+  font-size: 20px;
+}
+
+.button-arrow {
+  font-size: 20px;
+
+  margin-left: 4px;
+}
+
+
+/* =========================================================
+   RIGHT VISUAL
+   ========================================================= */
+
+.hero-visual {
+  position: relative;
+
+  height: 620px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* =========================================================
+   MAIN IMAGE
+   ========================================================= */
+
+.image-wrapper {
+  position: relative;
+
+  width: 610px;
+  height: 610px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 48% 52% 50% 50%;
+
+  overflow: visible;
+}
+
+.image-glow {
+  position: absolute;
+
+  width: 510px;
+  height: 510px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(205, 172, 255, 0.48),
+      rgba(255, 196, 225, 0.20),
+      transparent 70%
+    );
+
+  filter: blur(8px);
+}
+
+.hero-woman {
+  position: relative;
+  z-index: 2;
+
+  width: 570px;
+  height: 570px;
+
+  object-fit: cover;
+
+  border-radius: 48% 48% 50% 50%;
+
+  filter:
+    drop-shadow(
+      0 25px 45px rgba(116, 75, 157, 0.16)
+    );
+}
+
+
+/* =========================================================
+   FACE SCAN FRAME
+   ========================================================= */
+
+.face-scan-frame {
+  position: absolute;
+
+  z-index: 4;
+
+  width: 185px;
+  height: 230px;
+
+  right: 155px;
+  top: 155px;
+
+  pointer-events: none;
+}
+
+.corner {
+  position: absolute;
+
+  width: 30px;
+  height: 30px;
+
+  border-color: rgba(255, 255, 255, 0.85);
+  border-style: solid;
+}
+
+.top-left {
+  top: 0;
+  left: 0;
+
+  border-width: 2px 0 0 2px;
+}
+
+.top-right {
+  top: 0;
+  right: 0;
+
+  border-width: 2px 2px 0 0;
+}
+
+.bottom-left {
+  bottom: 0;
+  left: 0;
+
+  border-width: 0 0 2px 2px;
+}
+
+.bottom-right {
+  bottom: 0;
+  right: 0;
+
+  border-width: 0 2px 2px 0;
+}
+
+.scan-line {
+  position: absolute;
+
+  width: 100%;
+  height: 1px;
+
+  top: 50%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.85),
+      transparent
+    );
+}
+
+
+/* =========================================================
+   GLASS CARDS
+   ========================================================= */
+
+.floating-card {
+  position: absolute;
+
+  z-index: 8;
+
+  background: rgba(255, 255, 255, 0.76);
+
+  border: 1px solid rgba(255, 255, 255, 0.90);
+
+  box-shadow:
+    0 16px 40px rgba(108, 78, 148, 0.12);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  color: #4a3b68;
+}
+
+
+/* =========================================================
+   SKIN CARD
+   ========================================================= */
+
+.skin-card {
+  left: 10px;
+  top: 85px;
+
+  width: 275px;
+
+  padding: 20px 22px;
+
+  border-radius: 25px;
+}
+
+.card-heading {
+  color: #81709f;
+
+  font-size: 14px;
+
+  margin-bottom: 15px;
+}
+
+.skin-analysis-content {
+  display: flex;
+  align-items: center;
+
+  gap: 17px;
+}
+
+.confidence-circle {
+  width: 88px;
+  height: 88px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    conic-gradient(
+      #a67be8 0deg,
+      #d46bb1 300deg,
+      #eee3ff 300deg,
+      #eee3ff 360deg
+    );
+}
+
+.confidence-inner {
+  width: 68px;
+  height: 68px;
+
+  border-radius: 50%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.93);
+}
+
+.confidence-inner strong {
+  font-size: 15px;
+  color: #594080;
+}
+
+.confidence-inner small {
+  font-size: 8px;
+  color: #8a819c;
+}
+
+.issue-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  font-size: 11px;
+}
+
+.issue-list div {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+.check-dot {
+  color: #9c75dd;
+}
+
+
+/* =========================================================
+   HAIR CARD
+   ========================================================= */
+
+.hair-card {
+  right: -10px;
+  top: 180px;
+
+  width: 220px;
+
+  padding: 17px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border-radius: 22px;
+}
+
+.hair-card-icon {
+  width: 45px;
+  height: 45px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #906bd3;
+
+  font-size: 23px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eee5ff,
+      #f9e6f4
+    );
+}
+
+.small-card-title {
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #55406f;
+
+  margin-bottom: 5px;
+}
+
+.hair-status {
+  font-size: 10px;
+
+  color: #8d849d;
+
+  margin-top: 3px;
+}
+
+.status-check {
+  margin-left: auto;
+
+  width: 19px;
+  height: 19px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+
+  font-size: 10px;
+
+  background: #b77de4;
+}
+
+
+/* =========================================================
+   RECOMMENDATION CARD
+   ========================================================= */
+
+.recommendation-card {
+  right: -5px;
+  bottom: 45px;
+
+  width: 315px;
+
+  padding: 18px 20px;
+
+  border-radius: 25px;
+}
+
+.recommendation-title {
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: #52366e;
+
+  margin-bottom: 13px;
+}
+
+.recommendation-body {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.product-images {
+  position: relative;
+
+  width: 72px;
+  height: 70px;
+
+  flex-shrink: 0;
+}
+
+.product {
+  position: absolute;
+
+  bottom: 0;
+
+  border-radius: 6px 6px 3px 3px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e8c9f5,
+      #c99de9
+    );
+
+  box-shadow:
+    0 5px 12px rgba(130, 84, 162, 0.15);
+}
+
+.product-one {
+  width: 25px;
+  height: 45px;
+
+  left: 4px;
+}
+
+.product-two {
+  width: 29px;
+  height: 55px;
+
+  left: 25px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #d7b6f0,
+      #b982dc
+    );
+}
+
+.product-three {
+  width: 23px;
+  height: 37px;
+
+  right: 1px;
+}
+
+.recommendation-points {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  font-size: 9px;
+
+  color: #81788f;
+}
+
+.recommendation-points div {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.recommendation-points span {
+  color: #9d71d5;
+}
+
+.recommendation-arrow {
+  margin-left: auto;
+
+  width: 24px;
+  height: 24px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #a47be4,
+      #d86db0
+    );
+}
+
+
+/* =========================================================
+   BOTTOM PETALS
+   ========================================================= */
+
+.bottom-petal {
+  position: absolute;
+
+  border-radius: 70% 30% 70% 30%;
+
+  pointer-events: none;
+
+  opacity: 0.32;
+
+  transform: rotate(35deg);
+}
+
+.petal-one {
+  width: 90px;
+  height: 45px;
+
+  bottom: 0;
+  left: -15px;
+
+  background: #ef86bd;
+}
+
+.petal-two {
+  width: 120px;
+  height: 55px;
+
+  bottom: -15px;
+  left: 70px;
+
+  background: #d49af0;
+
+  transform: rotate(-20deg);
+}
+
+.petal-three {
+  width: 100px;
+  height: 45px;
+
+  bottom: -8px;
+  right: 100px;
+
+  background: #f3a1ca;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+  .hero-section {
+    grid-template-columns: 45% 55%;
+  }
+
+  .hero-content {
+    padding-left: 20px;
+  }
+
+  .hero-content h1 {
+    font-size: 65px;
+  }
+
+  .image-wrapper {
+    transform: scale(0.88);
+  }
+
+  .skin-card {
+    left: -5px;
+  }
+
+  .hair-card {
+    right: -20px;
+  }
+
+  .recommendation-card {
+    right: -20px;
+  }
+}
+
+
+@media (max-width: 950px) {
+
+  .home-navbar {
+    width: calc(100% - 30px);
+    margin: 15px 15px 0;
+  }
+
+  .hero-section {
+    grid-template-columns: 1fr;
+
+    padding-top: 55px;
+
+    overflow: visible;
+  }
+
+  .hero-content {
+    text-align: center;
+
+    padding: 0;
+
+    max-width: 720px;
+
+    margin: auto;
+  }
+
+  .eyebrow {
+    justify-content: center;
+  }
+
+  .hero-description {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .feature-row {
+    justify-content: center;
+
+    flex-wrap: wrap;
+  }
+
+  .scan-button {
+    margin-bottom: 20px;
+  }
+
+  .hero-visual {
+    height: 570px;
+
+    margin-top: 10px;
+  }
+}
+
+
+@media (max-width: 650px) {
+
+  .home-navbar {
+    height: 68px;
+
+    padding: 0 14px;
+  }
+
+  .brand-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .brand-name {
+    font-size: 18px;
+  }
+
+  .login-button {
+    min-width: auto;
+
+    padding: 10px 15px;
+  }
+
+  .hero-section {
+    padding:
+      35px
+      15px
+      50px;
+  }
+
+  .hero-content h1 {
+    font-size: 52px;
+
+    letter-spacing: -2px;
+  }
+
+  .hero-description {
+    font-size: 15px;
+  }
+
+  .feature-divider {
+    display: none;
+  }
+
+  .feature-row {
+    gap: 12px;
+  }
+
+  .feature-item {
+    font-size: 11px;
+  }
+
+  .hero-visual {
+    height: 470px;
+  }
+
+  .image-wrapper {
+    transform: scale(0.68);
+  }
+
+  .skin-card {
+    left: -20px;
+    top: 30px;
+
+    transform: scale(0.82);
+    transform-origin: left top;
+  }
+
+  .hair-card {
+    right: -35px;
+    top: 120px;
+
+    transform: scale(0.82);
+    transform-origin: right top;
+  }
+
+  .recommendation-card {
+    right: -35px;
+    bottom: 10px;
+
+    transform: scale(0.78);
+    transform-origin: right bottom;
+  }
+}
