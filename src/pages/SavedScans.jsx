@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 
 import GlassCard from "../components/GlassCard";
-import { getSkinReportHistory } from "../api/skinAnalysis";
+import {
+  getSkinReportHistory,
+  deleteSkinReport,
+} from "../api/skinAnalysis";
 
 const PETALS = [
   { left: "8%", size: 26, delay: 0, dur: 16 },
@@ -59,6 +62,11 @@ export default function SavedScans() {
   const [savedReports, setSavedReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deletingId, setDeletingId] = useState(null);
+
+  // ============================================================
+  // LOAD SAVED SCANS
+  // ============================================================
 
   useEffect(() => {
     async function loadSavedScans() {
@@ -67,8 +75,7 @@ export default function SavedScans() {
         setError("");
 
         /*
-         * Get analysis IDs that were saved
-         * using the Save Scan button.
+         * Get analysis IDs that were marked as saved.
          */
         const savedIds = Object.keys(localStorage)
           .filter((key) =>
@@ -87,7 +94,7 @@ export default function SavedScans() {
         }
 
         /*
-         * Fetch report history from backend.
+         * Get user's analysis history from backend.
          */
         const response =
           await getSkinReportHistory();
@@ -102,7 +109,7 @@ export default function SavedScans() {
                 : [];
 
         /*
-         * Keep only the reports that were saved.
+         * Keep only scans that the user marked as saved.
          */
         const filteredReports =
           history.filter((report) => {
@@ -133,6 +140,10 @@ export default function SavedScans() {
 
     loadSavedScans();
   }, []);
+
+  // ============================================================
+  // HELPERS
+  // ============================================================
 
   const getReportId = (report) =>
     report?.analysis_id ??
@@ -187,10 +198,70 @@ export default function SavedScans() {
     );
   };
 
+  // ============================================================
+  // DELETE SAVED SCAN
+  // ============================================================
+
+  const handleDelete = async (reportId) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this saved scan?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setDeletingId(reportId);
+      setError("");
+
+      /*
+       * Delete from backend database.
+       */
+      await deleteSkinReport(reportId);
+
+      /*
+       * Remove saved marker from browser storage.
+       */
+      localStorage.removeItem(
+        `dermanova_saved_scan_${reportId}`
+      );
+
+      /*
+       * Immediately remove the card from the UI.
+       */
+      setSavedReports((currentReports) =>
+        currentReports.filter(
+          (report) =>
+            String(getReportId(report)) !==
+            String(reportId)
+        )
+      );
+    } catch (err) {
+      console.error(
+        "FAILED TO DELETE SAVED SCAN:",
+        err
+      );
+
+      setError(
+        "Unable to delete this scan. Please try again."
+      );
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  // ============================================================
+  // PAGE
+  // ============================================================
+
   return (
     <div className="relative min-h-screen overflow-hidden">
 
-      {/* SAME BACKGROUND ATMOSPHERE */}
+      {/* ======================================================
+          SAME BACKGROUND ATMOSPHERE
+      ====================================================== */}
+
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-violet-50 via-fuchsia-50/60 to-purple-100/70">
 
         {/* Violet atmosphere */}
@@ -232,7 +303,10 @@ export default function SavedScans() {
       {/* Falling petals */}
       {!reduce && <Petals />}
 
-      {/* SAVED SCANS CONTENT */}
+      {/* ======================================================
+          CONTENT
+      ====================================================== */}
+
       <motion.main
         className="relative z-10 max-w-6xl mx-auto px-4 py-8"
         initial={{ opacity: 0, y: 15 }}
@@ -243,6 +317,7 @@ export default function SavedScans() {
         }}
       >
 
+        {/* HEADER */}
         <div className="mb-8">
 
           <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-lavender-600">
@@ -254,12 +329,15 @@ export default function SavedScans() {
           </h1>
 
           <p className="mt-2 text-sm text-ink/45">
-            View your saved facial analysis reports.
+            View and manage your saved facial analysis reports.
           </p>
 
         </div>
 
-        {/* LOADING */}
+        {/* ====================================================
+            LOADING
+        ==================================================== */}
+
         {loading && (
           <GlassCard>
 
@@ -276,11 +354,14 @@ export default function SavedScans() {
           </GlassCard>
         )}
 
-        {/* ERROR */}
+        {/* ====================================================
+            ERROR
+        ==================================================== */}
+
         {!loading && error && (
           <GlassCard>
 
-            <div className="py-12 text-center">
+            <div className="py-8 text-center">
 
               <p className="text-sm text-red-500">
                 {error}
@@ -291,7 +372,10 @@ export default function SavedScans() {
           </GlassCard>
         )}
 
-        {/* EMPTY STATE */}
+        {/* ====================================================
+            EMPTY STATE
+        ==================================================== */}
+
         {!loading &&
           !error &&
           savedReports.length === 0 && (
@@ -324,12 +408,23 @@ export default function SavedScans() {
                   “Save Scan” to keep the report here.
                 </p>
 
+                <button
+                  type="button"
+                  onClick={() => navigate("/scan/skin")}
+                  className="mt-6 rounded-xl bg-lavender-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-lavender-700"
+                >
+                  Start a Skin Scan
+                </button>
+
               </div>
 
             </GlassCard>
           )}
 
-        {/* SAVED REPORTS */}
+        {/* ====================================================
+            SAVED REPORTS
+        ==================================================== */}
+
         {!loading &&
           !error &&
           savedReports.length > 0 && (
@@ -347,6 +442,10 @@ export default function SavedScans() {
                 const concernCount =
                   getConcernCount(report);
 
+                const isDeleting =
+                  String(deletingId) ===
+                  String(reportId);
+
                 return (
                   <motion.div
                     key={reportId}
@@ -355,7 +454,7 @@ export default function SavedScans() {
                       y: 12,
                     }}
                     animate={{
-                      opacity: 1,
+                      opacity: isDeleting ? 0.55 : 1,
                       y: 0,
                     }}
                     transition={{
@@ -364,6 +463,7 @@ export default function SavedScans() {
                     className="group rounded-[26px] border border-lavender-100 bg-white/80 backdrop-blur-xl p-6 shadow-[0_16px_40px_rgba(80,60,120,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-lavender-200 hover:shadow-[0_20px_45px_rgba(80,60,120,0.10)]"
                   >
 
+                    {/* CARD HEADER */}
                     <div className="flex items-start justify-between gap-4">
 
                       <div>
@@ -383,12 +483,13 @@ export default function SavedScans() {
 
                       </div>
 
-                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-lavender-50 border border-lavender-100 text-lavender-600">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-lavender-50 border border-lavender-100 text-lavender-600">
                         ✓
                       </div>
 
                     </div>
 
+                    {/* STATS */}
                     <div className="mt-7 grid grid-cols-3 gap-3">
 
                       <div className="rounded-xl bg-lavender-50/60 border border-lavender-100 p-3">
@@ -430,17 +531,38 @@ export default function SavedScans() {
 
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        navigate(
-                          `/saved-scans/${reportId}`
-                        )
-                      }
-                      className="mt-6 w-full rounded-xl border border-lavender-200 bg-lavender-50/70 px-4 py-3 text-sm font-semibold text-lavender-700 transition hover:bg-lavender-100"
-                    >
-                      View Full Report
-                    </button>
+                    {/* ACTIONS */}
+                    <div className="mt-6 grid grid-cols-2 gap-3">
+
+                      {/* VIEW REPORT */}
+                      <button
+                        type="button"
+                        disabled={isDeleting}
+                        onClick={() =>
+                          navigate(
+                            `/saved-scans/${reportId}`
+                          )
+                        }
+                        className="rounded-xl border border-lavender-200 bg-lavender-50/70 px-4 py-3 text-sm font-semibold text-lavender-700 transition hover:bg-lavender-100 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        View Report
+                      </button>
+
+                      {/* DELETE */}
+                      <button
+                        type="button"
+                        disabled={isDeleting}
+                        onClick={() =>
+                          handleDelete(reportId)
+                        }
+                        className="rounded-xl border border-red-100 bg-red-50/60 px-4 py-3 text-sm font-semibold text-red-500 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        {isDeleting
+                          ? "Deleting..."
+                          : "Delete Scan"}
+                      </button>
+
+                    </div>
 
                   </motion.div>
                 );

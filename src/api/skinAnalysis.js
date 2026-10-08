@@ -30,8 +30,23 @@ export const submitSkinAnalysis = (
   });
 };
 
-export const getSkinReportHistory = () =>
-  client.get("/skin/reports");
 
+/**
+ * Get the logged-in user's analysis history.
+ */
+export const getSkinReportHistory = () =>
+  client.get("/analysis/history");
+
+
+/**
+ * Get one specific analysis report.
+ */
 export const getSkinReportById = (reportId) =>
-  client.get(`/skin/reports/${reportId}`);
+  client.get(`/analysis/history/${reportId}`);
+
+
+/**
+ * Delete one saved analysis report.
+ */
+export const deleteSkinReport = (reportId) =>
+  client.delete(`/analysis/history/${reportId}`);

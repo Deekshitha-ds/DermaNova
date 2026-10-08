@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
 
 export default function ScanResult({ result }) {
-  if (!result) return null;
   const [isSaved, setIsSaved] = useState(false);
 
-  const analysisId = result.analysis_id;
+  const analysisId = result?.analysis_id;
 
   const saveKey = analysisId
     ? `dermanova_saved_scan_${analysisId}`
     : null;
 
+  // ============================================================
+  // CHECK WHETHER THIS SCAN IS ALREADY SAVED
+  // ============================================================
+
   useEffect(() => {
-    if (!saveKey) return;
+    if (!saveKey) {
+      setIsSaved(false);
+      return;
+    }
 
     const saved =
       localStorage.getItem(saveKey) === "true";
@@ -19,13 +25,30 @@ export default function ScanResult({ result }) {
     setIsSaved(saved);
   }, [saveKey]);
 
+  // ============================================================
+  // SAVE SCAN
+  // ============================================================
+
   const handleSaveScan = () => {
-    if (!saveKey) return;
+    if (!analysisId || !saveKey) {
+      console.warn(
+        "Cannot save scan: analysis_id is missing."
+      );
+      return;
+    }
 
     localStorage.setItem(saveKey, "true");
 
     setIsSaved(true);
   };
+
+  // ============================================================
+  // NO RESULT
+  // ============================================================
+
+  if (!result) {
+    return null;
+  }
 
   const health = Math.round(result.scores?.health ?? 0);
   const oiliness = Math.round(result.scores?.oiliness ?? 0);
