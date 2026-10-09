@@ -275,42 +275,9 @@ export default function Home() {
               </motion.div>
 
 
-              {/* Skin Analysis card (near) */}
-              <motion.div className="absolute left-[-4%] top-[8%] z-20 w-[54%] sm:w-[46%]" style={{ translateZ: 110, x: nearX, y: nearY }}>
-                <motion.div {...float(8, 6)} className={`${glass} p-4`}>
-                  <p className="text-sm text-violet-950/60 mb-3">Skin Analysis</p>
-                  <div className="flex items-center gap-4">
-                    <ConfidenceRing reduce={reduce} />
-                    <ul className="space-y-1.5 text-[11px] text-violet-950/55">
-                      {["Blackheads", "Dark Spots", "Acne", "Pores"].map((t, i) => (
-                        <motion.li key={t} className="flex items-center gap-1.5" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.2 + i * 0.15 }}>
-                          <HiCheck className="text-violet-500" /> {t}
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </div>
-                </motion.div>
-              </motion.div>
+             
 
-              {/* Recommended card (near) */}
-              <motion.div className="absolute right-[-4%] bottom-[4%] z-20 w-[58%] sm:w-[48%]" style={{ translateZ: 100, x: nearX, y: nearY }}>
-                <motion.div {...float(7, 6.5, 0.3)} className={`${glass} p-4`}>
-                  <p className="text-sm font-medium text-violet-950 mb-2">Recommended For You</p>
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-end gap-1" aria-hidden>
-                      <span className="h-14 w-5 rounded-md bg-gradient-to-b from-violet-200 to-violet-400 shadow" />
-                      <span className="h-9 w-7 rounded-md bg-gradient-to-b from-pink-100 to-fuchsia-300 shadow" />
-                    </div>
-                    <ul className="flex-1 space-y-1 text-[11px] text-violet-950/55">
-                      {["Dermatologist-tested", "Budget-matched", "Personalized for you"].map((t) => (
-                        <li key={t} className="flex items-center gap-1.5"><HiCheck className="text-violet-500" /> {t}</li>
-                      ))}
-                    </ul>
-                    <span className="grid h-7 w-7 place-items-center rounded-full bg-violet-400 text-white"><HiOutlineArrowRight /></span>
-                  </div>
-                </motion.div>
               </motion.div>
-            </motion.div>
           </div>
         </div>
       </section>
