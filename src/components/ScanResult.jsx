@@ -1,55 +1,85 @@
 import { useEffect, useState } from "react";
+import {
+  saveScan,
+  unsaveScan,
+  getSavedScans,
+} from "..frontend/api/savedScans";
 
 export default function ScanResult({ result }) {
   const [isSaved, setIsSaved] = useState(false);
+const [isSaving, setIsSaving] = useState(false);
+const [saveError, setSaveError] = useState("");
 
-  const analysisId = result?.analysis_id;
+const analysisId = result?.analysis_id;
 
-  const saveKey = analysisId
-    ? `dermanova_saved_scan_${analysisId}`
-    : null;
+// Check whether this scan is saved in the backend.
+useEffect(() => {
+  let cancelled = false;
 
-  // ============================================================
-  // CHECK WHETHER THIS SCAN IS ALREADY SAVED
-  // ============================================================
-
-  useEffect(() => {
-    if (!saveKey) {
+  const checkSavedStatus = async () => {
+    if (!analysisId) {
       setIsSaved(false);
       return;
     }
 
-    const saved =
-      localStorage.getItem(saveKey) === "true";
+    try {
+      const response = await getSavedScans();
+      const savedScans = Array.isArray(response.data)
+        ? response.data
+        : [];
 
-    setIsSaved(saved);
-  }, [saveKey]);
-
-  // ============================================================
-  // SAVE SCAN
-  // ============================================================
-
-  const handleSaveScan = () => {
-    if (!analysisId || !saveKey) {
-      console.warn(
-        "Cannot save scan: analysis_id is missing."
+      const alreadySaved = savedScans.some(
+        (scan) =>
+          Number(scan.analysis_id ?? scan.id) ===
+          Number(analysisId)
       );
-      return;
+
+      if (!cancelled) {
+        setIsSaved(alreadySaved);
+      }
+    } catch (error) {
+      console.error("Failed to check saved scans:", error);
     }
-
-    localStorage.setItem(saveKey, "true");
-
-    setIsSaved(true);
   };
 
-  // ============================================================
-  // NO RESULT
-  // ============================================================
+  checkSavedStatus();
 
-  if (!result) {
-    return null;
+  return () => {
+    cancelled = true;
+  };
+}, [analysisId]);
+
+// Save or remove the scan through the backend.
+const handleSaveScan = async () => {
+  if (!analysisId || isSaving) {
+    if (!analysisId) {
+      setSaveError("Scan ID is missing. Please run the scan again.");
+    }
+    return;
   }
 
+  setIsSaving(true);
+  setSaveError("");
+
+  try {
+    if (isSaved) {
+      await unsaveScan(analysisId);
+      setIsSaved(false);
+    } else {
+      await saveScan(analysisId);
+      setIsSaved(true);
+    }
+  } catch (error) {
+    console.error("Failed to update saved scan:", error);
+
+    setSaveError(
+      error.response?.data?.detail ||
+      "Unable to update saved scan. Please try again."
+    );
+  } finally {
+    setIsSaving(false);
+  }
+};
   const health = Math.round(result.scores?.health ?? 0);
   const oiliness = Math.round(result.scores?.oiliness ?? 0);
   const hydration = Math.round(result.scores?.hydration ?? 0);
@@ -346,44 +376,32 @@ export default function ScanResult({ result }) {
   <button
     type="button"
     onClick={handleSaveScan}
-    disabled={isSaved}
+    disabled={!analysisId || isSaving}
     className={`
       group flex items-center gap-2 rounded-full
-      border px-4 py-2
-      text-xs font-semibold
-      transition-all duration-300
+      border px-4 py-2 text-xs font-semibold
+      transition-all duration-300 disabled:opacity-60
       ${
         isSaved
           ? "border-lavender-200 bg-lavender-50 text-lavender-700"
           : "border-ink/10 bg-white/70 text-ink/55 hover:border-lavender-200 hover:bg-lavender-50 hover:text-lavender-700"
       }
     `}
-    aria-label={
-      isSaved
-        ? "Scan saved"
-        : "Save this scan"
-    }
   >
-
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill={isSaved ? "currentColor" : "none"}
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="transition-transform duration-300 group-hover:scale-105"
-    >
-      <path d="M6 3.75A1.75 1.75 0 0 1 7.75 2h8.5A1.75 1.75 0 0 1 18 3.75v17.1a.65.65 0 0 1-1.02.53L12 17.8l-4.98 3.58A.65.65 0 0 1 6 20.85V3.75Z" />
-    </svg>
-
     <span>
-      {isSaved ? "Saved" : "Save Scan"}
+      {isSaving
+        ? "Saving..."
+        : isSaved
+          ? "Saved · Remove"
+          : "Save Scan"}
     </span>
-
   </button>
+
+{saveError && (
+  <p className="mt-2 text-xs text-red-600" role="alert">
+    {saveError}
+  </p>
+)}v
 
 </div>
           </div>
