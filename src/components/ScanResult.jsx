@@ -3,7 +3,7 @@ import {
   saveScan,
   unsaveScan,
   getSavedScans,
-} from "..frontend/api/savedScans";
+} from "../api/savedscans";
 
 export default function ScanResult({ result }) {
   const [isSaved, setIsSaved] = useState(false);
