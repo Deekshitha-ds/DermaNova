@@ -401,7 +401,7 @@ const handleSaveScan = async () => {
   <p className="mt-2 text-xs text-red-600" role="alert">
     {saveError}
   </p>
-)}v
+)}
 
 </div>
           </div>
