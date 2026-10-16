@@ -111,7 +111,7 @@ export default function Dashboard() {
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <h1 className="text-3xl font-semibold mb-1">
-          Welcome, {user?.name?.split(" ")[0]}
+          Welcome Back!, {user?.name?.split(" ")[0]}
         </h1>
 
         <p className="text-ink/60 mb-8">
