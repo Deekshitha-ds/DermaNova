@@ -35,3 +35,19 @@ export async function getProductRecommendations({
 
   return response.data;
 }
+
+
+export async function getScanRecommendations(analysisId) {
+  const token = localStorage.getItem("dermanova_access_token");
+
+  const response = await axios.get(
+    `${API_BASE_URL}/api/analysis/history/${analysisId}/recommendations`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+}

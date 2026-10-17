@@ -4,13 +4,21 @@ import {
   unsaveScan,
   getSavedScans,
 } from "../api/savedscans";
+import { getProductRecommendations } from "../api/recommendations";
 
 export default function ScanResult({ result }) {
   const [isSaved, setIsSaved] = useState(false);
-const [isSaving, setIsSaving] = useState(false);
-const [saveError, setSaveError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+  const [isLoadingRecommendations, setIsLoadingRecommendations] =
+    useState(false);
 
-const analysisId = result?.analysis_id;
+  const [recommendationError, setRecommendationError] =
+    useState("");
+
+  const [liveProducts, setLiveProducts] = useState(null);
+
+  const analysisId = result?.analysis_id;
 
 // Check whether this scan is saved in the backend.
 useEffect(() => {
@@ -1398,13 +1406,19 @@ const handleSaveScan = async () => {
                 Products chosen for your skin
               </h3>
 
-              <p className="mt-3 text-sm md:text-[15px] leading-7 text-ink/45">
-                Our recommendation engine compares products against your
-                detected skin concerns and selects the most suitable option
-                for your routine.
-              </p>
-
-            </div>
+                    <div className="mt-6">
+        <button
+          type="button"
+          onClick={handleLoadRecommendations}
+          disabled={isLoadingRecommendations || !analysisId}
+          className="rounded-full bg-lavender-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-lavender-700 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isLoadingRecommendations
+            ? "Finding suitable products..."
+            : "See Suitable Products"}
+        </button>
+      </div>
+                  </div>
 
 
             {/* ================================================= */}
@@ -2198,3 +2212,28 @@ function LiveRoutineProductCard({ product, step }) {
     </div>
   );
 }
+const handleLoadRecommendations = async () => {
+  if (!analysisId || isLoadingRecommendations) return;
+
+  setIsLoadingRecommendations(true);
+  setRecommendationError("");
+
+  try {
+    const response = await getProductRecommendations({
+      budget: result?.monthly_budget ?? 800,
+      skinType: result?.skin_type ?? result?.detected_type,
+      concerns: result?.concerns ?? result?.issues ?? [],
+    });
+
+    setLiveProducts(response);
+  } catch (error) {
+    console.error("Failed to load product recommendations:", error);
+
+    setRecommendationError(
+      error.response?.data?.detail ||
+        "Unable to load suitable products. Please try again."
+    );
+  } finally {
+    setIsLoadingRecommendations(false);
+  }
+};
