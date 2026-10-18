@@ -5,7 +5,7 @@ import {
   getSavedScans,
 } from "../api/savedscans";
 import { getProductRecommendations } from "../api/recommendations";
-
+import { getScanRecommendations } from "../api/skinAnalysis";
 export default function ScanResult({ result }) {
   const [isSaved, setIsSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -88,6 +88,41 @@ const handleSaveScan = async () => {
     setIsSaving(false);
   }
 };
+
+  
+const handleLoadRecommendations = async () => {
+  if (!analysisId || isLoadingRecommendations) return;
+
+  setIsLoadingRecommendations(true);
+  setRecommendationError("");
+
+  try {
+    console.log(
+      "Loading recommendations for analysis:",
+      analysisId
+    );
+
+    const response = await getScanRecommendations(analysisId);
+
+    console.log("Recommendations API response:", response.data);
+
+    setLiveProducts(response.data);
+  } catch (error) {
+    console.error(
+      "Failed to load recommendations:",
+      error.response?.status,
+      error.response?.data || error.message
+    );
+
+    setRecommendationError(
+      error.response?.data?.detail ||
+        "Unable to load suitable products. Please try again."
+    );
+  } finally {
+    setIsLoadingRecommendations(false);
+  }
+};
+
   const health = Math.round(result.scores?.health ?? 0);
   const oiliness = Math.round(result.scores?.oiliness ?? 0);
   const hydration = Math.round(result.scores?.hydration ?? 0);
@@ -105,7 +140,10 @@ const handleSaveScan = async () => {
     ? result.processed_image
     : `${backendBaseUrl}${result.processed_image}`
   : null;
-
+  console.log("Analysis ID:", analysisId);
+  console.log("Processed image path:", result?.processed_image);
+  console.log("Final image URL:", processedImageUrl);
+  console.log("Full analysis result:", result);
   const unevenTone = Math.round(
     skinMetrics.uneven_tone ?? 0
   );
@@ -1384,9 +1422,7 @@ const handleSaveScan = async () => {
       {/* DERMANOVA LIVE PRODUCT RECOMMENDATIONS */}
       {/* ================================================= */}
 
-      {(majorRecommendation ||
-        morningRoutineProducts.length > 0 ||
-        eveningRoutineProducts.length > 0) && (
+    
         <section className="relative overflow-hidden rounded-[34px] border border-lavender-200/60 bg-white/80 backdrop-blur-2xl shadow-[0_20px_60px_rgba(80,60,120,0.08)]">
 
           {/* Soft background accents */}
@@ -1407,16 +1443,18 @@ const handleSaveScan = async () => {
               </h3>
 
                     <div className="mt-6">
+        
         <button
           type="button"
-          onClick={handleLoadRecommendations}
-          disabled={isLoadingRecommendations || !analysisId}
-          className="rounded-full bg-lavender-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-lavender-700 disabled:cursor-not-allowed disabled:opacity-60"
+          onClick={() => {
+            window.location.href = `/recommendations/${analysisId}`;
+          }}
+          disabled={!analysisId}
+          className="mt-2 inline-flex items-center justify-center rounded-full bg-lavender-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-lavender-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isLoadingRecommendations
-            ? "Finding suitable products..."
-            : "See Suitable Products"}
+          See Suitable Products
         </button>
+
       </div>
                   </div>
 
@@ -1544,7 +1582,7 @@ const handleSaveScan = async () => {
           </div>
 
         </section>
-      )}
+      
 
       
                     
@@ -2211,29 +2249,5 @@ function LiveRoutineProductCard({ product, step }) {
 
     </div>
   );
+  
 }
-const handleLoadRecommendations = async () => {
-  if (!analysisId || isLoadingRecommendations) return;
-
-  setIsLoadingRecommendations(true);
-  setRecommendationError("");
-
-  try {
-    const response = await getProductRecommendations({
-      budget: result?.monthly_budget ?? 800,
-      skinType: result?.skin_type ?? result?.detected_type,
-      concerns: result?.concerns ?? result?.issues ?? [],
-    });
-
-    setLiveProducts(response);
-  } catch (error) {
-    console.error("Failed to load product recommendations:", error);
-
-    setRecommendationError(
-      error.response?.data?.detail ||
-        "Unable to load suitable products. Please try again."
-    );
-  } finally {
-    setIsLoadingRecommendations(false);
-  }
-};

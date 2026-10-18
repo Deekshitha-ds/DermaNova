@@ -12,6 +12,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import FaceScan from "./pages/FaceScan.jsx";
+import ProductRecommendations from "./pages/ProductRecommendations";
 
 import Footer from "./components/Footer";
 import WebLoader from "./components/WebLoader";
@@ -87,6 +88,10 @@ export default function App() {
                 path="/scan/skin"
                 element={<FaceScan />}
               />
+              <Route
+  path="/recommendations/:analysisId"
+  element={<ProductRecommendations />}
+/>
 
             </Route>
 

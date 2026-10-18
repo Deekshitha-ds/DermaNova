@@ -50,3 +50,12 @@ export const getSkinReportById = (reportId) =>
  */
 export const deleteSkinReport = (reportId) =>
   client.delete(`/analysis/history/${reportId}`);
+
+/**
+ * Get product recommendations for a specific skin scan.
+ * Called only when the user clicks "See Suitable Products".
+ */
+export const getScanRecommendations = (analysisId) =>
+  client.get(
+    `/analysis/history/${analysisId}/recommendations`
+);
