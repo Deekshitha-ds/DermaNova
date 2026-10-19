@@ -13,6 +13,7 @@ import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import FaceScan from "./pages/FaceScan.jsx";
 import ProductRecommendations from "./pages/ProductRecommendations";
+import SavedProducts from "./pages/SavedProducts";
 
 import Footer from "./components/Footer";
 import WebLoader from "./components/WebLoader";
@@ -91,8 +92,12 @@ export default function App() {
               <Route
   path="/recommendations/:analysisId"
   element={<ProductRecommendations />}
-/>
 
+/>
+              <Route
+  path="/saved-products"
+  element={<SavedProducts />}
+/>
             </Route>
 
           </Routes>

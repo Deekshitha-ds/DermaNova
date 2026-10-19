@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   saveScan,
   unsaveScan,
@@ -19,6 +20,7 @@ export default function ScanResult({ result }) {
   const [liveProducts, setLiveProducts] = useState(null);
 
   const analysisId = result?.analysis_id;
+  const navigate = useNavigate();
 
 // Check whether this scan is saved in the backend.
 useEffect(() => {
@@ -1446,9 +1448,7 @@ const handleLoadRecommendations = async () => {
         
         <button
           type="button"
-          onClick={() => {
-            window.location.href = `/recommendations/${analysisId}`;
-          }}
+          onClick={() => navigate(`/recommendations/${analysisId}`)}
           disabled={!analysisId}
           className="mt-2 inline-flex items-center justify-center rounded-full bg-lavender-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-lavender-700 disabled:cursor-not-allowed disabled:opacity-50"
         >

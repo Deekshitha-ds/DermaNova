@@ -16,6 +16,15 @@ import DermaLoader from "../components/dermaloader";
 import ScanResult from "./ScanResult";
 const HOLD_DURATION_MS = 1200;
 
+const getStoredScan = () => {
+  try {
+    const saved = sessionStorage.getItem("dermanova_last_scan");
+    return saved ? JSON.parse(saved) : null;
+  } catch {
+    return null;
+  }
+};
+
 export default function SmartCamera({ onResult,autoUpload = false, uploadOnly = false }) {
 
   /* ---------------- REFS ---------------- */
@@ -26,7 +35,10 @@ export default function SmartCamera({ onResult,autoUpload = false, uploadOnly = 
   const captureCanvasRef = useRef(null);
   const containerRef = useRef(null);
   const fileInputRef = useRef(null);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState(() =>
+  uploadOnly ? null : getStoredScan()
+);
+
   const holdStartRef = useRef(null);
   const animationRef = useRef(null);
   const isUploading = useRef(false);
@@ -37,13 +49,31 @@ export default function SmartCamera({ onResult,autoUpload = false, uploadOnly = 
 
   const [videoAspect, setVideoAspect] = useState(4 / 3);
 
-  const [phase, setPhase] = useState("scanning");
+  const [phase, setPhase] = useState(() =>
+  !uploadOnly && getStoredScan()
+    ? "result"
+    : "scanning"
+);
 
   const [holdProgress, setHoldProgress] = useState(0);
 
   const [cameraError, setCameraError] = useState("");
 
   const [submitError, setSubmitError] = useState("");
+
+
+  useEffect(() => {
+  if (!result?.processed_image) return;
+
+  const imageUrl = result.processed_image.startsWith("http")
+    ? result.processed_image
+    : `http://127.0.0.1:8000${result.processed_image}`;
+
+  setProcessedImage(imageUrl);
+}, [result]);
+
+
+  
 
   /* ---------------- FACE DETECTION ---------------- */
 
@@ -239,6 +269,10 @@ useEffect(() => {
 );
 // Save backend response
 setResult(data);
+sessionStorage.setItem(
+  "dermanova_last_scan",
+  JSON.stringify(data)
+);
 
 // Save processed image path
 if (data.processed_image) {
@@ -610,6 +644,10 @@ const handleImageUpload = async (event) => {
   "upload"
 );
     setResult(data);
+    sessionStorage.setItem(
+    "dermanova_last_scan",
+    JSON.stringify(data)
+  );
 
 
     if (data.processed_image) {
