@@ -22,6 +22,7 @@ import {
   deleteSavedProduct,
 } from "../api/savedProducts";
 import SerumLoader from "../components/SerumLoader";
+import SkinAnalysisCard from "../components/SkinAnalysisCard";
 
 /* -------------------------------------------------------
    HELPERS
@@ -699,55 +700,15 @@ export default function ProductRecommendations() {
               </div>
             </div>
 
-            {/* Decorative hero card */}
-            <div className="relative mx-auto w-full max-w-[270px] lg:mr-2">
+            {/* Skin analysis card */}
+            <div className="relative mx-auto w-full max-w-[340px] lg:mr-2">
               <div className="absolute inset-3 rounded-[35px] bg-gradient-to-br from-violet-300/50 via-fuchsia-200/50 to-pink-200/50 blur-2xl" />
-
-              <div className="relative rounded-[30px] border border-white/90 bg-white/60 p-5 shadow-[0_20px_50px_-28px_rgba(124,58,237,.45)] backdrop-blur-xl">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-fuchsia-100 text-violet-600">
-                    <HiOutlineSparkles className="h-5 w-5" />
-                  </div>
-                  <span className="rounded-full border border-fuchsia-100 bg-fuchsia-50/80 px-3 py-1.5 text-[10px] font-semibold text-fuchsia-700">
-                    Your skin edit
-                  </span>
-                </div>
-
-                <div className="flex aspect-square items-center justify-center rounded-[25px] bg-gradient-to-br from-violet-100 via-fuchsia-50 to-pink-100">
-                  <div className="relative flex h-36 w-36 items-center justify-center rounded-full border border-white/90 bg-white/45 shadow-inner">
-                    <div className="absolute inset-3 rounded-full border border-violet-200/70" />
-                    <div className="absolute inset-6 rounded-full border border-fuchsia-200/70" />
-                    <HiOutlineSparkles className="h-14 w-14 text-fuchsia-500" />
-                    <span className="absolute right-5 top-4 h-2.5 w-2.5 rounded-full bg-fuchsia-400 shadow-[0_0_0_5px_rgba(232,121,249,.15)]" />
-                    <span className="absolute bottom-5 left-5 h-2 w-2 rounded-full bg-violet-400" />
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <p className="dn-serif text-xl font-semibold text-violet-950">
-                    Made for your skin
-                  </p>
-                  <p className="mt-1 text-xs leading-5 text-violet-900/55">
-                    Personalized picks. Thoughtful routines.
-                  </p>
-                </div>
-
-                <div className="mt-4 flex items-center gap-2 rounded-2xl border border-white bg-white/75 p-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
-                    <HiOutlineCheckCircle className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-violet-900">
-                      Analysis-based selection
-                    </p>
-                    <p className="mt-0.5 text-[10px] text-violet-900/50">
-                      A routine made more personal
-                    </p>
-                  </div>
-                </div>
+              <div className="relative">
+                <SkinAnalysisCard />
               </div>
             </div>
-          </div>
+            </div>
+          
         </section>
 
         {/* Stats */}

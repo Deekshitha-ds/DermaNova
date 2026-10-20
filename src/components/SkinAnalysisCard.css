@@ -1,0 +1,223 @@
+/* ------------------------------------------------------------------
+   Skin analysis hero card
+   Fonts: set --sa-display / --sa-sans to match your site; they fall
+   back to whatever the page already uses.
+   Scan loop (--sa-cycle, default 6s):
+     0–6%   scan fades in at the top of the frame
+     6–50%  scan line travels down the face
+     50–56% scan fades out, chips and mesh settle
+   ------------------------------------------------------------------ */
+
+.sa-card {
+  --sa-cycle: 6s;
+  --sa-ink: #2b1062;
+  --sa-muted: #8a78b0;
+  --sa-violet: #8b5cf6;
+  --sa-magenta: #d946ef;
+
+  width: 100%;
+  max-width: 340px;
+  padding: 14px;
+  box-sizing: border-box;
+  border-radius: 30px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .96), rgba(250, 244, 255, .92));
+  border: 1px solid rgba(255, 255, 255, .95);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, .9) inset,
+    0 40px 70px -32px rgba(124, 77, 219, .35),
+    0 12px 24px -16px rgba(124, 77, 219, .18);
+  font-family: var(--sa-sans, inherit);
+}
+
+/* ---------- Stage ---------- */
+
+.sa-stage {
+  position: relative;
+  aspect-ratio: 300 / 260;
+  border-radius: 22px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% 38%, rgba(255, 255, 255, .75), rgba(255, 255, 255, 0) 60%),
+    linear-gradient(165deg, #ece2ff 0%, #f6e6f8 62%, #fde8f6 100%);
+}
+
+.sa-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------- Scan ---------- */
+
+.sa-scan {
+  transform: translateY(36px);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: sa-scan var(--sa-cycle) infinite;
+}
+
+@keyframes sa-scan {
+  0%   { transform: translateY(36px);  opacity: 0; animation-timing-function: ease-out; }
+  6%   { transform: translateY(40px);  opacity: 1; animation-timing-function: cubic-bezier(.45, 0, .35, 1); }
+  50%  { transform: translateY(224px); opacity: 1; animation-timing-function: ease-in; }
+  56%  { transform: translateY(228px); opacity: 0; }
+  100% { transform: translateY(36px);  opacity: 0; }
+}
+
+.sa-mesh {
+  opacity: .3;
+  animation: sa-mesh var(--sa-cycle) ease-in-out infinite;
+}
+
+@keyframes sa-mesh {
+  0%       { opacity: .3; }
+  14%, 50% { opacity: .7; }
+  72%, 100% { opacity: .3; }
+}
+
+/* ---------- Chips ---------- */
+
+.sa-chip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .74);
+  border: 1px solid rgba(255, 255, 255, .95);
+  box-shadow: 0 10px 22px -10px rgba(124, 77, 219, .4);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.sa-chip::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1.5px solid var(--sa-magenta);
+  opacity: 0;
+  pointer-events: none;
+  animation: sa-chip-pulse var(--sa-cycle) ease-out infinite;
+  animation-delay: var(--sa-delay, 1s);
+}
+
+@keyframes sa-chip-pulse {
+  0%   { opacity: 0; }
+  4%   { opacity: .7; }
+  16%, 100% { opacity: 0; }
+}
+
+.sa-chip--tl { top: 14%; left: 3.5%; }
+.sa-chip--mr { top: 44%; right: 3.5%; }
+.sa-chip--bl { bottom: 11%; left: 5%; }
+
+.sa-ring {
+  width: 24px;
+  height: 24px;
+  flex: none;
+}
+
+.sa-chip-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.sa-chip-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sa-ink);
+}
+
+.sa-chip-value {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--sa-muted);
+}
+
+/* ---------- Copy ---------- */
+
+.sa-copy {
+  padding: 18px 8px 0;
+}
+
+.sa-title {
+  margin: 0;
+  font-family: var(--sa-display, "Fraunces", Georgia, "Times New Roman", serif);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -.005em;
+  color: var(--sa-ink);
+}
+
+.sa-sub {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--sa-muted);
+}
+
+/* ---------- Selection row ---------- */
+
+.sa-selection {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid #f0e8fb;
+  box-shadow: 0 10px 24px -18px rgba(124, 77, 219, .5);
+}
+
+.sa-check {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: #f0e7ff;
+}
+
+.sa-check svg { width: 18px; height: 18px; }
+
+.sa-selection-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.sa-selection-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #3b1d7a;
+}
+
+.sa-selection-caption {
+  font-size: 11.5px;
+  color: #9b8bbe;
+}
+
+.sa-routine { flex: none; }
+.sa-routine svg { width: 46px; height: auto; display: block; }
+
+/* ---------- Reduced motion: still frame mid-scan ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .sa-scan,
+  .sa-mesh,
+  .sa-chip::after {
+    animation: none !important;
+  }
+
+  .sa-scan { opacity: 0; }
+  .sa-mesh { opacity: .7; }
+}
