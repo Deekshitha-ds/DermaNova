@@ -35,7 +35,20 @@ client.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const requestUrl = originalRequest?.url || "";
+
+const isLoginRequest =
+  requestUrl.includes("/auth/login");
+
+const isRegisterRequest =
+  requestUrl.includes("/auth/register");
+
+if (
+  error.response?.status === 401 &&
+  !originalRequest._retry &&
+  !isLoginRequest &&
+  !isRegisterRequest
+) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           pendingQueue.push({ resolve, reject });
@@ -48,6 +61,17 @@ client.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
       const refreshToken = localStorage.getItem("dermanova_refresh_token");
+      if (!refreshToken) {
+  localStorage.removeItem("dermanova_access_token");
+  localStorage.removeItem("dermanova_refresh_token");
+
+  flushQueue(
+    new Error("Session expired. Please log in again.")
+  );
+
+  window.location.href = "/login";
+  return Promise.reject(error);
+}
 
       try {
         const { data } = await axios.post("/api/auth/refresh", null, {

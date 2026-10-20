@@ -79,22 +79,36 @@ export default function Login() {
     }));
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setIsSubmitting(true);
+  e.preventDefault();
+  setError("");
+  setIsSubmitting(true);
 
-    try {
-      await login(form.email, form.password);
-      navigate(redirectTo, { replace: true });
-    } catch (err) {
+  try {
+    await login(form.email.trim(), form.password);
+
+    // Keep your existing redirect after successful login.
+    navigate(redirectTo, { replace: true });
+  } catch (err) {
+    const status = err?.response?.status;
+    const serverMessage =
+      err?.response?.data?.detail ||
+      err?.response?.data?.message;
+
+    if (status === 400 || status === 401 || status === 403) {
+      setError("Invalid email or password. Please try again.");
+    } else if (!err?.response) {
       setError(
-        err.response?.data?.message ||
-          "Invalid email or password."
+        "Unable to connect to the server. Please try again."
       );
-    } finally {
-      setIsSubmitting(false);
+    } else if (typeof serverMessage === "string") {
+      setError(serverMessage);
+    } else {
+      setError("Login failed. Please try again.");
     }
-  };
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="relative min-h-screen overflow-hidden flex items-center justify-center px-4">

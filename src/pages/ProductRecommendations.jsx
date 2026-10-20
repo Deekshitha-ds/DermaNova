@@ -21,6 +21,7 @@ import {
   saveProduct,
   deleteSavedProduct,
 } from "../api/savedProducts";
+import SerumLoader from "../components/SerumLoader";
 
 /* -------------------------------------------------------
    HELPERS
@@ -799,11 +800,8 @@ export default function ProductRecommendations() {
         {/* Loading */}
         {loading && (
           <section className="dn-glass flex min-h-[350px] flex-col items-center justify-center rounded-[30px] px-6 py-12 text-center">
-            <div className="relative mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-violet-200/80 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-pink-100">
-              <div className="absolute inset-2 rounded-full border border-dashed border-fuchsia-300" />
-              <div className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-fuchsia-400 border-r-violet-400" />
-              <HiOutlineSparkles className="h-9 w-9 text-violet-600" />
-            </div>
+            
+           <SerumLoader />
 
             <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.23em] text-fuchsia-600">
               A little skincare magic

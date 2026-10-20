@@ -761,6 +761,7 @@ return (
 
   if (onResult) {
     onResult(null);
+    sessionStorage.removeItem("dermanova_last_scan");
   }
 
 }}
