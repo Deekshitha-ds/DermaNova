@@ -1,1099 +1,1502 @@
+
 /* =========================================================
-   DERMANOVA AI - HOME PAGE
-   Font is intentionally NOT changed.
-   Your existing project font will be inherited.
+   DERMANOVA AI — HAIR CARE INTELLIGENCE
+   Aligned stylesheet for the supplied HairCare.jsx
+   Premium lavender glassmorphism
    ========================================================= */
 
-.home-page {
+.haircare-page {
+  --hc-ink: #443450;
+  --hc-muted: #8a7d96;
+  --hc-purple: #8666a5;
+  --hc-purple-dark: #70508f;
+  --hc-lavender: #f3ebf9;
+  --hc-pink: #dca9cf;
+  --hc-border: rgba(134, 102, 165, 0.17);
+  --hc-shadow: 0 16px 48px rgba(77, 54, 96, 0.075);
+
+  position: relative;
+  isolation: isolate;
   min-height: 100vh;
-  width: 100%;
   overflow: hidden;
-  position: relative;
-
+  padding: 38px 24px 72px;
+  color: var(--hc-ink);
   background:
-    radial-gradient(
-      circle at 85% 35%,
-      rgba(255, 188, 220, 0.32),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 20% 45%,
-      rgba(194, 171, 255, 0.35),
-      transparent 34%
-    ),
-    linear-gradient(
-      135deg,
-      #f8f4ff 0%,
-      #eee8ff 45%,
-      #fff4f8 100%
-    );
-
-  color: #2c204c;
+    radial-gradient(ellipse at 8% 12%, rgba(228, 205, 245, 0.3), transparent 36%),
+    radial-gradient(ellipse at 92% 42%, rgba(245, 215, 235, 0.28), transparent 34%),
+    #fbf9fd;
+  font-family: inherit;
 }
 
+.haircare-page *,
+.haircare-page *::before,
+.haircare-page *::after {
+  box-sizing: border-box;
+}
+
+.haircare-page button,
+.haircare-page input {
+  font: inherit;
+}
+
+.haircare-page button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.haircare-orb {
+  position: absolute;
+  z-index: -1;
+  width: 310px;
+  height: 310px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+.haircare-orb-one {
+  top: 180px;
+  left: -220px;
+  background: radial-gradient(circle, rgba(205, 178, 231, 0.23), transparent 70%);
+}
+
+.haircare-orb-two {
+  top: 580px;
+  right: -220px;
+  background: radial-gradient(circle, rgba(235, 191, 222, 0.2), transparent 70%);
+}
 
 /* =========================================================
-   NAVBAR
+   PAGE WIDTH
    ========================================================= */
 
-.home-navbar {
-  position: relative;
-  z-index: 20;
-
-  width: calc(100% - 64px);
-  height: 80px;
-
-  margin: 24px 32px 0;
-
-  padding: 0 22px 0 24px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  border-radius: 42px;
-
-  background: rgba(255, 255, 255, 0.62);
-
-  border: 1px solid rgba(255, 255, 255, 0.8);
-
-  box-shadow:
-    0 12px 40px rgba(115, 82, 165, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+.haircare-shell {
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
 }
-
-
-/* BRAND */
-
-.brand-area {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.brand-logo {
-  width: 54px;
-  height: 54px;
-
-  object-fit: contain;
-
-  border-radius: 50%;
-
-  filter:
-    drop-shadow(0 5px 12px rgba(160, 116, 210, 0.18));
-}
-
-.brand-name {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.4px;
-  color: #39235f;
-}
-
-.brand-name span {
-  color: #9a72e5;
-}
-
-
-/* LOGIN */
-
-.login-button {
-  border: none;
-  cursor: pointer;
-
-  padding: 12px 22px;
-
-  min-width: 112px;
-
-  border-radius: 18px;
-
-  color: white;
-
-  font-size: 15px;
-  font-weight: 600;
-
-  background:
-    linear-gradient(
-      135deg,
-      #9571df,
-      #ec62a3
-    );
-
-  box-shadow:
-    0 8px 20px rgba(190, 102, 190, 0.22);
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.login-button:hover {
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 12px 26px rgba(190, 102, 190, 0.30);
-}
-
-.login-arrow {
-  margin-left: 8px;
-  font-size: 17px;
-}
-
 
 /* =========================================================
    HERO
    ========================================================= */
 
-.hero-section {
-  min-height: calc(100vh - 104px);
-
-  position: relative;
-
-  display: grid;
-  grid-template-columns: 47% 53%;
-
-  align-items: center;
-
-  padding:
-    40px
-    32px
-    55px;
+.haircare-hero {
+  max-width: 750px;
+  margin: 0 auto 32px;
+  text-align: center;
 }
 
-
-/* =========================================================
-   BACKGROUND ORBS
-   ========================================================= */
-
-.soft-orb {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(3px);
-}
-
-.orb-one {
-  width: 420px;
-  height: 420px;
-
-  left: -190px;
-  top: 230px;
-
-  background: rgba(188, 156, 255, 0.13);
-}
-
-.orb-two {
-  width: 350px;
-  height: 350px;
-
-  right: 130px;
-  top: 80px;
-
-  background: rgba(255, 174, 215, 0.16);
-}
-
-.orb-three {
-  width: 260px;
-  height: 260px;
-
-  right: -80px;
-  bottom: -80px;
-
-  background: rgba(177, 148, 242, 0.12);
-}
-
-
-/* =========================================================
-   LEFT CONTENT
-   ========================================================= */
-
-.hero-content {
-  position: relative;
-  z-index: 5;
-
-  padding-left: 40px;
-
-  max-width: 680px;
-}
-
-
-/* EYEBROW */
-
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-
-  margin-bottom: 24px;
-
-  color: #9274d5;
-
-  font-size: 13px;
-  letter-spacing: 4px;
-  font-weight: 500;
-}
-
-.eyebrow-line {
-  width: 38px;
-  height: 1px;
-
-  background: #ad91e7;
-}
-
-
-/* HEADING */
-
-.hero-content h1 {
-  margin: 0;
-
-  color: #2d204b;
-
-  font-size: clamp(60px, 5.5vw, 86px);
-
-  line-height: 0.98;
-
-  letter-spacing: -3px;
-
-  font-weight: 600;
-}
-
-.hero-content h1 span {
-  color: #e866a5;
-
-  font-style: italic;
-}
-
-
-/* DESCRIPTION */
-
-.hero-description {
-  max-width: 610px;
-
-  margin-top: 30px;
-  margin-bottom: 30px;
-
-  color: #77718d;
-
-  font-size: 17px;
-
-  line-height: 1.65;
-}
-
-
-/* =========================================================
-   FEATURE ROW
-   ========================================================= */
-
-.feature-row {
-  display: flex;
-  align-items: center;
-
-  gap: 17px;
-
-  margin-bottom: 34px;
-}
-
-.feature-item {
-  display: flex;
-  align-items: center;
-
-  gap: 8px;
-
-  color: #77718d;
-
-  font-size: 13px;
-
-  line-height: 1.35;
-
-  white-space: nowrap;
-}
-
-.feature-icon {
-  width: 27px;
-  height: 27px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  color: #8666cf;
-
-  font-size: 17px;
-
-  background: rgba(255, 255, 255, 0.52);
-
-  border: 1px solid rgba(164, 135, 218, 0.20);
-}
-
-.hair-icon {
-  font-size: 20px;
-}
-
-.feature-divider {
-  width: 1px;
-  height: 27px;
-
-  background: rgba(142, 119, 184, 0.20);
-}
-
-
-/* =========================================================
-   SCAN BUTTON
-   ========================================================= */
-
-.scan-button {
+.haircare-eyebrow {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 8px 13px;
+  border: 1px solid rgba(134, 102, 165, 0.17);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--hc-purple-dark);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.1px;
+  line-height: 1.5;
+}
 
-  gap: 12px;
+.haircare-eyebrow svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
 
-  border: none;
+.haircare-title {
+  margin: 0;
+  color: #44334f;
+  font-size: clamp(35px, 5vw, 51px);
+  font-weight: 750;
+  line-height: 1.13;
+  letter-spacing: -1.8px;
+}
 
-  padding: 17px 28px;
+.haircare-title span {
+  color: var(--hc-purple);
+}
 
-  border-radius: 18px;
+.haircare-subtitle {
+  max-width: 560px;
+  margin: 14px auto 0;
+  color: var(--hc-muted);
+  font-size: 13px;
+  line-height: 1.9;
+}
 
-  color: white;
+.haircare-trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 23px;
+  margin-top: 22px;
+}
 
-  background:
-    linear-gradient(
-      135deg,
-      #9271e0,
-      #e45fa4
-    );
-
-  font-size: 16px;
+.haircare-trust-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #786986;
+  font-size: 11px;
   font-weight: 600;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 12px 30px rgba(173, 98, 202, 0.25);
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+  line-height: 1.6;
 }
 
-.scan-button:hover {
-  transform: translateY(-3px);
-
-  box-shadow:
-    0 16px 35px rgba(173, 98, 202, 0.32);
+.haircare-trust-row svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: #9677af;
 }
-
-.sparkle {
-  font-size: 20px;
-}
-
-.button-arrow {
-  font-size: 20px;
-
-  margin-left: 4px;
-}
-
 
 /* =========================================================
-   RIGHT VISUAL
+   QUESTIONNAIRE PANEL
    ========================================================= */
 
-.hero-visual {
+.haircare-form {
   position: relative;
-
-  height: 620px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 30px 32px 27px;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--hc-shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
-
-/* =========================================================
-   MAIN IMAGE
-   ========================================================= */
-
-.image-wrapper {
-  position: relative;
-
-  width: 610px;
-  height: 610px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 48% 52% 50% 50%;
-
-  overflow: visible;
-}
-
-.image-glow {
+.haircare-form::before {
   position: absolute;
-
-  width: 510px;
-  height: 510px;
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(205, 172, 255, 0.48),
-      rgba(255, 196, 225, 0.20),
-      transparent 70%
-    );
-
-  filter: blur(8px);
-}
-
-.hero-woman {
-  position: relative;
-  z-index: 2;
-
-  width: 570px;
-  height: 570px;
-
-  object-fit: cover;
-
-  border-radius: 48% 48% 50% 50%;
-
-  filter:
-    drop-shadow(
-      0 25px 45px rgba(116, 75, 157, 0.16)
-    );
-}
-
-
-/* =========================================================
-   FACE SCAN FRAME
-   ========================================================= */
-
-.face-scan-frame {
-  position: absolute;
-
-  z-index: 4;
-
-  width: 185px;
-  height: 230px;
-
-  right: 155px;
-  top: 155px;
-
+  top: 0;
+  left: 10%;
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d7c1e7, transparent);
+  content: "";
   pointer-events: none;
 }
 
-.corner {
-  position: absolute;
-
-  width: 30px;
-  height: 30px;
-
-  border-color: rgba(255, 255, 255, 0.85);
-  border-style: solid;
+.haircare-form-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 23px;
 }
 
-.top-left {
-  top: 0;
-  left: 0;
-
-  border-width: 2px 0 0 2px;
+.haircare-form-heading > div:first-child {
+  min-width: 0;
 }
 
-.top-right {
-  top: 0;
-  right: 0;
-
-  border-width: 2px 2px 0 0;
+.haircare-section-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--hc-purple);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  line-height: 1.5;
 }
 
-.bottom-left {
-  bottom: 0;
-  left: 0;
-
-  border-width: 0 0 2px 2px;
+.haircare-form-heading h2 {
+  margin: 0;
+  color: var(--hc-ink);
+  font-size: clamp(20px, 2.7vw, 25px);
+  font-weight: 750;
+  letter-spacing: -0.65px;
+  line-height: 1.35;
 }
 
-.bottom-right {
-  bottom: 0;
-  right: 0;
-
-  border-width: 0 2px 2px 0;
+.haircare-form-heading p {
+  margin: 8px 0 0;
+  color: var(--hc-muted);
+  font-size: 12px;
+  line-height: 1.75;
 }
 
-.scan-line {
-  position: absolute;
+.haircare-step-count {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 13px;
+  border: 1px solid rgba(134, 102, 165, 0.13);
+  border-radius: 12px;
+  background: #f8f3fc;
+  font-size: 12px;
+  font-weight: 750;
+}
 
+.haircare-step-count span:first-child {
+  color: var(--hc-purple-dark);
+}
+
+.haircare-step-count span:last-child {
+  color: #a99ab5;
+}
+
+.haircare-step-divider {
+  color: #c7b8d1;
+}
+
+.haircare-progress-track {
   width: 100%;
-  height: 1px;
-
-  top: 50%;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.85),
-      transparent
-    );
+  height: 5px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #eee7f3;
 }
 
+.haircare-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8666a5, #d6a9cf);
+}
 
 /* =========================================================
-   GLASS CARDS
+   FIELD GRID
+   Two equal columns, consistent spacing
    ========================================================= */
 
-.floating-card {
-  position: absolute;
-
-  z-index: 8;
-
-  background: rgba(255, 255, 255, 0.76);
-
-  border: 1px solid rgba(255, 255, 255, 0.90);
-
-  box-shadow:
-    0 16px 40px rgba(108, 78, 148, 0.12);
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-
-  color: #4a3b68;
+.haircare-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 27px 24px;
 }
 
+.haircare-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-self: stretch;
+}
+
+.haircare-field-heading {
+  min-height: 62px;
+  margin-bottom: 12px;
+}
+
+.haircare-field-heading h3 {
+  margin: 0;
+  color: #51405d;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.55;
+}
+
+.haircare-field-heading p {
+  margin: 5px 0 0;
+  color: var(--hc-muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
 
 /* =========================================================
-   SKIN CARD
+   HAIR TYPE / LENGTH / TEXTURE / SCALP OPTIONS
    ========================================================= */
 
-.skin-card {
-  left: 10px;
-  top: 85px;
-
-  width: 275px;
-
-  padding: 20px 22px;
-
-  border-radius: 25px;
+.haircare-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 9px;
 }
 
-.card-heading {
-  color: #81709f;
+.haircare-option {
+  display: flex;
+  min-width: 0;
+  min-height: 45px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 12px;
+  border: 1px solid var(--hc-border);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #6f5e79;
+  cursor: pointer;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.45;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
 
-  font-size: 14px;
+.haircare-option:hover {
+  border-color: rgba(134, 102, 165, 0.42);
+  background: #fbf7fe;
+}
 
+.haircare-option.is-selected {
+  border-color: rgba(134, 102, 165, 0.65);
+  background: #f3eafa;
+  color: #674a7e;
+}
+
+.haircare-option svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--hc-purple);
+}
+
+/* =========================================================
+   CONCERNS
+   ========================================================= */
+
+.haircare-concerns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.haircare-concern {
+  display: flex;
+  min-width: 0;
+  min-height: 45px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--hc-border);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #6f5e79;
+  cursor: pointer;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.5;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.haircare-concern:hover {
+  border-color: rgba(134, 102, 165, 0.42);
+  background: #fbf7fe;
+}
+
+.haircare-concern.is-selected {
+  border-color: rgba(134, 102, 165, 0.6);
+  background: #f3eafa;
+  color: #674a7e;
+}
+
+.haircare-concern-check {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  place-items: center;
+  border: 1px solid #d9c9e5;
+  border-radius: 5px;
+  background: #fff;
+  color: white;
+}
+
+.haircare-concern.is-selected .haircare-concern-check {
+  border-color: var(--hc-purple);
+  background: var(--hc-purple);
+}
+
+.haircare-concern-check svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* =========================================================
+   PROFILE PREVIEW
+   ========================================================= */
+
+.haircare-profile-preview {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  gap: 13px;
+  padding: 16px;
+  border: 1px solid rgba(134, 102, 165, 0.15);
+  border-radius: 14px;
+  background: linear-gradient(110deg, #f7f0fc, #fff7fb);
+}
+
+.haircare-profile-preview-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  place-items: center;
+  border: 1px solid rgba(134, 102, 165, 0.12);
+  border-radius: 13px;
+  background: white;
+  color: var(--hc-purple);
+}
+
+.haircare-profile-preview-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.haircare-profile-preview h4 {
+  margin: 0;
+  color: #51405d;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.haircare-profile-preview p {
+  margin: 5px 0;
+  color: #766480;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.haircare-profile-preview span {
+  color: #9a84a8;
+  font-size: 10px;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.haircare-form-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 1px;
+  padding-top: 21px;
+  border-top: 1px solid rgba(134, 102, 165, 0.13);
+}
+
+.haircare-helper-text {
+  color: #9b8ca5;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.haircare-primary-button,
+.haircare-secondary-button {
+  display: inline-flex;
+  min-height: 43px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 11px 17px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.45;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.haircare-primary-button {
+  background: linear-gradient(115deg, #80609d, #9877b2);
+  box-shadow: 0 5px 13px rgba(112, 80, 143, 0.12);
+  color: #fff;
+}
+
+.haircare-primary-button:hover:not(:disabled) {
+  background: linear-gradient(115deg, #70508f, #8966a5);
+  transform: translateY(-1px);
+}
+
+.haircare-secondary-button {
+  border-color: rgba(134, 102, 165, 0.2);
+  background: rgba(255, 255, 255, 0.85);
+  color: #735789;
+}
+
+.haircare-secondary-button:hover:not(:disabled) {
+  border-color: rgba(134, 102, 165, 0.4);
+  background: #f7f1fb;
+}
+
+.haircare-primary-button svg,
+.haircare-secondary-button svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.haircare-back-icon {
+  transform: rotate(180deg);
+}
+
+.haircare-primary-button:disabled,
+.haircare-secondary-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.haircare-spinning {
+  animation: hc-spin 1s linear infinite;
+}
+
+@keyframes hc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.haircare-error {
+  grid-column: 1 / -1;
+  padding: 13px 15px;
+  border: 1px solid rgba(190, 104, 128, 0.22);
+  border-radius: 11px;
+  background: #fff3f6;
+  color: #98546a;
+  font-size: 11px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   RESULTS LAYOUT
+   ========================================================= */
+
+.haircare-results {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 23px;
+}
+
+.haircare-results-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.haircare-results-heading > div {
+  min-width: 0;
+}
+
+.haircare-results-heading .haircare-eyebrow {
+  margin-bottom: 12px;
+}
+
+.haircare-results-heading h2 {
+  margin: 0;
+  color: var(--hc-ink);
+  font-size: clamp(24px, 3.5vw, 32px);
+  font-weight: 750;
+  letter-spacing: -1px;
+  line-height: 1.25;
+}
+
+.haircare-results-heading p {
+  margin: 9px 0 0;
+  color: var(--hc-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.haircare-edit-button {
+  margin-bottom: 2px;
+}
+
+/* =========================================================
+   PROFILE SUMMARY
+   ========================================================= */
+
+.haircare-profile-summary {
+  padding: 20px;
+  border: 1px solid rgba(134, 102, 165, 0.16);
+  border-radius: 17px;
+  background: linear-gradient(115deg, rgba(245, 237, 251, 0.94), rgba(255, 246, 251, 0.95));
+}
+
+.haircare-summary-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
   margin-bottom: 15px;
 }
 
-.skin-analysis-content {
-  display: flex;
-  align-items: center;
-
-  gap: 17px;
+.haircare-summary-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  place-items: center;
+  border-radius: 12px;
+  background: white;
+  color: var(--hc-purple);
 }
 
-.confidence-circle {
-  width: 88px;
-  height: 88px;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background:
-    conic-gradient(
-      #a67be8 0deg,
-      #d46bb1 300deg,
-      #eee3ff 300deg,
-      #eee3ff 360deg
-    );
-}
-
-.confidence-inner {
-  width: 68px;
-  height: 68px;
-
-  border-radius: 50%;
-
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(255, 255, 255, 0.93);
-}
-
-.confidence-inner strong {
-  font-size: 15px;
-  color: #594080;
-}
-
-.confidence-inner small {
-  font-size: 8px;
-  color: #8a819c;
-}
-
-.issue-list {
-  display: flex;
-  flex-direction: column;
-
-  gap: 7px;
-
-  font-size: 11px;
-}
-
-.issue-list div {
-  display: flex;
-  align-items: center;
-
-  gap: 7px;
-}
-
-.check-dot {
-  color: #9c75dd;
-}
-
-
-/* =========================================================
-   HAIR CARD
-   ========================================================= */
-
-.hair-card {
-  right: -10px;
-  top: 180px;
-
-  width: 220px;
-
-  padding: 17px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  border-radius: 22px;
-}
-
-.hair-card-icon {
-  width: 45px;
-  height: 45px;
-
-  border-radius: 50%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #906bd3;
-
-  font-size: 23px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #eee5ff,
-      #f9e6f4
-    );
-}
-
-.small-card-title {
-  font-size: 14px;
-  font-weight: 600;
-
-  color: #55406f;
-
-  margin-bottom: 5px;
-}
-
-.hair-status {
-  font-size: 10px;
-
-  color: #8d849d;
-
-  margin-top: 3px;
-}
-
-.status-check {
-  margin-left: auto;
-
+.haircare-summary-icon svg {
   width: 19px;
   height: 19px;
-
-  border-radius: 50%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: white;
-
-  font-size: 10px;
-
-  background: #b77de4;
 }
 
+.haircare-summary-heading h3 {
+  margin: 0;
+  color: #51405d;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.haircare-summary-heading p {
+  margin: 4px 0 0;
+  color: var(--hc-muted);
+  font-size: 10px;
+}
+
+.haircare-summary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.haircare-summary-tags span {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 10px;
+  border: 1px solid rgba(134, 102, 165, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #725b81;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.5;
+}
 
 /* =========================================================
-   RECOMMENDATION CARD
+   RESULTS SECTIONS
    ========================================================= */
 
-.recommendation-card {
-  right: -5px;
-  bottom: 45px;
-
-  width: 315px;
-
-  padding: 18px 20px;
-
-  border-radius: 25px;
+.haircare-results-section {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid rgba(134, 102, 165, 0.14);
+  border-radius: 19px;
+  background: rgba(255, 255, 255, 0.77);
+  box-shadow: 0 8px 24px rgba(77, 54, 96, 0.035);
 }
 
-.recommendation-title {
-  font-size: 14px;
-
-  font-weight: 600;
-
-  color: #52366e;
-
-  margin-bottom: 13px;
-}
-
-.recommendation-body {
+.haircare-section-heading {
   display: flex;
   align-items: center;
-
   gap: 12px;
+  margin-bottom: 18px;
 }
 
-.product-images {
-  position: relative;
-
-  width: 72px;
-  height: 70px;
-
-  flex-shrink: 0;
+.haircare-section-icon {
+  display: grid;
+  width: 41px;
+  height: 41px;
+  flex: 0 0 41px;
+  place-items: center;
+  border: 1px solid rgba(134, 102, 165, 0.13);
+  border-radius: 13px;
+  background: #f4ebfa;
+  color: var(--hc-purple-dark);
 }
 
-.product {
-  position: absolute;
-
-  bottom: 0;
-
-  border-radius: 6px 6px 3px 3px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #e8c9f5,
-      #c99de9
-    );
-
-  box-shadow:
-    0 5px 12px rgba(130, 84, 162, 0.15);
+.haircare-section-icon svg {
+  width: 19px;
+  height: 19px;
 }
 
-.product-one {
-  width: 25px;
-  height: 45px;
-
-  left: 4px;
+.haircare-section-heading h3 {
+  margin: 0;
+  color: #4e3b59;
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.3px;
+  line-height: 1.45;
 }
 
-.product-two {
-  width: 29px;
-  height: 55px;
-
-  left: 25px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #d7b6f0,
-      #b982dc
-    );
+.haircare-section-heading p {
+  margin: 5px 0 0;
+  color: var(--hc-muted);
+  font-size: 11px;
+  line-height: 1.7;
 }
 
-.product-three {
-  width: 23px;
-  height: 37px;
+/* =========================================================
+   PERSONAL ROUTINE
+   ========================================================= */
 
-  right: 1px;
-}
-
-.recommendation-points {
+.haircare-routine-list {
   display: flex;
   flex-direction: column;
+  gap: 11px;
+}
 
-  gap: 5px;
+.haircare-routine-item {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 15px;
+  border: 1px solid rgba(134, 102, 165, 0.13);
+  border-radius: 13px;
+  background: #fdfbfe;
+}
 
+.haircare-routine-number {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  place-items: center;
+  border-radius: 11px;
+  background: #f0e5f8;
+  color: #70508f;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.haircare-routine-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.haircare-routine-step {
+  display: block;
+  margin-bottom: 6px;
+  color: #51405d;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.6;
+}
+
+.haircare-routine-content p {
+  margin: 0;
+  color: #83748d;
+  font-size: 11px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.haircare-routine-category {
+  display: inline-flex;
+  margin-top: 9px;
+  padding: 5px 8px;
+  border-radius: 7px;
+  background: #f4ebfa;
+  color: #795b90;
   font-size: 9px;
-
-  color: #81788f;
+  font-weight: 700;
 }
 
-.recommendation-points div {
+/* =========================================================
+   RECOMMENDED CATEGORIES
+   ========================================================= */
+
+.haircare-category-list {
   display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.haircare-category-chip {
+  display: inline-flex;
   align-items: center;
-
-  gap: 5px;
+  gap: 7px;
+  padding: 9px 11px;
+  border: 1px solid rgba(134, 102, 165, 0.15);
+  border-radius: 10px;
+  background: #f8f3fc;
+  color: #715584;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.5;
 }
 
-.recommendation-points span {
-  color: #9d71d5;
-}
-
-.recommendation-arrow {
-  margin-left: auto;
-
-  width: 24px;
-  height: 24px;
-
+.haircare-category-chip svg {
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
+}
 
+/* =========================================================
+   PRODUCT GRID
+   Equal card widths and consistent card structure
+   ========================================================= */
+
+.haircare-live-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 15px;
+}
+
+.haircare-live-product {
   display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(134, 102, 165, 0.16);
+  border-radius: 15px;
+  background: #fff;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.haircare-live-product:hover {
+  border-color: rgba(134, 102, 165, 0.35);
+  box-shadow: 0 9px 22px rgba(77, 54, 96, 0.07);
+  transform: translateY(-2px);
+}
+
+/* Product image area */
+
+.haircare-live-product-image {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: 155px;
+  flex: 0 0 155px;
+  place-items: center;
+  overflow: hidden;
+  padding: 17px;
+  background: linear-gradient(145deg, #f7f1fb, #fff7fb);
+}
+
+.haircare-live-product-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.haircare-product-image-fallback {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: 1px solid rgba(134, 102, 165, 0.14);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--hc-purple);
+}
+
+.haircare-product-image-fallback svg {
+  width: 25px;
+  height: 25px;
+}
+
+.haircare-product-type {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  max-width: calc(100% - 18px);
+  overflow: hidden;
+  padding: 5px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #765b89;
+  font-size: 8px;
+  font-weight: 750;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Product information */
+
+.haircare-live-product-info {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 13px;
+}
+
+.haircare-live-product-brand {
+  margin-bottom: 5px;
+  color: #9787a1;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.haircare-live-product-info h4 {
+  display: -webkit-box;
+  min-height: 42px;
+  overflow: hidden;
+  margin: 0;
+  color: #4e3b59;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.haircare-product-description {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 7px 0 0;
+  color: #91839a;
+  font-size: 10px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.haircare-live-product-meta {
+  display: flex;
+  min-height: 29px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.haircare-live-product-meta strong {
+  color: #64467a;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.haircare-product-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #a77b3e;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.haircare-product-store {
+  min-height: 28px;
+  margin: 5px 0 10px;
+  color: #93849c;
+  font-size: 9px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+/* Purchase link */
+
+.haircare-shop-link {
+  display: inline-flex;
+  width: 100%;
+  min-height: 36px;
   align-items: center;
   justify-content: center;
-
-  border-radius: 50%;
-
-  color: white;
-
-  background:
-    linear-gradient(
-      135deg,
-      #a47be4,
-      #d86db0
-    );
+  gap: 7px;
+  margin-top: auto;
+  padding: 9px 10px;
+  border: 1px solid rgba(134, 102, 165, 0.2);
+  border-radius: 9px;
+  background: #f6effb;
+  color: #71518a;
+  text-decoration: none;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 1.4;
+  transition: border-color 160ms ease, background 160ms ease;
 }
 
+.haircare-shop-link:hover {
+  border-color: rgba(134, 102, 165, 0.4);
+  background: #eee3f7;
+}
+
+.haircare-shop-link svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.haircare-unavailable-link {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  padding: 8px;
+  color: #a294ab;
+  font-size: 9px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Save product button */
+
+.haircare-save-product {
+  display: inline-flex;
+  width: 100%;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 9px 8px;
+  border: 1px solid rgba(134, 102, 165, 0.23);
+  border-radius: 9px;
+  background: #fff;
+  color: #76578b;
+  cursor: pointer;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 1.4;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.haircare-save-product:hover:not(:disabled) {
+  border-color: rgba(134, 102, 165, 0.45);
+  background: #faf6fd;
+}
+
+.haircare-save-product.is-saved {
+  border-color: rgba(112, 80, 143, 0.23);
+  background: #f0e7f7;
+  color: #674781;
+}
+
+.haircare-save-product svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.haircare-save-product:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Empty product state */
+
+.haircare-empty-products {
+  padding: 30px 16px;
+  border: 1px dashed rgba(134, 102, 165, 0.25);
+  border-radius: 14px;
+  background: #fdfbfe;
+  text-align: center;
+}
+
+.haircare-empty-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  margin: 0 auto 12px;
+  border-radius: 15px;
+  background: #f1e7f8;
+  color: var(--hc-purple);
+}
+
+.haircare-empty-icon svg {
+  width: 23px;
+  height: 23px;
+}
+
+.haircare-empty-products h4 {
+  margin: 0;
+  color: #594563;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.haircare-empty-products p {
+  max-width: 400px;
+  margin: 8px auto 0;
+  color: var(--hc-muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
 
 /* =========================================================
-   BOTTOM PETALS
+   RESULTS FOOTER
    ========================================================= */
 
-.bottom-petal {
-  position: absolute;
-
-  border-radius: 70% 30% 70% 30%;
-
-  pointer-events: none;
-
-  opacity: 0.32;
-
-  transform: rotate(35deg);
+.haircare-bottom-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 2px;
 }
-
-.petal-one {
-  width: 90px;
-  height: 45px;
-
-  bottom: 0;
-  left: -15px;
-
-  background: #ef86bd;
-}
-
-.petal-two {
-  width: 120px;
-  height: 55px;
-
-  bottom: -15px;
-  left: 70px;
-
-  background: #d49af0;
-
-  transform: rotate(-20deg);
-}
-
-.petal-three {
-  width: 100px;
-  height: 45px;
-
-  bottom: -8px;
-  right: 100px;
-
-  background: #f3a1ca;
-}
-
 
 /* =========================================================
-   RESPONSIVE
+   ACCESSIBILITY
    ========================================================= */
 
-@media (max-width: 1200px) {
+.haircare-page button:focus-visible,
+.haircare-page a:focus-visible {
+  outline: 3px solid rgba(134, 102, 165, 0.3);
+  outline-offset: 3px;
+}
 
-  .hero-section {
-    grid-template-columns: 45% 55%;
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .haircare-page {
+    padding: 32px 20px 56px;
   }
 
-  .hero-content {
-    padding-left: 20px;
+  .haircare-form {
+    padding: 27px 25px;
   }
 
-  .hero-content h1 {
-    font-size: 65px;
+  .haircare-live-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .image-wrapper {
-    transform: scale(0.88);
+  .haircare-live-product-image {
+    height: 160px;
+    flex-basis: 160px;
   }
 
-  .skin-card {
-    left: -5px;
-  }
-
-  .hair-card {
-    right: -20px;
-  }
-
-  .recommendation-card {
-    right: -20px;
+  .haircare-results-section {
+    padding: 19px;
   }
 }
 
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
-@media (max-width: 950px) {
-
-  .home-navbar {
-    width: calc(100% - 30px);
-    margin: 15px 15px 0;
+@media (max-width: 600px) {
+  .haircare-page {
+    padding: 24px 13px 40px;
   }
 
-  .hero-section {
-    grid-template-columns: 1fr;
-
-    padding-top: 55px;
-
-    overflow: visible;
+  .haircare-hero {
+    margin-bottom: 23px;
   }
 
-  .hero-content {
-    text-align: center;
-
-    padding: 0;
-
-    max-width: 720px;
-
-    margin: auto;
+  .haircare-eyebrow {
+    gap: 6px;
+    margin-bottom: 12px;
+    padding: 7px 10px;
+    font-size: 9px;
+    letter-spacing: 0.7px;
   }
 
-  .eyebrow {
-    justify-content: center;
+  .haircare-title {
+    font-size: clamp(32px, 8vw, 40px);
+    letter-spacing: -1.2px;
   }
 
-  .hero-description {
-    margin-left: auto;
-    margin-right: auto;
+  .haircare-subtitle {
+    margin-top: 11px;
+    font-size: 12px;
   }
 
-  .feature-row {
-    justify-content: center;
-
-    flex-wrap: wrap;
+  .haircare-trust-row {
+    gap: 9px 14px;
+    margin-top: 17px;
   }
 
-  .scan-button {
+  .haircare-trust-row span {
+    font-size: 10px;
+  }
+
+  .haircare-form {
+    padding: 21px 16px;
+    border-radius: 19px;
+  }
+
+  .haircare-form-heading {
+    align-items: flex-start;
+    gap: 10px;
     margin-bottom: 20px;
   }
 
-  .hero-visual {
-    height: 570px;
-
-    margin-top: 10px;
-  }
-}
-
-
-@media (max-width: 650px) {
-
-  .home-navbar {
-    height: 68px;
-
-    padding: 0 14px;
+  .haircare-form-heading h2 {
+    font-size: 20px;
   }
 
-  .brand-logo {
-    width: 44px;
-    height: 44px;
-  }
-
-  .brand-name {
-    font-size: 18px;
-  }
-
-  .login-button {
-    min-width: auto;
-
-    padding: 10px 15px;
-  }
-
-  .hero-section {
-    padding:
-      35px
-      15px
-      50px;
-  }
-
-  .hero-content h1 {
-    font-size: 52px;
-
-    letter-spacing: -2px;
-  }
-
-  .hero-description {
-    font-size: 15px;
-  }
-
-  .feature-divider {
-    display: none;
-  }
-
-  .feature-row {
-    gap: 12px;
-  }
-
-  .feature-item {
+  .haircare-form-heading p {
     font-size: 11px;
   }
 
-  .hero-visual {
-    height: 470px;
+  .haircare-step-count {
+    gap: 4px;
+    padding: 8px 9px;
+    font-size: 10px;
   }
 
-  .image-wrapper {
-    transform: scale(0.68);
+  .haircare-progress-track {
+    margin-bottom: 23px;
   }
 
-  .skin-card {
-    left: -20px;
-    top: 30px;
-
-    transform: scale(0.82);
-    transform-origin: left top;
+  .haircare-fields {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
   }
 
-  .hair-card {
-    right: -35px;
-    top: 120px;
-
-    transform: scale(0.82);
-    transform-origin: right top;
+  .haircare-field-heading {
+    min-height: auto;
+    margin-bottom: 11px;
   }
 
-  .recommendation-card {
-    right: -35px;
-    bottom: 10px;
+  .haircare-options {
+    gap: 8px;
+  }
 
-    transform: scale(0.78);
-    transform-origin: right bottom;
+  .haircare-option {
+    min-height: 43px;
+    padding: 10px;
+    font-size: 11px;
+  }
+
+  .haircare-concerns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .haircare-concern {
+    min-height: 43px;
+    gap: 7px;
+    padding: 9px;
+    font-size: 10px;
+  }
+
+  .haircare-form-actions {
+    gap: 9px;
+    padding-top: 17px;
+  }
+
+  .haircare-helper-text {
+    max-width: 90px;
+    font-size: 9px;
+  }
+
+  .haircare-primary-button,
+  .haircare-secondary-button {
+    min-height: 41px;
+    gap: 6px;
+    padding: 10px 12px;
+    font-size: 10px;
+  }
+
+  .haircare-profile-preview {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .haircare-profile-preview-icon {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+  }
+
+  .haircare-results {
+    gap: 16px;
+  }
+
+  .haircare-results-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .haircare-results-heading h2 {
+    font-size: 25px;
+  }
+
+  .haircare-edit-button {
+    align-self: flex-start;
+  }
+
+  .haircare-profile-summary {
+    padding: 15px;
+  }
+
+  .haircare-results-section {
+    padding: 15px 12px;
+    border-radius: 15px;
+  }
+
+  .haircare-section-heading {
+    gap: 9px;
+    margin-bottom: 14px;
+  }
+
+  .haircare-section-icon {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+  }
+
+  .haircare-section-heading h3 {
+    font-size: 14px;
+  }
+
+  .haircare-section-heading p {
+    font-size: 10px;
+  }
+
+  .haircare-routine-item {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .haircare-routine-number {
+    width: 31px;
+    height: 31px;
+    flex-basis: 31px;
+  }
+
+  .haircare-category-list {
+    gap: 7px;
+  }
+
+  .haircare-category-chip {
+    padding: 8px 9px;
+    font-size: 10px;
+  }
+
+  .haircare-live-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .haircare-live-product {
+    border-radius: 12px;
+  }
+
+  .haircare-live-product-image {
+    height: 115px;
+    flex-basis: 115px;
+    padding: 12px;
+  }
+
+  .haircare-product-type {
+    top: 6px;
+    left: 6px;
+    font-size: 7px;
+  }
+
+  .haircare-live-product-info {
+    padding: 10px;
+  }
+
+  .haircare-live-product-brand {
+    font-size: 9px;
+  }
+
+  .haircare-live-product-info h4 {
+    min-height: 38px;
+    font-size: 11px;
+  }
+
+  .haircare-product-description {
+    font-size: 9px;
+  }
+
+  .haircare-live-product-meta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 8px;
+  }
+
+  .haircare-live-product-meta strong {
+    font-size: 13px;
+  }
+
+  .haircare-product-store {
+    min-height: 25px;
+    font-size: 9px;
+  }
+
+  .haircare-shop-link,
+  .haircare-unavailable-link {
+    min-height: 33px;
+    font-size: 9px;
+  }
+
+  .haircare-save-product {
+    min-height: 34px;
+    gap: 5px;
+    padding: 8px 5px;
+    font-size: 9px;
+  }
+
+  .haircare-save-product svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .haircare-bottom-actions {
+    justify-content: stretch;
+  }
+
+  .haircare-bottom-actions .haircare-primary-button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   VERY SMALL SCREENS
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .haircare-page {
+    padding-right: 9px;
+    padding-left: 9px;
+  }
+
+  .haircare-form {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .haircare-concerns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .haircare-live-product-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .haircare-live-product-image {
+    height: 155px;
+    flex-basis: 155px;
+  }
+
+  .haircare-live-product-meta {
+    align-items: center;
+    flex-direction: row;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .haircare-page *,
+  .haircare-page *::before,
+  .haircare-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

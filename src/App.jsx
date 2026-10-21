@@ -14,6 +14,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import FaceScan from "./pages/FaceScan.jsx";
 import ProductRecommendations from "./pages/ProductRecommendations";
 import SavedProducts from "./pages/SavedProducts";
+import HairCare from "./pages/HairCare.jsx";
 
 import Footer from "./components/Footer";
 import WebLoader from "./components/WebLoader";
@@ -99,6 +100,10 @@ export default function App() {
   element={<SavedProducts />}
 />
             </Route>
+            <Route
+  path="/hair-care"
+  element={<HairCare />}
+/>
 
           </Routes>
         </main>

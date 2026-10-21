@@ -487,13 +487,13 @@ export default function Dashboard() {
               <ScanOption
                 glyph={<HairGlyph />}
                 title="Hair"
-                status="No scan yet this week"
-                text="Check your hair and scalp to get care suggestions that suit your hair type."
+                status="Personalized hair care"
+                text="Answer a few simple questions about your hair and scalp to receive a personalized care routine and product categories."
               >
-                <Link to="/scan/hair" className={primaryBtn}>
-                  <HiOutlineCamera size={20} />
-                  Scan my hair
-                </Link>
+               <Link to="/hair-care" className={primaryBtn}>
+                <HairGlyph />
+                Build my hair routine
+              </Link>
               </ScanOption>
             </div>
           </div>
@@ -553,51 +553,9 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* ============ WHAT'S NEXT (rows, not cards) ============ */}
-        <section className="mt-16 sm:mt-20" aria-labelledby="next-title">
-          <h2 id="next-title" className="dn-serif mb-2 text-2xl font-medium text-violet-950 sm:text-3xl">
-            Around your routine
-          </h2>
+        
 
-          <ul className="divide-y divide-violet-200/50">
-            <li>
-              <Link
-                to="/saved-products"
-                className="group flex items-center justify-between gap-6 py-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
-              >
-                <span>
-                  <span className="block text-[17px] font-semibold text-violet-950">My collection</span>
-                  <span className="mt-0.5 block text-sm text-violet-900/55">
-                    Products you've saved, all in one place.
-                  </span>
-                </span>
-                <span className="shrink-0 text-sm font-semibold text-violet-700 underline decoration-transparent underline-offset-4 transition group-hover:decoration-fuchsia-400">
-                  Open
-                </span>
-              </Link>
-            </li>
 
-            <li className="flex items-center justify-between gap-6 py-5">
-              <span>
-                <span className="block text-[17px] font-semibold text-violet-950">Product picks</span>
-                <span className="mt-0.5 block text-sm text-violet-900/55">
-                  Chosen from your analysis, split into morning and evening routines.
-                </span>
-              </span>
-              <span className="shrink-0 text-sm text-violet-900/50">After your first scan</span>
-            </li>
-
-            <li className="flex items-center justify-between gap-6 py-5">
-              <span>
-                <span className="block text-[17px] font-semibold text-violet-950">Ask DermaNova</span>
-                <span className="mt-0.5 block text-sm text-violet-900/55">
-                  Questions about your routine and products, answered in plain language.
-                </span>
-              </span>
-              <span className="shrink-0 text-sm text-violet-900/50">Coming soon</span>
-            </li>
-          </ul>
-        </section>
       </main>
     </div>
   );
