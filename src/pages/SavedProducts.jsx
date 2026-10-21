@@ -110,58 +110,75 @@ export default function SavedProducts() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-violet-50 via-fuchsia-50/60 to-purple-100/70 px-4 py-7 text-violet-950 sm:px-8">
-      <div className="mx-auto max-w-7xl">
+    <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_85%_20%,rgba(255,188,220,0.34),transparent_30%),radial-gradient(circle_at_15%_45%,rgba(194,171,255,0.34),transparent_34%),linear-gradient(135deg,#f8f4ff_0%,#eee8ff_48%,#fff4f8_100%)] px-4 py-6 text-[#2c204c] sm:px-8">
+
+      {/* Soft ambient background accents */}
+      <div className="pointer-events-none fixed -left-32 top-40 h-72 w-72 rounded-full bg-[#cbb5ff]/15 blur-3xl" />
+      <div className="pointer-events-none fixed -right-24 top-24 h-80 w-80 rounded-full bg-[#ffb9dc]/20 blur-3xl" />
+
+      <div className="relative z-10 mx-auto max-w-7xl">
+
         {/* Back to dashboard */}
         <button
           type="button"
           onClick={() => navigate("/dashboard")}
-          className="mb-8 inline-flex items-center gap-2 rounded-full border border-white bg-white/70 px-4 py-2.5 text-sm font-semibold text-violet-800 shadow-sm backdrop-blur-xl transition hover:bg-white"
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/65 px-4 py-2 text-sm font-semibold text-[#594080] shadow-sm backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-[#d8c7f5] hover:bg-white/90"
         >
           <HiOutlineArrowNarrowLeft className="h-4 w-4" />
           Back to dashboard
         </button>
 
         {/* Page header */}
-        <header className="mb-9 rounded-[32px] border border-white/80 bg-white/70 p-7 shadow-[0_25px_55px_-30px_rgba(124,58,237,.35)] backdrop-blur-xl sm:p-10">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-fuchsia-100 text-fuchsia-600">
-            <HiOutlineHeart className="h-6 w-6" />
-          </div>
+        <header className="relative mb-8 overflow-hidden rounded-[28px] border border-white/85 bg-white/60 p-6 shadow-[0_18px_50px_rgba(108,78,148,0.09)] backdrop-blur-[22px] sm:p-8">
+          <div className="pointer-events-none absolute -right-12 -top-20 h-52 w-52 rounded-full bg-[#d8c5ff]/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 right-1/4 h-44 w-44 rounded-full bg-[#ffc8e2]/20 blur-3xl" />
 
-          <p className="mb-2 text-xs font-bold uppercase tracking-[.22em] text-fuchsia-600">
-            YOUR PERSONAL COLLECTION
-          </p>
+          <div className="relative">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[17px] border border-white/90 bg-gradient-to-br from-[#f0e8ff] to-[#ffe8f3] text-[#9274d5] shadow-sm">
+              <HiOutlineHeart className="h-6 w-6" />
+            </div>
 
-          <h1 className="text-4xl font-semibold tracking-tight text-violet-950 sm:text-5xl">
-            Saved <span className="text-fuchsia-500">for you.</span>
-          </h1>
-
-          <p className="mt-3 max-w-xl text-sm leading-7 text-violet-900/60">
-            Your favourite skincare finds, all in one place.
-            Revisit your products and learn how to use them
-            whenever you need them.
-          </p>
-
-          {!loading && (
-            <p className="mt-5 inline-flex items-center gap-2 rounded-full border border-violet-100 bg-white/80 px-4 py-2 text-sm font-semibold text-violet-700">
-              <HiOutlineShoppingBag className="h-4 w-4" />
-              {products.length} saved{" "}
-              {products.length === 1 ? "product" : "products"}
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.23em] text-[#9274d5]">
+              YOUR PERSONAL COLLECTION
             </p>
-          )}
+
+            <h1 className="text-3xl font-semibold tracking-tight text-[#2d204b] sm:text-4xl">
+              Saved{" "}
+              <span className="bg-gradient-to-r from-[#9271e0] to-[#e45fa4] bg-clip-text text-transparent">
+                for you.
+              </span>
+            </h1>
+
+            <p className="mt-3 max-w-xl text-sm leading-6 text-[#77718d]">
+              Your favourite skincare finds, thoughtfully
+              collected in one place. Revisit your products
+              and learn how to use them whenever you need.
+            </p>
+
+            {!loading && (
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#e8def8] bg-white/75 px-3.5 py-2 shadow-sm">
+                <HiOutlineShoppingBag className="h-4 w-4 text-[#9274d5]" />
+                <span className="text-xs font-semibold text-[#594080]">
+                  {products.length} saved{" "}
+                  {products.length === 1 ? "product" : "products"}
+                </span>
+              </div>
+            )}
+          </div>
         </header>
 
         {/* Error message */}
         {error && (
           <div
             role="alert"
-            className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700"
+            className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-rose-200/80 bg-white/80 p-4 text-sm text-rose-700 shadow-sm backdrop-blur-xl"
           >
-            {error}
+            <span>{error}</span>
+
             <button
               type="button"
               onClick={loadProducts}
-              className="ml-3 font-semibold underline"
+              className="font-semibold underline underline-offset-2"
             >
               Retry
             </button>
@@ -170,39 +187,52 @@ export default function SavedProducts() {
 
         {/* Loading state */}
         {loading ? (
-          <div className="rounded-3xl border border-white/80 bg-white/70 p-12 text-center">
-            <HiOutlineSparkles className="mx-auto mb-4 h-9 w-9 animate-pulse text-fuchsia-500" />
-            <p className="font-medium text-violet-800">
+          <div className="rounded-[26px] border border-white/85 bg-white/60 p-10 text-center shadow-[0_12px_35px_rgba(108,78,148,0.08)] backdrop-blur-[22px]">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-[19px] border border-white bg-gradient-to-br from-[#eee5ff] to-[#ffe7f2]">
+              <HiOutlineSparkles className="h-7 w-7 animate-pulse text-[#9274d5]" />
+            </div>
+
+            <p className="text-sm font-semibold text-[#39235f]">
               Gathering your favourites...
+            </p>
+
+            <p className="mt-1.5 text-xs text-[#81709f]">
+              Preparing your personal collection
             </p>
           </div>
         ) : products.length === 0 ? (
           /* Empty state */
-          <div className="rounded-[30px] border border-white/80 bg-white/65 px-6 py-14 text-center shadow-sm backdrop-blur-xl">
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-3xl bg-violet-100 text-violet-500">
+          <div className="rounded-[28px] border border-white/85 bg-white/60 px-6 py-12 text-center shadow-[0_18px_50px_rgba(108,78,148,0.08)] backdrop-blur-[22px]">
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-[22px] border border-white bg-gradient-to-br from-[#eee5ff] to-[#ffe7f2] text-[#9274d5] shadow-sm">
               <HiOutlineHeart className="h-8 w-8" />
             </div>
 
-            <h2 className="text-2xl font-semibold text-violet-950">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[#9274d5]">
+              YOUR COLLECTION
+            </p>
+
+            <h2 className="text-xl font-semibold text-[#2d204b] sm:text-2xl">
               Your collection starts here
             </h2>
 
-            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-violet-900/60">
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#77718d]">
               You haven't saved any products yet. Explore your
-              personalized recommendations and save the ones you like.
+              personalized recommendations and save the products
+              that fit your skincare routine.
             </p>
 
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="mt-6 rounded-2xl bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-400 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-200 transition hover:-translate-y-0.5"
+              className="mt-6 inline-flex items-center justify-center gap-2 rounded-[16px] bg-gradient-to-br from-[#9271e0] to-[#e45fa4] px-5 py-3 text-sm font-semibold text-white shadow-[0_7px_18px_rgba(190,102,190,0.20)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(190,102,190,0.28)]"
             >
+              <HiOutlineSparkles className="h-4 w-4" />
               Explore recommendations
             </button>
           </div>
         ) : (
-          /* Saved product cards */
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          /* Compact premium product cards */
+          <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((product, index) => {
               const id = product.id ?? product.saved_product_id;
 
@@ -231,88 +261,112 @@ export default function SavedProducts() {
               return (
                 <article
                   key={id ?? `${name}-${index}`}
-                  className="flex flex-col overflow-hidden rounded-[26px] border border-white/80 bg-white/75 p-3 shadow-[0_15px_35px_-25px_rgba(109,40,217,.4)] backdrop-blur-xl transition hover:-translate-y-1 hover:shadow-xl"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-white/90 bg-white/65 p-2.5 shadow-[0_10px_30px_rgba(91,65,133,0.07)] backdrop-blur-[18px] transition-all duration-300 hover:-translate-y-1 hover:border-[#d9c7f5] hover:bg-white/80 hover:shadow-[0_18px_40px_rgba(91,65,133,0.12)]"
                 >
-                  {/* Product image */}
-                  <div className="flex h-52 items-center justify-center overflow-hidden rounded-[21px] bg-gradient-to-br from-violet-50 via-fuchsia-50 to-pink-100 p-5">
+                  {/* Subtle top highlight */}
+                  <div className="pointer-events-none absolute inset-x-8 top-0 z-20 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
+
+                  {/* Compact product image */}
+                  <div className="relative flex h-40 items-center justify-center overflow-hidden rounded-[20px] border border-white/90 bg-gradient-to-br from-[#f9f6ff] via-[#f3edff] to-[#fff1f7] p-4">
+                    <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[#e8d9ff]/45 blur-2xl" />
+                    <div className="pointer-events-none absolute -bottom-10 -left-6 h-24 w-24 rounded-full bg-[#ffd9e9]/40 blur-2xl" />
+
                     {image ? (
                       <img
                         src={image}
                         alt={name}
                         loading="lazy"
-                        className="h-full w-full object-contain"
+                        className="relative z-10 h-full w-full object-contain drop-shadow-[0_6px_10px_rgba(70,45,100,0.08)] transition-transform duration-300 group-hover:scale-[1.04]"
                         onError={(event) => {
                           event.currentTarget.style.display = "none";
                         }}
                       />
                     ) : (
-                      <HiOutlineShoppingBag className="h-12 w-12 text-violet-300" />
+                      <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-[20px] border border-white/90 bg-white/65 text-[#b6a0df] shadow-sm">
+                        <HiOutlineShoppingBag className="h-7 w-7" />
+                      </div>
                     )}
+
+                    {/* Small saved badge */}
+                    <div className="absolute left-2.5 top-2.5 z-20 inline-flex items-center gap-1 rounded-full border border-white/90 bg-white/80 px-2 py-1 text-[9px] font-semibold tracking-wide text-[#71569d] shadow-sm backdrop-blur-xl">
+                      <HiOutlineHeart className="h-3 w-3 text-[#d875aa]" />
+                      SAVED
+                    </div>
                   </div>
 
-                  <div className="flex flex-1 flex-col px-2 pb-2 pt-4">
+                  {/* Compact product details */}
+                  <div className="flex flex-1 flex-col px-2.5 pb-2 pt-3">
+
                     {/* Brand */}
                     {product.brand && (
-                      <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-fuchsia-600">
+                      <p className="mb-1 text-[9px] font-bold uppercase tracking-[0.16em] text-[#9274d5]">
                         {product.brand}
                       </p>
                     )}
 
                     {/* Product name */}
-                    <h2 className="line-clamp-2 min-h-12 text-sm font-semibold leading-6 text-violet-950">
+                    <h2 className="line-clamp-2 min-h-[42px] text-[13px] font-semibold leading-[1.6] text-[#2d204b]">
                       {name}
                     </h2>
 
                     {/* Store */}
                     {product.store && (
-                      <p className="mt-2 text-xs text-violet-900/50">
+                      <p className="mt-1.5 truncate text-[10px] text-[#81709f]">
                         {product.store}
                       </p>
                     )}
 
                     {/* Price */}
-                    <p className="mt-4 text-xl font-bold text-violet-950">
-                      {price === null ||
-                      price === undefined ||
-                      price === ""
-                        ? "Price unavailable"
-                        : typeof price === "number"
-                          ? `₹${price.toLocaleString("en-IN")}`
-                          : String(price).match(/[₹$€£]/)
-                            ? String(price)
-                            : `₹${price}`}
-                    </p>
+                    <div className="mt-2.5 border-t border-[#e9e0f5]/80 pt-2.5">
+                      <p className="mb-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-[#9285aa]">
+                        PRICE
+                      </p>
 
-                    {/* Product actions */}
-                    <div className="mt-auto space-y-2 pt-4">
+                      <p className="text-lg font-bold tracking-tight text-[#39235f]">
+                        {price === null ||
+                        price === undefined ||
+                        price === ""
+                          ? "Price unavailable"
+                          : typeof price === "number"
+                            ? `₹${price.toLocaleString("en-IN")}`
+                            : String(price).match(/[₹$€£]/)
+                              ? String(price)
+                              : `₹${price}`}
+                      </p>
+                    </div>
+
+                    {/* Compact actions */}
+                    <div className="mt-auto space-y-2 pt-3">
+
                       {/* Purchase link */}
                       {link ? (
                         <a
                           href={link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-400 px-4 py-3 text-sm font-semibold text-white transition hover:shadow-lg hover:shadow-violet-200"
+                          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-[14px] bg-gradient-to-br from-[#9271e0] to-[#e45fa4] px-3 py-2.5 text-xs font-semibold text-white shadow-[0_6px_16px_rgba(190,102,190,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_22px_rgba(190,102,190,0.25)] focus:outline-none focus:ring-2 focus:ring-[#cbb8f3] focus:ring-offset-2"
                         >
+                          <HiOutlineShoppingBag className="h-3.5 w-3.5" />
                           View product
-                          <HiOutlineExternalLink className="h-4 w-4" />
+                          <HiOutlineExternalLink className="h-3.5 w-3.5 opacity-80" />
                         </a>
                       ) : (
-                        <p className="rounded-xl bg-violet-50 p-3 text-center text-xs text-violet-500">
+                        <div className="flex min-h-[40px] items-center justify-center rounded-[14px] border border-[#e8def8] bg-white/60 px-2 py-2 text-center text-[10px] text-[#81709f]">
                           Purchase link unavailable
-                        </p>
+                        </div>
                       )}
 
-                      {/* YouTube how-to-use tutorial */}
+                      {/* YouTube tutorial */}
                       <a
                         href={howToUseLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`Find a YouTube tutorial for how to use ${name}`}
-                        className="flex items-center justify-center gap-2 rounded-2xl border border-rose-200 bg-white px-4 py-3 text-sm font-semibold text-rose-600 transition hover:border-rose-300 hover:bg-rose-50"
+                        className="flex min-h-[38px] items-center justify-center gap-1.5 rounded-[14px] border border-[#e7dcf6] bg-white/65 px-3 py-2 text-xs font-semibold text-[#594080] transition-all duration-300 hover:border-[#d4c1f0] hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#cbb8f3] focus:ring-offset-2"
                       >
-                        <FaYoutube className="h-5 w-5" />
+                        <FaYoutube className="h-4 w-4 text-[#e45fa4]" />
                         How to Use
-                        <HiOutlineExternalLink className="h-4 w-4" />
+                        <HiOutlineExternalLink className="h-3 w-3 text-[#a08bbf]" />
                       </a>
 
                       {/* Remove saved product */}
@@ -320,11 +374,19 @@ export default function SavedProducts() {
                         type="button"
                         disabled={removingId === id}
                         onClick={() => removeProduct(product)}
-                        className="w-full rounded-2xl border border-violet-200 bg-white/70 px-4 py-2.5 text-xs font-semibold text-violet-700 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 disabled:opacity-50"
+                        className="flex min-h-[32px] w-full items-center justify-center gap-1.5 rounded-[12px] border border-transparent bg-transparent px-3 py-1.5 text-[10px] font-medium text-[#897a9f] transition-all duration-300 hover:border-rose-100 hover:bg-rose-50/80 hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        {removingId === id
-                          ? "Removing..."
-                          : "Remove from collection"}
+                        {removingId === id ? (
+                          <>
+                            <HiOutlineSparkles className="h-3.5 w-3.5 animate-pulse" />
+                            Removing...
+                          </>
+                        ) : (
+                          <>
+                            <HiOutlineHeart className="h-3.5 w-3.5" />
+                            Remove from collection
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -332,6 +394,13 @@ export default function SavedProducts() {
               );
             })}
           </div>
+        )}
+
+        {/* Collection footer */}
+        {!loading && products.length > 0 && (
+          <p className="mt-7 text-center text-[11px] font-medium tracking-wide text-[#81709f]">
+            Your skincare favourites, thoughtfully collected.
+          </p>
         )}
       </div>
     </main>

@@ -151,16 +151,16 @@ function SectionHeading({ eyebrow, title, description, icon }) {
       </div>
 
       <div className="min-w-0">
-        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.23em] text-fuchsia-600 sm:text-[11px]">
+        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.23em] text-[#9274d5] sm:text-[11px]">
           {eyebrow}
         </p>
 
-        <h2 className="dn-serif text-2xl font-semibold leading-tight text-violet-950 sm:text-3xl">
+        <h2 className="dn-serif text-2xl font-semibold leading-tight text-[#2d204b] sm:text-3xl">
           {title}
         </h2>
 
         {description && (
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-violet-900/60">
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[#77718d]">
             {description}
           </p>
         )}
@@ -168,6 +168,7 @@ function SectionHeading({ eyebrow, title, description, icon }) {
     </div>
   );
 }
+
 
 function ProductCard({
   product,
@@ -189,152 +190,151 @@ function ProductCard({
   const [imageFailed, setImageFailed] = useState(false);
 
   return (
-    <article className="dn-product-card group relative flex h-full flex-col overflow-hidden rounded-[26px] border border-white/80 bg-white/75 shadow-[0_12px_35px_-22px_rgba(109,40,217,0.28)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-fuchsia-200 hover:shadow-[0_24px_48px_-24px_rgba(147,51,234,0.36)]">
-      {/* Image area */}
-      <div className="relative m-3 mb-0 overflow-hidden rounded-[21px] border border-violet-100/70 bg-gradient-to-br from-violet-50 via-fuchsia-50/70 to-pink-50">
-        <div className="absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-full border border-white/90 bg-white/85 px-3 py-1.5 text-[10px] font-semibold text-violet-700 shadow-sm backdrop-blur-md">
-          <HiOutlineSparkles className="h-3.5 w-3.5 text-fuchsia-500" />
-          AI matched
-        </div>
+    <article className="dn-product-card group relative flex h-full flex-col overflow-hidden rounded-[23px] border border-white/90 bg-white/70 p-2.5 shadow-[0_10px_28px_rgba(91,65,133,0.08)] backdrop-blur-[20px] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#d9c7f5] hover:bg-white/85 hover:shadow-[0_20px_42px_rgba(91,65,133,0.15)]">
 
+      {/* Compact product image */}
+      <div className="dn-product-image relative flex h-[150px] items-center justify-center overflow-hidden rounded-[18px] border border-white/90 bg-gradient-to-br from-[#faf7ff] via-[#f2ebff] to-[#fff0f7] p-4 sm:h-[158px]">
+
+        <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[#e2d3ff]/55 blur-2xl transition-transform duration-500 group-hover:scale-125" />
+
+        <div className="pointer-events-none absolute -bottom-10 -left-5 h-24 w-24 rounded-full bg-[#ffd8e9]/55 blur-2xl transition-transform duration-500 group-hover:scale-125" />
+
+        {/* Save button */}
         <button
           type="button"
           onClick={() => onToggleSave(product, category, key)}
           disabled={saving}
           aria-label={saved ? "Remove saved product" : "Save product"}
           title={saved ? "Remove from saved products" : "Save product"}
-          className={`absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-200 ${
+          className={`absolute right-2.5 top-2.5 z-20 flex h-8 w-8 items-center justify-center rounded-full border shadow-sm backdrop-blur-xl transition-all duration-300 hover:scale-110 ${
             saved
-              ? "border-fuchsia-200 bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-md"
-              : "border-white/90 bg-white/90 text-violet-600 shadow-sm hover:border-fuchsia-200 hover:bg-fuchsia-50"
+              ? "border-[#d8c2f4] bg-gradient-to-br from-[#9271e0] to-[#e45fa4] text-white shadow-[0_5px_14px_rgba(190,102,190,0.25)]"
+              : "border-white/90 bg-white/85 text-[#8c6ac9] hover:border-[#dfc9f4] hover:bg-white"
           } ${saving ? "cursor-wait opacity-60" : ""}`}
         >
           {saved ? (
-            <HiOutlineHeart className="h-5 w-5" />
+            <HiOutlineHeart className="h-[17px] w-[17px]" />
           ) : (
-            <HiOutlineBookmark className="h-[18px] w-[18px]" />
+            <HiOutlineBookmark className="h-4 w-4" />
           )}
         </button>
 
-        <div className="flex h-[205px] items-center justify-center p-5 sm:h-[220px]">
-          {image && !imageFailed ? (
-            <img
-              src={image}
-              alt={name}
-              loading="lazy"
-              onError={() => setImageFailed(true)}
-              className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.05]"
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center gap-3 text-violet-400">
-              <div className="flex h-20 w-20 items-center justify-center rounded-[25px] border border-white bg-white/75 shadow-sm">
-                <HiOutlineShoppingBag className="h-9 w-9" />
-              </div>
-              <span className="text-xs font-medium text-violet-500/70">
-                Product preview unavailable
-              </span>
-            </div>
-          )}
-        </div>
+        {/* Product image */}
+        {image && !imageFailed ? (
+          <img
+            src={image}
+            alt={name}
+            loading="lazy"
+            onError={() => setImageFailed(true)}
+            className="relative z-10 h-full w-full object-contain drop-shadow-[0_7px_10px_rgba(70,45,100,0.08)] transition-transform duration-500 ease-out group-hover:scale-[1.07]"
+          />
+        ) : (
+          <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-[18px] border border-white/90 bg-white/70 text-[#b19bda] shadow-sm">
+            <HiOutlineShoppingBag className="h-7 w-7" />
+          </div>
+        )}
       </div>
 
       {/* Product details */}
-      <div className="flex flex-1 flex-col p-5 pt-4">
+      <div className="flex flex-1 flex-col px-2 pb-1 pt-3">
+
         {product?.brand && (
-          <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-600">
+          <p className="mb-1 truncate text-[9px] font-bold uppercase tracking-[0.16em] text-[#9274d5]">
             {product.brand}
           </p>
         )}
 
-        <h3 className="line-clamp-2 min-h-[48px] text-[15px] font-semibold leading-6 text-violet-950">
+        <h3 className="line-clamp-2 min-h-[39px] text-[13px] font-semibold leading-[1.5] text-[#2d204b]">
           {name}
         </h3>
 
-        <div className="mt-2 flex min-h-5 flex-wrap items-center gap-x-3 gap-y-1">
+        {/* Rating and store */}
+        <div className="mt-1.5 flex min-h-[16px] items-center gap-2 overflow-hidden">
           {rating !== null && (
-            <span className="inline-flex items-center gap-1 text-xs font-semibold text-violet-800">
-              <HiOutlineStar className="h-4 w-4 fill-amber-300 text-amber-500" />
+            <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-semibold text-[#594080]">
+              <HiOutlineStar className="h-3.5 w-3.5 fill-amber-300 text-amber-500" />
               {rating.toFixed(1)}
             </span>
           )}
 
           {store && (
-            <span className="max-w-full truncate text-xs text-violet-900/50">
+            <span className="truncate text-[10px] text-[#81709f]">
               {store}
             </span>
           )}
         </div>
 
-        {product?.description && (
-          <p className="mt-3 line-clamp-3 text-sm leading-6 text-violet-900/60">
-            {product.description}
-          </p>
-        )}
-
-        <div className="mt-auto pt-5">
-          <div className="mb-4 flex items-end justify-between gap-2">
-            <div>
-              <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-violet-900/45">
-                Product price
+        {/* Price */}
+        <div className="mt-auto pt-3">
+          <div className="mb-2.5 flex min-h-[34px] items-end justify-between gap-2 border-t border-[#e9e0f5]/80 pt-2.5">
+            <div className="min-w-0">
+              <p className="mb-0.5 text-[9px] font-semibold uppercase tracking-[0.13em] text-[#9285aa]">
+                PRICE
               </p>
-              <p className="text-xl font-bold tracking-tight text-violet-950">
+
+              <p className="truncate text-[17px] font-bold tracking-tight text-[#39235f]">
                 {price}
               </p>
             </div>
 
             {saved && (
-              <span className="mb-1 inline-flex items-center gap-1 text-[11px] font-semibold text-fuchsia-600">
-                <HiOutlineCheckCircle className="h-4 w-4" />
+              <span className="mb-0.5 inline-flex shrink-0 items-center gap-1 text-[9px] font-semibold text-[#9274d5]">
+                <HiOutlineCheckCircle className="h-3.5 w-3.5" />
                 Saved
               </span>
             )}
           </div>
 
+          {/* Purchase button */}
           {isSafeUrl(link) ? (
             <a
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group/buy flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-400 px-4 py-3 text-sm font-semibold text-white shadow-[0_8px_20px_-10px_rgba(147,51,234,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_25px_-10px_rgba(147,51,234,0.7)] focus:outline-none focus:ring-2 focus:ring-fuchsia-300 focus:ring-offset-2"
+              className="group/buy flex min-h-[36px] w-full items-center justify-center gap-1.5 rounded-[12px] bg-gradient-to-r from-[#9271e0] to-[#e45fa4] px-3 py-2 text-[11px] font-semibold text-white shadow-[0_5px_13px_rgba(190,102,190,0.19)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_9px_18px_rgba(190,102,190,0.27)] focus:outline-none focus:ring-2 focus:ring-[#cbb8f3] focus:ring-offset-2"
             >
+              <HiOutlineShoppingBag className="h-3.5 w-3.5" />
               View product
-              <HiOutlineExternalLink className="h-4 w-4 transition-transform group-hover/buy:translate-x-0.5" />
+              <HiOutlineExternalLink className="h-3.5 w-3.5 transition-transform duration-300 group-hover/buy:translate-x-0.5" />
             </a>
           ) : (
-            <div className="flex w-full items-center justify-center gap-2 rounded-2xl border border-violet-100 bg-violet-50/80 px-4 py-3 text-sm font-medium text-violet-400">
+            <div className="flex min-h-[36px] w-full items-center justify-center rounded-[12px] border border-[#e8def8] bg-white/65 px-2 py-2 text-center text-[10px] text-[#81709f]">
               Purchase link unavailable
             </div>
           )}
-          
+
+          {/* YouTube tutorial */}
           <a
             href={howToUseLink}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Find a YouTube tutorial for how to use ${name}`}
-            className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-2xl border border-rose-200 bg-white px-4 py-3 text-sm font-semibold text-rose-600 transition hover:border-rose-300 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:ring-offset-2"
+            className="mt-2 flex min-h-[34px] w-full items-center justify-center gap-1.5 rounded-[12px] border border-[#e7dcf6] bg-white/65 px-3 py-2 text-[11px] font-semibold text-[#594080] transition-all duration-300 hover:border-[#d4c1f0] hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#cbb8f3] focus:ring-offset-2"
           >
-            <FaYoutube className="h-5 w-5" />
+            <FaYoutube className="h-4 w-4 text-[#e45fa4]" />
             How to Use
-            <HiOutlineExternalLink className="h-4 w-4" />
+            <HiOutlineExternalLink className="h-3 w-3 text-[#a08bbf]" />
           </a>
 
+          {/* Save / remove */}
           <button
             type="button"
             onClick={() => onToggleSave(product, category, key)}
             disabled={saving}
-            className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-2xl border border-violet-200/80 bg-white/70 px-4 py-2.5 text-xs font-semibold text-violet-700 transition hover:border-fuchsia-200 hover:bg-fuchsia-50/80 disabled:cursor-wait disabled:opacity-60"
+            className="mt-1.5 flex min-h-[30px] w-full items-center justify-center gap-1.5 rounded-[11px] border border-transparent bg-transparent px-2 py-1.5 text-[10px] font-medium text-[#897a9f] transition-all duration-300 hover:border-rose-100 hover:bg-rose-50/80 hover:text-rose-600 disabled:cursor-wait disabled:opacity-60"
           >
             {saving
-              ? "Updating saved products..."
+              ? "Updating..."
               : saved
                 ? "Remove from saved"
-                : "Save to my collection"}
+                : "♡ Save to collection"}
           </button>
         </div>
       </div>
     </article>
   );
 }
+
 
 function ProductSection({
   eyebrow,
@@ -570,10 +570,9 @@ export default function ProductRecommendations() {
   };
 
   return (
-    <main className="dn-recommendations relative min-h-screen overflow-hidden bg-gradient-to-br from-violet-50 via-fuchsia-50/60 to-purple-100/70 px-4 pb-16 pt-6 text-violet-950 sm:px-6 sm:pt-8 lg:px-10">
+    <main className="dn-recommendations relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_85%_35%,rgba(255,188,220,0.32),transparent_30%),radial-gradient(circle_at_20%_45%,rgba(194,171,255,0.35),transparent_34%),linear-gradient(135deg,#f8f4ff_0%,#eee8ff_45%,#fff4f8_100%)] px-4 pb-16 pt-6 text-[#2d204b] sm:px-6 sm:pt-8 lg:px-10">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap');
-
+        
         .dn-recommendations {
           isolation: isolate;
         }
@@ -638,13 +637,13 @@ export default function ProductRecommendations() {
           <button
             type="button"
            onClick={() => navigate("/scan/skin")}
-            className="inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/65 px-4 py-2.5 text-sm font-semibold text-violet-800 shadow-sm backdrop-blur-xl transition hover:border-violet-200 hover:bg-white"
+            className="inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/65 px-4 py-2.5 text-sm font-semibold text-[#594080] shadow-sm backdrop-blur-xl transition hover:border-violet-200 hover:bg-white"
           >
             <HiOutlineArrowNarrowLeft className="h-4 w-4" />
             Back to scan
           </button>
 
-          <div className="flex items-center gap-2 rounded-full border border-white/80 bg-white/65 px-3 py-2 text-xs font-semibold text-violet-700 shadow-sm backdrop-blur-xl sm:px-4">
+          <div className="flex items-center gap-2 rounded-full border border-white/80 bg-white/65 px-3 py-2 text-xs font-semibold text-[#594080] shadow-sm backdrop-blur-xl sm:px-4">
             <HiOutlineShieldCheck className="h-4 w-4 text-fuchsia-500" />
             Your personal skincare space
           </div>
@@ -662,7 +661,7 @@ export default function ProductRecommendations() {
                 DermaNova AI · Smart recommendations
               </div>
 
-              <h1 className="dn-serif text-4xl font-semibold leading-[1.12] tracking-tight text-violet-950 sm:text-5xl lg:text-6xl">
+              <h1 className="dn-serif text-4xl font-semibold leading-[1.12] tracking-tight text-[#2d204b] sm:text-5xl lg:text-6xl">
                 Your skin,
                 <br />
                 <span className="dn-grad-text">your ritual.</span>
@@ -692,7 +691,7 @@ export default function ProductRecommendations() {
                 <button
                   type="button"
                   onClick={() => navigate("/saved-products")}
-                  className="inline-flex items-center gap-2 rounded-2xl border border-violet-200/80 bg-white/70 px-5 py-3.5 text-sm font-semibold text-violet-800 transition hover:border-fuchsia-200 hover:bg-white"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-violet-200/80 bg-white/70 px-5 py-3.5 text-sm font-semibold text-[#594080] transition hover:border-fuchsia-200 hover:bg-white"
                 >
                   <HiOutlineHeart className="h-4 w-4 text-fuchsia-500" />
                   My collection
@@ -719,7 +718,7 @@ export default function ProductRecommendations() {
                 <HiOutlineShoppingBag className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-violet-950">
+                <p className="text-2xl font-bold text-[#2d204b]">
                   {totalProducts}
                 </p>
                 <p className="mt-0.5 text-xs text-violet-900/55">
@@ -729,11 +728,11 @@ export default function ProductRecommendations() {
             </div>
 
             <div className="dn-glass flex items-center gap-4 rounded-[25px] p-5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-fuchsia-100 text-fuchsia-600">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-fuchsia-100 text-[#9274d5]">
                 <HiOutlineSparkles className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-violet-950">
+                <p className="text-2xl font-bold text-[#2d204b]">
                   {sections.filter((section) => section.products.length > 0).length}
                 </p>
                 <p className="mt-0.5 text-xs text-violet-900/55">
@@ -747,7 +746,7 @@ export default function ProductRecommendations() {
                 <HiOutlineHeart className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-violet-950">
+                <p className="text-2xl font-bold text-[#2d204b]">
                   {savedProducts.length}
                 </p>
                 <p className="mt-0.5 text-xs text-violet-900/55">
@@ -760,19 +759,19 @@ export default function ProductRecommendations() {
 
         {/* Loading */}
         {loading && (
-          <section className="dn-glass flex min-h-[350px] flex-col items-center justify-center rounded-[30px] px-6 py-12 text-center">
+          <section id="recommended"  className="dn-glass flex min-h-[350px] flex-col items-center justify-center rounded-[30px] px-6 py-12 text-center">
             
            <SerumLoader />
 
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.23em] text-fuchsia-600">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.23em] text-[#9274d5]">
               A little skincare magic
             </p>
 
-            <h2 className="dn-serif text-2xl font-semibold text-violet-950 sm:text-3xl">
+            <h2 className="dn-serif text-2xl font-semibold text-[#2d204b] sm:text-3xl">
               Curating your routine
             </h2>
 
-            <p className="mt-3 max-w-md text-sm leading-6 text-violet-900/60">
+            <p className="mt-3 max-w-md text-sm leading-6 text-[#77718d]">
               We're gathering your personalized product selections. This
               should only take a moment.
             </p>
@@ -790,11 +789,11 @@ export default function ProductRecommendations() {
               <HiOutlineSparkles className="h-8 w-8" />
             </div>
 
-            <h2 className="dn-serif text-2xl font-semibold text-violet-950">
+            <h2 className="dn-serif text-2xl font-semibold text-[#2d204b]">
               We couldn't load your recommendations
             </h2>
 
-            <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-violet-900/60">
+            <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-[#77718d]">
               {error}
             </p>
 
@@ -852,11 +851,11 @@ export default function ProductRecommendations() {
                   <HiOutlineShoppingBag className="h-8 w-8" />
                 </div>
 
-                <h2 className="dn-serif text-2xl font-semibold text-violet-950">
+                <h2 className="dn-serif text-2xl font-semibold text-[#2d204b]">
                   Your product edit is still taking shape
                 </h2>
 
-                <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-violet-900/60">
+                <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-[#77718d]">
                   No product recommendations are available for this scan
                   yet. Return to your scan results and try opening the
                   recommendations again.
@@ -875,7 +874,7 @@ export default function ProductRecommendations() {
 
             {/* Footer note */}
             <div className="mt-12 rounded-[25px] border border-white/80 bg-white/50 px-5 py-6 text-center backdrop-blur-xl sm:px-8">
-              <div className="mb-2 flex items-center justify-center gap-2 text-violet-700">
+              <div className="mb-2 flex items-center justify-center gap-2 text-[#594080]">
                 <HiOutlineShieldCheck className="h-5 w-5 text-fuchsia-500" />
                 <p className="text-sm font-semibold">
                   Thoughtful choices, informed skincare
