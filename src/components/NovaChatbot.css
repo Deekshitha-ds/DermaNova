@@ -249,6 +249,7 @@
 .nova-header {
   position: relative;
 
+  width: 100%;
   height: 90px;
   min-height: 90px;
 
@@ -256,7 +257,8 @@
   align-items: center;
   justify-content: space-between;
 
-  padding: 12px 18px;
+  padding: 8px 18px;
+  box-sizing: border-box;
 
   background:
     linear-gradient(
@@ -266,21 +268,30 @@
       #e752a3 100%
     );
 
-  border-bottom:
-    1px solid rgba(255,255,255,.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
 
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.35);
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
+
+/* =========================================================
+   HEADER LEFT
+========================================================= */
 
 .nova-header-left {
   display: flex;
   align-items: center;
+
   gap: 16px;
+
   min-width: 0;
 }
 
+
+/* =========================================================
+   NOVA AVATAR
+========================================================= */
 
 .nova-header-avatar {
   width: 64px;
@@ -290,25 +301,30 @@
   align-items: center;
   justify-content: center;
 
+  flex-shrink: 0;
+
   overflow: hidden;
 
-  border:
-    1px solid rgba(255,255,255,.9);
+  border: 1px solid rgba(255, 255, 255, 0.9);
 
   border-radius: 21px;
 
   background:
     linear-gradient(
       145deg,
-      rgba(255,255,255,.86),
-      rgba(255,222,247,.7)
+      rgba(255, 255, 255, 0.86),
+      rgba(255, 222, 247, 0.7)
     );
 
   box-shadow:
-    inset 0 2px 8px rgba(255,255,255,.95),
-    0 8px 20px rgba(101,48,119,.1);
+    inset 0 2px 8px rgba(255, 255, 255, 0.95),
+    0 8px 20px rgba(101, 48, 119, 0.1);
 }
 
+
+/* =========================================================
+   NOVA ROBOT
+========================================================= */
 
 .nova-header-avatar .nova-robot {
   width: 65px;
@@ -317,6 +333,25 @@
   transform: scale(1.08);
 }
 
+
+/* =========================================================
+   HEADER INFO
+========================================================= */
+
+.nova-header-info {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: flex-start;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   NOVA TITLE
+========================================================= */
 
 .nova-title {
   display: flex;
@@ -333,22 +368,28 @@
 
   font-size: 20px;
   font-weight: 700;
-white-space: nowrap;
-line-height: 1;
-  letter-spacing: -.045em;
+
+  line-height: 1;
+
+  letter-spacing: -0.045em;
+
+  white-space: nowrap;
 }
 
 
+/* =========================================================
+   OPTIONAL AI PILL
+========================================================= */
+
 .nova-ai-pill {
-  padding:
-    6px 9px;
+  padding: 6px 9px;
 
   border-radius: 999px;
 
   color: white;
 
   background:
-    rgba(255,255,255,.25);
+    rgba(255, 255, 255, 0.25);
 
   font-family:
     Arial,
@@ -358,6 +399,10 @@ line-height: 1;
   font-weight: 700;
 }
 
+
+/* =========================================================
+   TITLE SPARK
+========================================================= */
 
 .title-spark {
   color: #ffe4f6;
@@ -369,33 +414,54 @@ line-height: 1;
 }
 
 
+/* =========================================================
+   AI SUBTITLE
+========================================================= */
+
 .nova-subtitle {
   display: flex;
   align-items: center;
+
   gap: 7px;
 
   margin-top: 7px;
 
-  font-family: Arial, sans-serif;
+  font-family:
+    Arial,
+    sans-serif;
+
   font-size: 14px;
+
   line-height: 1;
 
   color: rgba(255, 255, 255, 0.9);
+
+  white-space: nowrap;
 }
 
+
+/* =========================================================
+   STATUS DOT
+========================================================= */
 
 .status-dot {
   width: 8px;
   height: 8px;
+
+  flex-shrink: 0;
 
   border-radius: 50%;
 
   background: #f9ddff;
 
   box-shadow:
-    0 0 9px rgba(255,232,255,.8);
+    0 0 9px rgba(255, 232, 255, 0.8);
 }
 
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
 
 .nova-close {
   width: 43px;
@@ -405,26 +471,32 @@ line-height: 1;
   align-items: center;
   justify-content: center;
 
-  border:
-    1px solid rgba(255,255,255,.45);
+  flex-shrink: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.45);
 
   border-radius: 15px;
 
   color: #805c7b;
 
   background:
-    rgba(255,255,255,.22);
+    rgba(255, 255, 255, 0.22);
 
   cursor: pointer;
 
   transition:
-    .25s ease;
+    background 0.25s ease,
+    transform 0.25s ease;
 }
 
 
+/* =========================================================
+   CLOSE BUTTON HOVER
+========================================================= */
+
 .nova-close:hover {
   background:
-    rgba(255,255,255,.4);
+    rgba(255, 255, 255, 0.4);
 
   transform:
     scale(1.04)
@@ -432,10 +504,15 @@ line-height: 1;
 }
 
 
+/* =========================================================
+   CLOSE ICON
+========================================================= */
+
 .nova-close svg {
   width: 21px;
   height: 21px;
 }
+
 
 .nova-close svg path {
   fill: none;
@@ -447,6 +524,21 @@ line-height: 1;
   stroke-linecap: round;
 }
 
+
+/* =========================================================
+   SPARKLE ANIMATION
+========================================================= */
+
+@keyframes sparkleFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+}
 
 /* =========================================================
    BODY
@@ -552,38 +644,18 @@ line-height: 1;
 ========================================================= */
 
 .nova-welcome {
+  .nova-welcome {
   flex: 0 0 auto;
-
-  margin: 20px 28px 8px;
+  margin: 65px 28px 8px;
   padding: 17px 18px 13px;
-
   text-align: center;
-
   border-radius: 26px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,.82),
-      rgba(255,244,252,.65)
-    );
-
-  border: 1px solid rgba(255,255,255,.9);
-
-  box-shadow:
-    0 12px 30px rgba(111,58,125,.05);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
-
-
-.welcome-spark {
-  color: #d477c4;
-
-  font-size: 17px;
-
-  animation:
-    welcomeSpark 2s ease-in-out infinite;
 }
-
 
 .nova-welcome h1 {
   margin: 5px 0 0;

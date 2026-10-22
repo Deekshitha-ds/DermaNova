@@ -186,36 +186,66 @@ export default function NovaChatbot() {
      SEND
   ===================================================== */
 
-  const sendMessage = () => {
-    const cleanMessage = message.trim();
+  const sendMessage = async () => {
+  const cleanMessage = message.trim();
 
-    if (!cleanMessage) return;
+  if (!cleanMessage) return;
+
+  // Show user's message immediately
+  setMessages((previous) => [
+    ...previous,
+    {
+      id: Date.now(),
+      type: "user",
+      text: cleanMessage,
+    },
+  ]);
+
+  setMessage("");
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: cleanMessage,
+        conversation_history: messages.map((item) => ({
+          role: item.type === "user" ? "user" : "nova",
+          text: item.text,
+        })),
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Chat request failed");
+    }
+
+    const data = await response.json();
+
+    // Show Nova's response
+    setMessages((previous) => [
+      ...previous,
+      {
+        id: Date.now() + 1,
+        type: "nova",
+        text: data.reply,
+      },
+    ]);
+  } catch (error) {
+    console.error("Nova chat error:", error);
 
     setMessages((previous) => [
       ...previous,
       {
-        id: Date.now(),
-        type: "user",
-        text: cleanMessage,
+        id: Date.now() + 1,
+        type: "nova",
+        text: "Sorry, I couldn't connect to Nova right now.",
       },
     ]);
-
-    setMessage("");
-
-    /* Temporary response */
-    setTimeout(() => {
-      setMessages((previous) => [
-        ...previous,
-        {
-          id: Date.now() + 1,
-          type: "nova",
-          text:
-            "I'd love to help ✨ Tell me a little more about your skin.",
-        },
-      ]);
-    }, 700);
-  };
-
+  }
+};
 
   /* =====================================================
      ENTER TO SEND
@@ -272,47 +302,44 @@ export default function NovaChatbot() {
 
 
       {/* =================================================
-          HEADER
-      ================================================= */}
+    HEADER
+================================================= */}
 
-      <header className="nova-header">
+<header className="nova-header">
 
-        <div className="nova-header-left">
+  <div className="nova-header-left">
 
-          <div className="nova-header-avatar">
-            <NovaRobot />
-          </div>
+    <div className="nova-header-avatar">
+      <NovaRobot />
+    </div>
 
-          <div className="nova-header-info">
+    <div className="nova-header-info">
 
-            <div className="nova-title">
-              NOVA AI
-              <span className="title-spark">
-                ✦
-              </span>
-            </div>
-            <br></br>
+      <div className="nova-title">
+        NOVA AI
+        <span className="title-spark">✦</span>
+      </div>
 
-            <div className="nova-subtitle">
-              <span className="status-dot" />
-              AI Assistant
-            </div>
+      <div className="nova-subtitle">
+        <span className="status-dot" />
+        AI Assistant
+      </div>
 
-          </div>
+    </div>
 
-        </div>
+  </div>
 
+  <button
+    className="nova-close"
+    onClick={closeNova}
+    aria-label="Close Nova"
+  >
+    <CloseIcon />
+  </button>
 
-        <button
-          className="nova-close"
-          onClick={closeNova}
-          aria-label="Close Nova"
-        >
-          <CloseIcon />
-        </button>
+</header>
 
-      </header>
-
+      
 
       {/* =================================================
           CHAT BODY
@@ -324,7 +351,7 @@ export default function NovaChatbot() {
         <div className="body-glow glow-left" />
         <div className="body-glow glow-right" />
         <div className="body-spark spark-top">
-          ✦
+          
         </div>
 
 

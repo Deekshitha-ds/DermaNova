@@ -45,11 +45,12 @@ export default function Dashboard() {
           </Link>
         </GlassCard>
       </div>
-
+      
       <p className="text-sm text-ink/40 mt-8">
         Progress charts, product recommendations, and the AI assistant plug into this
         dashboard in the next build modules.
       </p>
     </div>
+    
   );
 }
