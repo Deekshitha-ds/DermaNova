@@ -435,7 +435,7 @@ export default function Dashboard() {
               transition={{ duration: 0.8, delay: 0.55, ease: "easeOut" }}
             >
               <p className="mt-6 max-w-md text-base leading-7 text-violet-900/65">
-                Here's where your routine stands today.
+                Here's where your skin care and hair care routine stands today.
               </p>
 
               <p className="mt-2 flex items-center gap-2 text-sm text-violet-900/55">
