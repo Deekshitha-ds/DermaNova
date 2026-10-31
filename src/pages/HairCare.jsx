@@ -377,7 +377,7 @@ export default function HairCare() {
                 </span>
                 <h2>Let's get to know your hair</h2>
                 <p>
-                  A few simple answers help us personalise your routine.
+                  A thoughtful little consultation is the first step to a routine that feels right.
                 </p>
               </div>
 
@@ -394,6 +394,11 @@ export default function HairCare() {
                 animate={{ width: step === 1 ? "50%" : "100%" }}
                 transition={{ duration: 0.35 }}
               />
+            </div>
+
+            <div className="haircare-step-caption">
+              <span>{step === 1 ? "THE FOUNDATIONS" : "YOUR HAIR GOALS"}</span>
+              <span>{step === 1 ? "Tell us about your natural hair." : "Choose what you would like your routine to focus on."}</span>
             </div>
 
             {step === 1 ? (
@@ -420,17 +425,34 @@ export default function HairCare() {
                     description: "Think about how your scalp usually feels.",
                   },
                 ].map((question) => (
-                  <div className="haircare-field" key={question.field}>
+                  <div
+                    className={`haircare-field haircare-field--${question.field}`}
+                    key={question.field}
+                    data-field={question.field}
+                  >
                     <div className="haircare-field-heading">
-                      <h3>{question.title}</h3>
-                      <p>{question.description}</p>
+                      <span className="haircare-question-index">
+                        {String(
+                          [
+                            "hair_type",
+                            "hair_length",
+                            "hair_texture",
+                            "scalp_condition",
+                          ].indexOf(question.field) + 1
+                        ).padStart(2, "0")}
+                      </span>
+                      <div>
+                        <h3>{question.title}</h3>
+                        <p>{question.description}</p>
+                      </div>
                     </div>
 
-                    <div className="haircare-options">
-                      {OPTIONS[question.field].map((option) => (
+                    <div className={`haircare-options haircare-options--${question.field}`}>
+                      {OPTIONS[question.field].map((option, optionIndex) => (
                         <button
                           type="button"
                           key={option}
+                          data-option={option.toLowerCase().replace(/\s+/g, "-")}
                           className={`haircare-option ${
                             profile[question.field] === option
                               ? "is-selected"
@@ -443,9 +465,22 @@ export default function HairCare() {
                             profile[question.field] === option
                           }
                         >
-                          {option}
+                          <span className="haircare-option-art" aria-hidden="true">
+                            <span className="haircare-option-art-inner">
+                              {question.field === "hair_type"
+                                ? ["—", "〰", "∿", "◎"][optionIndex]
+                                : question.field === "hair_length"
+                                  ? ["短", "中", "長"][optionIndex]
+                                  : question.field === "hair_texture"
+                                    ? ["Ⅰ", "Ⅱ", "Ⅲ"][optionIndex]
+                                    : ["◌", "◇", "✧", "◈", "?"][optionIndex]}
+                            </span>
+                          </span>
+                          <span className="haircare-option-label">{option}</span>
                           {profile[question.field] === option && (
-                            <HiOutlineCheckCircle />
+                            <span className="haircare-option-selected">
+                              <HiOutlineCheckCircle />
+                            </span>
                           )}
                         </button>
                       ))}
