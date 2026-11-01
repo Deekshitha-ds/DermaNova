@@ -20,7 +20,7 @@ import {
   HiOutlineBookmark,
 } from "react-icons/hi";
 
-import heroBanner from "./hairCare-hero.jpg";
+import heroModel from "./hairCare-model.jpg";
 import client from "../api/client";
 import {
   getSavedProducts,
@@ -58,15 +58,6 @@ const CONCERNS = [
 const EASE = [0.22, 1, 0.36, 1];
 
 const AMP = { Straight: 0, Wavy: 20, Curly: 34, Coily: 48 };
-const LEN = { Short: 0.52, Medium: 0.78, Long: 1 };
-const THICK = { Fine: 1.6, Medium: 2.6, Thick: 4 };
-const GLOW = { Oily: 30, Dry: 11, Normal: 19, Combination: 25, Unsure: 15 };
-const LOADING_MESSAGES = [
-  "Reading your hair type...",
-  "Matching your scalp needs...",
-  "Building your routine...",
-  "Finding products worth your money...",
-];
 const SORTS = [
   ["recommended", "Recommended"],
   ["price-asc", "Price: low to high"],
@@ -107,56 +98,15 @@ function drift(e) {
   });
 }
 
-// Live strands: they bend, lengthen, thicken and glow to match the profile.
-function LiveStrand({ profile, uid, hero = false }) {
-  const id = `hc-${uid}`;
-  const amp = AMP[profile.hair_type] ?? 20;
-  const len = LEN[profile.hair_length] ?? 0.78;
-  const w = THICK[profile.hair_texture] ?? 2.6;
-  const glow = GLOW[profile.scalp_condition] ?? 19;
-
+// Sidebar model photo in an arched frame.
+function LiveModel() {
   return (
-    <svg
-      className={`haircare-strands${hero ? " is-hero" : ""}`}
-      viewBox="-40 -20 240 230"
-      aria-hidden="true"
-    >
-      <defs>
-        <linearGradient id={`${id}-s`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#9271e0" />
-          <stop offset="1" stopColor="#ec62a3" />
-        </linearGradient>
-        <radialGradient id={`${id}-g`}>
-          <stop offset="0" stopColor="#ec62a3" stopOpacity=".4" />
-          <stop offset="1" stopColor="#ec62a3" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      <motion.circle
-        cx="60"
-        cy="8"
-        fill={`url(#${id}-g)`}
-        animate={{ r: glow * 2 }}
-        transition={{ type: "spring", stiffness: 80, damping: 14 }}
-      />
-      {[-34, 0, 34].map((off, i) => (
-        <g
-          key={off}
-          className="hc-sway"
-          style={{ animationDelay: `${i * -1.4}s`, animationDuration: `${5 + i}s` }}
-        >
-          <g className="hc-len" style={{ "--len": len }}>
-            <motion.path
-              fill="none"
-              stroke={`url(#${id}-s)`}
-              strokeLinecap="round"
-              opacity={i === 1 ? 1 : 0.5}
-              animate={{ d: strand(amp, 60 + off), strokeWidth: w }}
-              transition={{ type: "spring", stiffness: 70, damping: 15 }}
-            />
-          </g>
-        </g>
-      ))}
-    </svg>
+    <div className="hl-model">
+      <div className="hl-frame">
+        <img src={heroModel} alt="" />
+        <span className="hl-sheen" />
+      </div>
+    </div>
   );
 }
 
@@ -280,6 +230,7 @@ function sameHairProduct(saved, product) {
   );
 }
 
+
 export default function HairCare() {
   const [profile, setProfile] = useState(INITIAL_PROFILE);
   const [result, setResult] = useState(null);
@@ -296,7 +247,6 @@ export default function HairCare() {
   const [sortBy, setSortBy] = useState("recommended");
   const [catFilter, setCatFilter] = useState("All");
   const [toast, setToast] = useState("");
-  const [msgIndex, setMsgIndex] = useState(0);
   const toastTimer = useRef(null);
 
   const { scrollYProgress } = useScroll();
@@ -317,18 +267,6 @@ export default function HairCare() {
 
   useEffect(() => () => clearTimeout(toastTimer.current), []);
 
-  // Cycle the status line while the routine is being generated.
-  useEffect(() => {
-    if (!loading) {
-      setMsgIndex(0);
-      return undefined;
-    }
-    const timer = setInterval(
-      () => setMsgIndex((i) => (i + 1) % LOADING_MESSAGES.length),
-      1700
-    );
-    return () => clearInterval(timer);
-  }, [loading]);
 
   // Load products already saved in the shared Saved Products page.
   useEffect(() => {
@@ -575,21 +513,69 @@ export default function HairCare() {
       <div className="haircare-shell">
         <motion.section
           ref={heroRef}
-          className="haircare-hero haircare-banner"
+          className="haircare-hero"
           onPointerMove={spot}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: EASE }}
         >
-          <h1 className="hc-sr">AI Hair Care Intelligence by DermaNova AI</h1>
+          <div className="hh-copy">
+            <div className="hh-brand">
+              <HiOutlineSparkles />
+              <span>DermaNova AI</span>
+              <i />
+            </div>
 
-          <div className="haircare-banner-stage">
-            <motion.div className="haircare-banner-layer" style={{ y: heroY }}>
-              <img
-                className="haircare-banner-img"
-                src={heroBanner}
-                alt="A woman with long wavy hair beside a hair analysis panel: hair type, texture, scalp condition and concerns."
-              />
+            <h1 className="haircare-title" aria-label="Your hair, understood.">
+              {["Your", "hair,"].map((word, i) => (
+                <motion.i
+                  key={word}
+                  className="hc-word"
+                  aria-hidden="true"
+                  initial={{ opacity: 0, y: 34, filter: "blur(8px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  transition={{ duration: 0.8, ease: EASE, delay: 0.15 + i * 0.09 }}
+                >
+                  {word}
+                </motion.i>
+              ))}
+              <br />
+              <motion.span
+                aria-hidden="true"
+                initial={{ opacity: 0, y: 34, filter: "blur(8px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.9, ease: EASE, delay: 0.38 }}
+              >
+                understood.
+              </motion.span>
+            </h1>
+
+            <p className="haircare-subtitle">
+              Discover a hair-care routine tailored to your hair type, scalp
+              condition and personal concerns.
+            </p>
+
+            <div className="haircare-trust-row">
+              <span><HiOutlineCheckCircle />Personalised routine</span>
+              <span><HiOutlineBeaker />Targeted product categories</span>
+              <span><HiOutlineHeart />Made for your needs</span>
+            </div>
+
+            <div className="hh-pill">
+              <HiOutlineSparkles />
+              Your hair. Our AI care.
+            </div>
+          </div>
+
+          <div className="hh-stage">
+            <motion.div className="hh-art" style={{ y: heroY }}>
+              <div className="hh-arch" onPointerMove={tilt} onPointerLeave={untilt}>
+                <span className="hh-arch-glow" />
+                <div className="hh-arch-frame">
+                  <img src={heroModel} alt="Woman with long, glossy wavy hair" />
+                  <span className="hh-arch-sheen" />
+                </div>
+              </div>
             </motion.div>
 
             <div className="hb-fx" aria-hidden="true">
@@ -598,11 +584,53 @@ export default function HairCare() {
               {Array.from({ length: 8 }, (_, i) => (
                 <i key={i} className="hc-petal" style={{ "--i": i }} />
               ))}
-              <b className="hb-star" style={{ left: "73.6%", top: "35.9%" }} />
-              <b className="hb-star hb-star-b" style={{ left: "63.4%", top: "37.4%" }} />
-              <b className="hb-star hb-star-c" style={{ left: "45%", top: "70%" }} />
-              <b className="hb-star hb-star-d" style={{ left: "93.2%", top: "86%" }} />
-              <span className="hb-pulse" style={{ left: "83.9%", top: "45.4%" }} />
+              <span className="hc-bubble hc-bubble-a" />
+              <span className="hc-bubble hc-bubble-b" />
+              <b className="hb-star" style={{ left: "58%", top: "34%" }} />
+              <b className="hb-star hb-star-b" style={{ left: "30%", top: "20%" }} />
+              <b className="hb-star hb-star-c" style={{ left: "44%", top: "74%" }} />
+              <b className="hb-star hb-star-d" style={{ left: "92%", top: "92%" }} />
+            </div>
+
+            <div className="haircare-analysis" onPointerMove={tilt} onPointerLeave={untilt}>
+              <div className="haircare-analysis-title">
+                <HiOutlineSparkles />
+                Your hair profile
+              </div>
+              {[
+                ["Hair type", profile.hair_type],
+                ["Texture", profile.hair_texture],
+                ["Scalp", profile.scalp_condition],
+                ["Concerns", profile.hair_concerns.join(", ") || "None yet"],
+              ].map(([label, value], i) => (
+                <motion.div
+                  key={label}
+                  className="haircare-analysis-row"
+                  initial={{ opacity: 0, x: 18 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.55, ease: EASE, delay: 1.1 + i * 0.18 }}
+                >
+                  <HiOutlineCheckCircle />
+                  <span>{label}:</span>
+                  <AnimatePresence mode="wait">
+                    <motion.b
+                      key={value}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {value}
+                    </motion.b>
+                  </AnimatePresence>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="hh-card">
+              <h4>Radiant hair, confident you</h4>
+              <i />
+              <HiOutlineSparkles />
             </div>
           </div>
         </motion.section>
@@ -834,18 +862,15 @@ export default function HairCare() {
             </div>
 
             <aside className="haircare-live" aria-label="Live profile preview">
-              <div className="haircare-live-stage">
-                <LiveStrand profile={profile} uid="a" />
-              </div>
+              <LiveModel />
               <div className="haircare-live-copy">
-                <h4>Your profile, live</h4>
-                <p>Pick an option and watch the strands change.</p>
+                <h4>Your hair profile</h4>
+                <p>Your answers appear here as you choose them.</p>
+              </div>
+              <div className="hl-concerns-title">
+                Your concerns <b>{profile.hair_concerns.length}</b>
               </div>
               <div className="haircare-live-tags">
-                <span>{profile.hair_type}</span>
-                <span>{profile.hair_length}</span>
-                <span>{profile.hair_texture}</span>
-                <span>{profile.scalp_condition} scalp</span>
                 <AnimatePresence>
                   {profile.hair_concerns.map((concern) => (
                     <motion.span
@@ -860,6 +885,9 @@ export default function HairCare() {
                     </motion.span>
                   ))}
                 </AnimatePresence>
+                {profile.hair_concerns.length === 0 && (
+                  <span className="hl-empty">None selected yet</span>
+                )}
               </div>
             </aside>
             </div>
@@ -874,18 +902,8 @@ export default function HairCare() {
                   role="status"
                   aria-live="polite"
                 >
-                  <LiveStrand profile={profile} uid="l" />
-                  <AnimatePresence mode="wait">
-                    <motion.p
-                      key={msgIndex}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {LOADING_MESSAGES[msgIndex]}
-                    </motion.p>
-                  </AnimatePresence>
+                  <span className="haircare-loading-orb" />
+                  <p>Putting together your routine...</p>
                 </motion.div>
               )}
             </AnimatePresence>

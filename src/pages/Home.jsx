@@ -202,7 +202,7 @@ export default function Home() {
 
             <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
               className="text-lg text-violet-950/55 max-w-xl mx-auto lg:mx-0 mb-9 leading-relaxed">
-              Scan your skin and hair with your camera, get a dermatologist-style report in seconds,
+              Scan your skin with your camera, get a dermatologist-style report in seconds,
               and follow a routine built for exactly what your skin needs today.
             </motion.p>
 
