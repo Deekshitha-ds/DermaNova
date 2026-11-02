@@ -442,7 +442,7 @@ export default function Dashboard() {
               transition={{ duration: 0.8, delay: 0.55, ease: "easeOut" }}
             >
               <p className="mt-6 max-w-md text-base leading-7 text-violet-900/65">
-                Here's where your routine stands today.
+                Here's where your skin care and hair care routine stands today.
               </p>
 
               <p className="mt-2 flex items-center gap-2 text-sm text-violet-900/55">
@@ -506,61 +506,7 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* ============ WEEK + PROGRESS (open band, no card) ============ */}
-        <section
-          className="mt-16 grid gap-10 border-y border-violet-200/50 py-10 sm:mt-20 lg:grid-cols-2 lg:gap-0"
-          aria-labelledby="week-title"
-        >
-          <div className="lg:pr-12">
-            <div className="flex items-baseline justify-between gap-4">
-              <h2 id="week-title" className="dn-serif text-2xl font-medium text-violet-950">
-                This week
-              </h2>
-              <p className="text-sm text-violet-900/55">
-                {scannedCount === 0
-                  ? "No scans yet"
-                  : `${scannedCount} ${scannedCount === 1 ? "scan" : "scans"} this week`}
-              </p>
-            </div>
-
-            <ol className="mt-7 grid grid-cols-7 gap-1 sm:gap-2">
-              {week.map((d) => (
-                <li key={d.key} className="flex flex-col items-center gap-2.5">
-                  <span className="text-xs text-violet-900/50">{d.label}</span>
-                  <span
-                    className={`flex h-11 w-11 items-center justify-center rounded-full text-sm font-semibold sm:h-12 sm:w-12 ${
-                      d.scanned
-                        ? "bg-gradient-to-br from-violet-500 to-fuchsia-400 text-white shadow-[0_8px_18px_-8px_rgba(147,51,234,.8)]"
-                        : d.isToday
-                          ? "border border-fuchsia-300 bg-white text-violet-950 shadow-[0_0_0_5px_rgba(232,121,249,.14)]"
-                          : "border border-dashed border-violet-200 text-violet-900/45"
-                    }`}
-                    aria-label={`${d.label} ${d.day}${d.isToday ? ", today" : ""}${d.scanned ? ", scanned" : ""}`}
-                  >
-                    {d.day}
-                  </span>
-                </li>
-              ))}
-            </ol>
-
-            <p className="mt-7 max-w-sm text-sm leading-6 text-violet-900/55">
-              One scan a week is enough to see how your skin changes over time.
-            </p>
-          </div>
-
-          <div className="lg:border-l lg:border-violet-200/50 lg:pl-12">
-            <div className="flex items-baseline justify-between gap-4">
-              <h2 className="dn-serif text-2xl font-medium text-violet-950">Skin progress</h2>
-              <p className="text-sm text-violet-900/55">Starts after your first scan</p>
-            </div>
-
-            <div className="mt-5 h-32">
-              <GhostChart />
-            </div>
-          </div>
-        </section>
-
-        
+       
 
 
       </main>
