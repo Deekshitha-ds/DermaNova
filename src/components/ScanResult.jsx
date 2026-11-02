@@ -1,31 +1,133 @@
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+import {
+  saveScan,
+  unsaveScan,
+  getSavedScans,
+} from "../api/savedscans";
+import {
+  HiOutlineArrowRight,
+  HiOutlineSparkles,
+} from "react-icons/hi";
+import { getProductRecommendations } from "../api/recommendations";
+import { getScanRecommendations } from "../api/skinAnalysis";
 export default function ScanResult({ result }) {
-  if (!result) return null;
   const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+  const [isLoadingRecommendations, setIsLoadingRecommendations] =
+    useState(false);
 
-  const analysisId = result.analysis_id;
+  const [recommendationError, setRecommendationError] =
+    useState("");
 
-  const saveKey = analysisId
-    ? `dermanova_saved_scan_${analysisId}`
-    : null;
+  const [liveProducts, setLiveProducts] = useState(null);
 
-  useEffect(() => {
-    if (!saveKey) return;
+  const analysisId = result?.analysis_id;
+  const navigate = useNavigate();
 
-    const saved =
-      localStorage.getItem(saveKey) === "true";
+// Check whether this scan is saved in the backend.
+useEffect(() => {
+  let cancelled = false;
 
-    setIsSaved(saved);
-  }, [saveKey]);
+  const checkSavedStatus = async () => {
+    if (!analysisId) {
+      setIsSaved(false);
+      return;
+    }
 
-  const handleSaveScan = () => {
-    if (!saveKey) return;
+    try {
+      const response = await getSavedScans();
+      const savedScans = Array.isArray(response.data)
+        ? response.data
+        : [];
 
-    localStorage.setItem(saveKey, "true");
+      const alreadySaved = savedScans.some(
+        (scan) =>
+          Number(scan.analysis_id ?? scan.id) ===
+          Number(analysisId)
+      );
 
-    setIsSaved(true);
+      if (!cancelled) {
+        setIsSaved(alreadySaved);
+      }
+    } catch (error) {
+      console.error("Failed to check saved scans:", error);
+    }
   };
+
+  checkSavedStatus();
+
+  return () => {
+    cancelled = true;
+  };
+}, [analysisId]);
+
+// Save or remove the scan through the backend.
+const handleSaveScan = async () => {
+  if (!analysisId || isSaving) {
+    if (!analysisId) {
+      setSaveError("Scan ID is missing. Please run the scan again.");
+    }
+    return;
+  }
+
+  setIsSaving(true);
+  setSaveError("");
+
+  try {
+    if (isSaved) {
+      await unsaveScan(analysisId);
+      setIsSaved(false);
+    } else {
+      await saveScan(analysisId);
+      setIsSaved(true);
+    }
+  } catch (error) {
+    console.error("Failed to update saved scan:", error);
+
+    setSaveError(
+      error.response?.data?.detail ||
+      "Unable to update saved scan. Please try again."
+    );
+  } finally {
+    setIsSaving(false);
+  }
+};
+
+  
+const handleLoadRecommendations = async () => {
+  if (!analysisId || isLoadingRecommendations) return;
+
+  setIsLoadingRecommendations(true);
+  setRecommendationError("");
+
+  try {
+    console.log(
+      "Loading recommendations for analysis:",
+      analysisId
+    );
+
+    const response = await getScanRecommendations(analysisId);
+
+    console.log("Recommendations API response:", response.data);
+
+    setLiveProducts(response.data);
+  } catch (error) {
+    console.error(
+      "Failed to load recommendations:",
+      error.response?.status,
+      error.response?.data || error.message
+    );
+
+    setRecommendationError(
+      error.response?.data?.detail ||
+        "Unable to load suitable products. Please try again."
+    );
+  } finally {
+    setIsLoadingRecommendations(false);
+  }
+};
 
   const health = Math.round(result.scores?.health ?? 0);
   const oiliness = Math.round(result.scores?.oiliness ?? 0);
@@ -44,7 +146,10 @@ export default function ScanResult({ result }) {
     ? result.processed_image
     : `${backendBaseUrl}${result.processed_image}`
   : null;
-
+  console.log("Analysis ID:", analysisId);
+  console.log("Processed image path:", result?.processed_image);
+  console.log("Final image URL:", processedImageUrl);
+  console.log("Full analysis result:", result);
   const unevenTone = Math.round(
     skinMetrics.uneven_tone ?? 0
   );
@@ -180,6 +285,15 @@ export default function ScanResult({ result }) {
 
   const notes =
     fullRecommendation.notes ?? [];
+  /* ========================================================= */
+  /* LIVE PRODUCT RECOMMENDATIONS */
+  /* ========================================================= */
+
+  const majorRecommendation = result.major_recommendation ?? null;
+
+  const morningRoutineProducts = result.morning_routine ?? [];
+
+  const eveningRoutineProducts = result.evening_routine ?? [];
 
   /* ========================================================= */
   /* SEVERITY */
@@ -314,44 +428,32 @@ export default function ScanResult({ result }) {
   <button
     type="button"
     onClick={handleSaveScan}
-    disabled={isSaved}
+    disabled={!analysisId || isSaving}
     className={`
       group flex items-center gap-2 rounded-full
-      border px-4 py-2
-      text-xs font-semibold
-      transition-all duration-300
+      border px-4 py-2 text-xs font-semibold
+      transition-all duration-300 disabled:opacity-60
       ${
         isSaved
           ? "border-lavender-200 bg-lavender-50 text-lavender-700"
           : "border-ink/10 bg-white/70 text-ink/55 hover:border-lavender-200 hover:bg-lavender-50 hover:text-lavender-700"
       }
     `}
-    aria-label={
-      isSaved
-        ? "Scan saved"
-        : "Save this scan"
-    }
   >
-
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill={isSaved ? "currentColor" : "none"}
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="transition-transform duration-300 group-hover:scale-105"
-    >
-      <path d="M6 3.75A1.75 1.75 0 0 1 7.75 2h8.5A1.75 1.75 0 0 1 18 3.75v17.1a.65.65 0 0 1-1.02.53L12 17.8l-4.98 3.58A.65.65 0 0 1 6 20.85V3.75Z" />
-    </svg>
-
     <span>
-      {isSaved ? "Saved" : "Save Scan"}
+      {isSaving
+        ? "Saving..."
+        : isSaved
+          ? "Saved · Remove"
+          : "Save Scan"}
     </span>
-
   </button>
+
+{saveError && (
+  <p className="mt-2 text-xs text-red-600" role="alert">
+    {saveError}
+  </p>
+)}
 
 </div>
           </div>
@@ -869,460 +971,195 @@ export default function ScanResult({ result }) {
       </section>
 
       
-{/* ================================================= */}
-{/* PERSONALIZED INSIGHTS */}
-{/* ================================================= */}
 
-<section className="relative overflow-hidden rounded-[34px] border border-lavender-200/60 bg-white/80 backdrop-blur-2xl shadow-[0_20px_60px_rgba(80,60,120,0.08)]">
+      {/* ================================================= */}
+      {/* DERMANOVA LIVE PRODUCT RECOMMENDATIONS */}
+      {/* ================================================= */}
 
-  {/* Soft background accents */}
-  <div className="pointer-events-none absolute -top-28 -right-24 h-72 w-72 rounded-full bg-lavender-200/20 blur-3xl" />
-  <div className="pointer-events-none absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-purple-200/10 blur-3xl" />
+    
+        <section className="relative overflow-hidden rounded-[34px] border border-lavender-200/60 bg-white/80 backdrop-blur-2xl shadow-[0_20px_60px_rgba(80,60,120,0.08)]">
 
-  <div className="relative p-7 md:p-10">
+          {/* Soft background accents */}
+          <div className="pointer-events-none absolute -top-28 -right-24 h-72 w-72 rounded-full bg-lavender-200/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-purple-200/10 blur-3xl" />
 
-    {/* ================================================= */}
-    {/* HEADER */}
-    {/* ================================================= */}
+          <div className="relative p-7 md:p-10">
 
-    <div className="max-w-2xl">
+            {/* HEADER */}
+            <div className="max-w-3xl">
 
-      <p className="text-[10px] uppercase tracking-[0.24em] font-semibold text-lavender-600">
-        DermaNova Intelligence
-      </p>
-
-      <h3 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight text-ink">
-        Personalized insights
-      </h3>
-
-      <p className="mt-3 text-sm md:text-[15px] leading-7 text-ink/45">
-        A tailored skincare plan based on the visual characteristics
-        identified during your DermaNova analysis.
-      </p>
-
-    </div>
-
-
-    {/* ================================================= */}
-    {/* SKIN PROFILE */}
-    {/* ================================================= */}
-
-    {profile.summary && (
-
-      <div className="mt-10 border-t border-ink/5 pt-8">
-
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
-
-          <div>
-
-            <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender-600">
-              01 · Skin profile
-            </p>
-
-            <h4 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight text-ink">
-              {profile.skin_type || result.detected_type || "Skin"}
-              {" "}
-              Skin
-            </h4>
-
-          </div>
-
-          <span className="text-[10px] uppercase tracking-[0.16em] text-ink/30">
-            AI assessment
-          </span>
-
-        </div>
-
-        <p className="mt-5 max-w-4xl text-sm leading-7 text-ink/55">
-          {profile.summary}
-        </p>
-
-      </div>
-
-    )}
-
-
-    {/* ================================================= */}
-    {/* DAILY ROUTINE */}
-    {/* ================================================= */}
-
-    {(routine.morning?.length > 0 || routine.night?.length > 0) && (
-
-      <div className="mt-10 border-t border-ink/5 pt-8">
-
-        <div className="mb-7">
-
-          <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender-600">
-            02 · Daily routine
-          </p>
-
-          <h4 className="mt-2 text-xl md:text-2xl font-semibold tracking-tight text-ink">
-            A simple routine for your skin
-          </h4>
-
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-x-12 gap-y-8">
-
-          {/* MORNING */}
-
-          <div>
-
-            <div className="flex items-center justify-between pb-3 border-b border-ink/5">
-
-              <h5 className="text-sm font-semibold text-ink">
-                Morning
-              </h5>
-
-              <span className="text-[10px] uppercase tracking-[0.16em] text-ink/30">
-                AM
-              </span>
-
-            </div>
-
-            <div className="mt-5 space-y-5">
-
-              {routine.morning?.map((step, index) => (
-
-                <div
-                  key={index}
-                  className="flex items-start gap-4"
-                >
-
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-lavender-50 border border-lavender-100 text-[11px] font-semibold text-lavender-600">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-
-                  <div className="pt-0.5">
-
-                    <p className="text-sm font-medium leading-6 text-ink">
-                      {typeof step === "object"
-                        ? step.product
-                        : step}
-                    </p>
-
-                    {typeof step === "object" &&
-                      step.purpose && (
-
-                        <p className="mt-1 max-w-md text-xs leading-5 text-ink/40">
-                          {step.purpose}
-                        </p>
-
-                    )}
-
-                  </div>
-
-                </div>
-
-              ))}
-
-            </div>
-
-          </div>
-
-
-          {/* NIGHT */}
-
-          <div>
-
-            <div className="flex items-center justify-between pb-3 border-b border-ink/5">
-
-              <h5 className="text-sm font-semibold text-ink">
-                Night
-              </h5>
-
-              <span className="text-[10px] uppercase tracking-[0.16em] text-ink/30">
-                PM
-              </span>
-
-            </div>
-
-            <div className="mt-5 space-y-5">
-
-              {routine.night?.map((step, index) => (
-
-                <div
-                  key={index}
-                  className="flex items-start gap-4"
-                >
-
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-lavender-50 border border-lavender-100 text-[11px] font-semibold text-lavender-600">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-
-                  <div className="pt-0.5">
-
-                    <p className="text-sm font-medium leading-6 text-ink">
-                      {typeof step === "object"
-                        ? step.product
-                        : step}
-                    </p>
-
-                    {typeof step === "object" &&
-                      step.purpose && (
-
-                        <p className="mt-1 max-w-md text-xs leading-5 text-ink/40">
-                          {step.purpose}
-                        </p>
-
-                    )}
-
-                  </div>
-
-                </div>
-
-              ))}
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    )}
-
-
-    {/* ================================================= */}
-    {/* RECOMMENDED SKINCARE */}
-    {/* ================================================= */}
-
-    {products.length > 0 && (
-
-      <div className="mt-10 border-t border-ink/5 pt-8">
-
-        <div className="mb-6">
-
-          <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender-600">
-            03 · Recommended skincare
-          </p>
-
-          <h4 className="mt-2 text-xl md:text-2xl font-semibold tracking-tight text-ink">
-            Selected for your profile
-          </h4>
-
-        </div>
-
-        <div className="divide-y divide-ink/5 border-y border-ink/5">
-
-          {products.map((product, index) => (
-
-            <div
-              key={index}
-              className="grid md:grid-cols-[140px_minmax(0,1fr)_auto] gap-3 md:gap-6 py-5"
-            >
-
-              <div>
-
-                <p className="text-[10px] uppercase tracking-[0.16em] font-semibold text-lavender-600">
-                  {product.category}
-                </p>
-
-              </div>
-
-              <div>
-
-                <p className="text-sm font-semibold text-ink">
-                  {product.recommendation}
-                </p>
-
-                {product.reason && (
-
-                  <p className="mt-1.5 max-w-2xl text-xs leading-5 text-ink/45">
-                    {product.reason}
-                  </p>
-
-                )}
-
-              </div>
-
-              {product.priority && (
-
-                <div className="md:text-right">
-
-                  <span className="text-[10px] uppercase tracking-[0.14em] text-ink/30">
-                    {product.priority}
-                  </span>
-
-                </div>
-
-              )}
-
-            </div>
-
-          ))}
-
-        </div>
-
-      </div>
-
-    )}
-
-
-    {/* ================================================= */}
-    {/* PERSONAL FOCUS */}
-    {/* ================================================= */}
-
-    {focus.length > 0 && (
-
-      <div className="mt-10 border-t border-ink/5 pt-8">
-
-        <div className="mb-6">
-
-          <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender-600">
-            04 · Personal focus
-          </p>
-
-          <h4 className="mt-2 text-xl md:text-2xl font-semibold tracking-tight text-ink">
-            What deserves your attention
-          </h4>
-
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-x-10 gap-y-5">
-
-          {focus.map((item, index) => (
-
-            <div
-              key={index}
-              className="border-l border-lavender-200 pl-5"
-            >
-
-              <div className="flex items-center justify-between gap-4">
-
-                <h5 className="text-sm font-semibold text-ink">
-                  {typeof item === "object"
-                    ? item.title
-                    : item}
-                </h5>
-
-                {typeof item === "object" &&
-                  item.priority && (
-
-                    <span className="shrink-0 text-[10px] uppercase tracking-[0.14em] text-ink/30">
-                      {item.priority}
-                    </span>
-
-                  )}
-
-              </div>
-
-              {typeof item === "object" &&
-                item.description && (
-
-                  <p className="mt-2 text-xs leading-5 text-ink/45">
-                    {item.description}
-                  </p>
-
-                )}
-
-            </div>
-
-          ))}
-
-        </div>
-
-      </div>
-
-    )}
-
-
-    {/* ================================================= */}
-    {/* ROUTINE NOTES */}
-    {/* ================================================= */}
-
-    {(avoid.length > 0 || notes.length > 0) && (
-
-      <div className="mt-10 border-t border-ink/5 pt-8">
-
-        <div className="grid lg:grid-cols-2 gap-10">
-
-          {/* WHAT TO AVOID */}
-
-          {avoid.length > 0 && (
-
-            <div>
-
-              <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender-600">
-                05 · Routine notes
+              <p className="text-[10px] uppercase tracking-[0.24em] font-semibold text-lavender-600">
+                DermaNova Recommends
               </p>
 
-              <h4 className="mt-2 text-base font-semibold text-ink">
-                What to avoid
-              </h4>
+              <h3 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight text-ink">
+                Products chosen for your skin
+              </h3>
 
-              <div className="mt-4 space-y-3">
+                    <div className="mt-6">
+        
+        <button
+        type="button"
+        onClick={() => navigate(`/recommendations/${analysisId}`)}
+        disabled={!analysisId}
+        className="
+          group relative mt-3 inline-flex items-center justify-center gap-3
+          overflow-hidden rounded-full
+          bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-400
+          px-8 py-4
+          text-sm font-semibold text-white
+          shadow-[0_18px_40px_-12px_rgba(139,92,246,0.55)]
+          transition-all duration-500
+          hover:-translate-y-1
+          hover:shadow-[0_24px_50px_-10px_rgba(192,38,211,0.45)]
+          active:scale-[0.98]
+          disabled:cursor-not-allowed
+          disabled:opacity-50
+          disabled:hover:translate-y-0
+        "
+      >
+        {/* Shine effect */}
+        <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
 
-                {avoid.map((item, index) => (
+        {/* Glow */}
+        <span className="absolute inset-0 rounded-full bg-violet-400/20 blur-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-                  <div
-                    key={index}
-                    className="flex items-start gap-3"
-                  >
+        <HiOutlineSparkles className="relative z-10 h-5 w-5" />
 
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-lavender-300" />
+        <span className="relative z-10">
+          Discover Your Routine
+        </span>
 
-                    <p className="text-sm leading-6 text-ink/50">
-                      {item}
-                    </p>
-
-                  </div>
-
-                ))}
-
-              </div>
-
-            </div>
-
-          )}
-
-
-          {/* IMPORTANT NOTES */}
-
-          {notes.length > 0 && (
-
-            <div>
-
-              <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender-600">
-                Important notes
-              </p>
-
-              <div className="mt-4 space-y-3">
-
-                {notes.map((note, index) => (
-
-                  <div
-                    key={index}
-                    className="flex items-start gap-3"
-                  >
-
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-lavender-300" />
-
-                    <p className="text-sm leading-6 text-ink/50">
-                      {note}
-                    </p>
-
-                  </div>
-
-                ))}
-
-              </div>
-
-            </div>
-
-          )}
-
-        </div>
-
+        <HiOutlineArrowRight className="relative z-10 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+      </button>
       </div>
+                  </div>
 
-    )}
 
-  </div>
+            {/* ================================================= */}
+            {/* MAJOR CONCERN PRODUCT */}
+            {/* ================================================= */}
 
-</section>
+            {majorRecommendation && (
+              <div className="mt-10">
 
+                <div className="mb-5">
+
+                  <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender-600">
+                    Major concern recommendation
+                  </p>
+
+                  <h4 className="mt-2 text-xl md:text-2xl font-semibold tracking-tight text-ink">
+                    Your primary treatment
+                  </h4>
+
+                  <p className="mt-1 text-sm text-ink/40">
+                    Selected specifically for the concerns detected during
+                    your facial scan.
+                  </p>
+
+                </div>
+
+                <LiveProductCard
+                  product={majorRecommendation}
+                  featured
+                />
+
+              </div>
+            )}
+
+
+            {/* ================================================= */}
+            {/* MORNING ROUTINE */}
+            {/* ================================================= */}
+
+            {morningRoutineProducts.length > 0 && (
+              <div className="mt-12 border-t border-ink/5 pt-9">
+
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-6">
+
+                  <div>
+
+                    <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender-600">
+                      Morning routine
+                    </p>
+
+                    <h4 className="mt-2 text-xl md:text-2xl font-semibold tracking-tight text-ink">
+                      🌞 Start your day
+                    </h4>
+
+                  </div>
+
+                  <span className="text-[10px] uppercase tracking-[0.16em] text-ink/30">
+                    AM · Daily
+                  </span>
+
+                </div>
+
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+                  {morningRoutineProducts.map((product, index) => (
+                    <LiveRoutineProductCard
+                      key={`${product.id}-${index}`}
+                      product={product}
+                      step={index + 1}
+                    />
+                  ))}
+
+                </div>
+
+              </div>
+            )}
+
+
+            {/* ================================================= */}
+            {/* EVENING ROUTINE */}
+            {/* ================================================= */}
+
+            {eveningRoutineProducts.length > 0 && (
+              <div className="mt-12 border-t border-ink/5 pt-9">
+
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-6">
+
+                  <div>
+
+                    <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender-600">
+                      Evening routine
+                    </p>
+
+                    <h4 className="mt-2 text-xl md:text-2xl font-semibold tracking-tight text-ink">
+                      🌙 Reset & restore
+                    </h4>
+
+                  </div>
+
+                  <span className="text-[10px] uppercase tracking-[0.16em] text-ink/30">
+                    PM · Daily
+                  </span>
+
+                </div>
+
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+                  {eveningRoutineProducts.map((product, index) => (
+                    <LiveRoutineProductCard
+                      key={`${product.id}-${index}`}
+                      product={product}
+                      step={index + 1}
+                    />
+                  ))}
+
+                </div>
+
+              </div>
+            )}
+
+          </div>
+
+        </section>
+      
 
       
                     
@@ -1656,4 +1493,338 @@ function Recommendation({ issue }) {
     </div>
 
   );
+}
+
+/* ========================================================= */
+/* LIVE PRODUCT CARD */
+/* ========================================================= */
+
+function LiveProductCard({ product, featured = false }) {
+  if (!product) return null;
+
+  const image = product.image_url;
+  const price =
+    product.price !== null && product.price !== undefined
+      ? `₹${Math.round(Number(product.price))}`
+      : "Price unavailable";
+
+  const rating =
+    product.rating !== null && product.rating !== undefined
+      ? Number(product.rating).toFixed(1)
+      : null;
+
+  const store = product.store || "Online store";
+
+  const purchaseLink = product.purchase_link;
+
+  const searchQuery = encodeURIComponent(
+    `${product.brand || ""} ${product.name || ""} skincare`
+  );
+
+  const howToUseLink =
+    `https://www.youtube.com/results?search_query=${searchQuery}`;
+
+  return (
+    <div
+      className={`group relative overflow-hidden rounded-[28px] border border-lavender-100 bg-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:border-lavender-200 hover:shadow-[0_18px_40px_rgba(90,70,140,0.10)] ${
+        featured ? "p-5 md:p-6" : "p-4"
+      }`}
+    >
+
+      <div className="flex flex-col sm:flex-row gap-5">
+
+        {/* PRODUCT IMAGE */}
+        <div
+          className={`relative shrink-0 overflow-hidden rounded-2xl border border-lavender-100 bg-[#f7f4ff] ${
+            featured
+              ? "w-full sm:w-40 h-40"
+              : "w-full sm:w-32 h-32"
+          }`}
+        >
+
+          {image ? (
+            <img
+              src={image}
+              alt={product.name || "Recommended skincare product"}
+              className="w-full h-full object-contain p-3"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="text-3xl text-lavender-300">
+                ✦
+              </span>
+            </div>
+          )}
+
+        </div>
+
+
+        {/* PRODUCT DETAILS */}
+        <div className="flex-1 min-w-0">
+
+          <div className="flex flex-wrap items-center gap-2">
+
+            {product.category && (
+              <span className="text-[10px] uppercase tracking-[0.16em] font-semibold text-lavender-600">
+                {product.category}
+              </span>
+            )}
+
+            {product.live_research?.found && (
+              <span className="rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-emerald-600">
+                Live price
+              </span>
+            )}
+
+          </div>
+
+
+          <h4
+            className={`mt-2 font-semibold tracking-tight text-ink ${
+              featured
+                ? "text-xl md:text-2xl"
+                : "text-base"
+            }`}
+          >
+            {product.name}
+          </h4>
+
+
+          {product.brand && (
+            <p className="mt-1 text-xs font-medium text-ink/40">
+              {product.brand}
+            </p>
+          )}
+
+
+          {product.description && featured && (
+            <p className="mt-3 text-sm leading-6 text-ink/50">
+              {product.description}
+            </p>
+          )}
+
+
+          <div className="mt-4 flex flex-wrap items-center gap-4">
+
+            {/* PRICE */}
+            <div>
+              <p className="text-[9px] uppercase tracking-wider text-ink/30">
+                Price
+              </p>
+
+              <p className="mt-0.5 text-lg font-semibold text-ink">
+                {price}
+              </p>
+            </div>
+
+
+            {/* RATING */}
+            {rating && (
+              <div>
+                <p className="text-[9px] uppercase tracking-wider text-ink/30">
+                  Rating
+                </p>
+
+                <p className="mt-0.5 text-sm font-semibold text-ink">
+                  <span className="text-amber-500">★</span>{" "}
+                  {rating}
+                </p>
+              </div>
+            )}
+
+
+            {/* STORE */}
+            <div>
+              <p className="text-[9px] uppercase tracking-wider text-ink/30">
+                Available at
+              </p>
+
+              <p className="mt-0.5 text-sm font-semibold text-lavender-700">
+                {store}
+              </p>
+            </div>
+
+          </div>
+
+
+          {/* ACTIONS */}
+          <div className="mt-5 flex flex-wrap gap-2.5">
+
+            {purchaseLink && (
+              <a
+                href={purchaseLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full bg-ink px-5 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                Buy Now
+                <span className="ml-2">↗</span>
+              </a>
+            )}
+
+
+            <a
+              href={howToUseLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-full border border-lavender-200 bg-lavender-50/70 px-5 py-2.5 text-xs font-semibold text-lavender-700 transition-all duration-300 hover:border-lavender-300 hover:bg-lavender-100"
+            >
+              ▶ How to use
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+
+/* ========================================================= */
+/* ROUTINE PRODUCT CARD */
+/* ========================================================= */
+
+function LiveRoutineProductCard({ product, step }) {
+  if (!product) return null;
+
+  return (
+    <div className="group relative overflow-hidden rounded-[26px] border border-lavender-100 bg-white/85 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-lavender-200 hover:shadow-[0_16px_35px_rgba(90,70,140,0.08)]">
+
+      <div className="flex gap-4">
+
+        {/* STEP NUMBER */}
+        <div className="shrink-0">
+
+          <div className="flex h-9 w-9 items-center justify-center rounded-full border border-lavender-100 bg-lavender-50 text-[11px] font-semibold text-lavender-600">
+            {String(step).padStart(2, "0")}
+          </div>
+
+        </div>
+
+
+        {/* PRODUCT IMAGE */}
+        <div className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-lavender-100 bg-[#f7f4ff]">
+
+          {product.image_url ? (
+            <img
+              src={product.image_url}
+              alt={product.name || "Skincare product"}
+              className="h-full w-full object-contain p-2"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center">
+              <span className="text-2xl text-lavender-300">
+                ✦
+              </span>
+            </div>
+          )}
+
+        </div>
+
+
+        {/* DETAILS */}
+        <div className="min-w-0 flex-1">
+
+          <div className="flex flex-wrap items-center gap-2">
+
+            {product.category && (
+              <span className="text-[9px] uppercase tracking-[0.15em] font-semibold text-lavender-600">
+                {product.category}
+              </span>
+            )}
+
+            {product.live_research?.found && (
+              <span className="text-[9px] font-medium text-emerald-600">
+                ● Live
+              </span>
+            )}
+
+          </div>
+
+
+          <h5 className="mt-1 text-sm font-semibold leading-5 text-ink">
+            {product.name}
+          </h5>
+
+
+          {product.brand && (
+            <p className="mt-0.5 text-[11px] text-ink/40">
+              {product.brand}
+            </p>
+          )}
+
+
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1">
+
+            <span className="text-sm font-semibold text-ink">
+              {product.price !== null &&
+              product.price !== undefined
+                ? `₹${Math.round(Number(product.price))}`
+                : "Price unavailable"}
+            </span>
+
+
+            {product.rating !== null &&
+              product.rating !== undefined && (
+                <span className="text-[11px] font-medium text-ink/50">
+                  <span className="text-amber-500">★</span>{" "}
+                  {Number(product.rating).toFixed(1)}
+                </span>
+              )}
+
+
+            {product.store && (
+              <span className="text-[11px] font-medium text-lavender-700">
+                {product.store}
+              </span>
+            )}
+
+          </div>
+
+
+          {/* ACTIONS */}
+          <div className="mt-3 flex flex-wrap gap-2">
+
+            {product.purchase_link && (
+              <a
+                href={product.purchase_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center rounded-full bg-ink px-3.5 py-2 text-[10px] font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-md"
+              >
+                Buy Now
+                <span className="ml-1.5">↗</span>
+              </a>
+            )}
+
+
+            <a
+              href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
+                `${product.brand || ""} ${product.name || ""} how to use`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center rounded-full border border-lavender-200 bg-lavender-50/70 px-3.5 py-2 text-[10px] font-semibold text-lavender-700 transition hover:border-lavender-300 hover:bg-lavender-100"
+            >
+              ▶ How to use
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
+  
 }

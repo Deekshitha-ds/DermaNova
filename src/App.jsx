@@ -11,8 +11,12 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import Assistant from "./pages/Assistant.jsx";
 
 import FaceScan from "./pages/FaceScan.jsx";
+import ProductRecommendations from "./pages/ProductRecommendations";
+import SavedProducts from "./pages/SavedProducts";
+import HairCare from "./pages/HairCare.jsx";
 
 import Footer from "./components/Footer";
 import WebLoader from "./components/WebLoader";
@@ -75,7 +79,11 @@ export default function App() {
                 element={<Dashboard />}
               />
 
-              
+              <Route
+                 path="/assistant"
+                 element={<Assistant />}
+/>
+            
                <Route
   path="/saved-scans"
   element={<SavedScans />}
@@ -90,8 +98,20 @@ export default function App() {
                 path="/scan/skin"
                 element={<FaceScan />}
               />
+              <Route
+  path="/recommendations/:analysisId"
+  element={<ProductRecommendations />}
 
+/>
+              <Route
+  path="/saved-products"
+  element={<SavedProducts />}
+/>
             </Route>
+            <Route
+  path="/hair-care"
+  element={<HairCare />}
+/>
 
           </Routes>
         </main>

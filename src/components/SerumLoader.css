@@ -1,0 +1,329 @@
+/* ------------------------------------------------------------------
+   Serum ritual loader — one loop (--dn-cycle, default 7s)
+     0–6%    rest, dropper seated in the bottle
+     6–18%   dropper draws serum and lifts out
+     18–36%  dropper arcs to the cheek
+     42–48%  bulb squeezes, a drop forms
+     49–54%  drop falls and lands
+     54–76%  ripples, bloom, a sweep of light crosses the face
+     54–83%  dropper returns to the bottle
+   Ambient: a single light travels the orbit ring.
+   ------------------------------------------------------------------ */
+
+.dn-ritual-loader {
+  --dn-cycle: 7s;
+  --dn-step: 2.33s;
+  --dn-ease: cubic-bezier(.45, 0, .2, 1);
+  --dn-ink: #7a63a8;
+
+  width: 320px;
+  max-width: 100%;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dn-ritual-art {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 320 / 240;
+  display: block;
+  overflow: visible;
+}
+
+.dn-ritual-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Orbit ---------- */
+
+.dn-ritual-orbit {
+  transform-box: view-box;
+  transform-origin: 196px 112px;
+  animation: dn-ritual-orbit 24s linear infinite;
+}
+
+@keyframes dn-ritual-orbit {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Dropper ---------- */
+
+.dn-ritual-pipette {
+  transform-box: view-box;
+  transform-origin: 70px 186px; /* the tip */
+  will-change: transform;
+  animation: dn-ritual-pipette var(--dn-cycle) infinite;
+}
+
+@keyframes dn-ritual-pipette {
+  0%, 6% {
+    transform: translate(0, 0) rotate(0deg);
+    animation-timing-function: var(--dn-ease);
+  }
+  18% {
+    transform: translate(0, -50px) rotate(0deg);
+    animation-timing-function: var(--dn-ease);
+  }
+  26% {
+    transform: translate(52px, -82px) rotate(-8deg);
+    animation-timing-function: var(--dn-ease);
+  }
+  36%, 54% {
+    transform: translate(98px, -68px) rotate(-14deg);
+    animation-timing-function: var(--dn-ease);
+  }
+  63% {
+    transform: translate(52px, -80px) rotate(-8deg);
+    animation-timing-function: var(--dn-ease);
+  }
+  73% {
+    transform: translate(0, -50px) rotate(0deg);
+    animation-timing-function: var(--dn-ease);
+  }
+  83%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* serum in the tube: fills while submerged, empties at the cheek */
+.dn-ritual-fill {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: dn-ritual-fill var(--dn-cycle) ease-in-out infinite;
+}
+
+@keyframes dn-ritual-fill {
+  0%, 6%    { opacity: 0; transform: scaleY(.2); }
+  17%, 44%  { opacity: 1; transform: scaleY(1); }
+  50%, 100% { opacity: 0; transform: scaleY(.3); }
+}
+
+.dn-ritual-bulb {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: dn-ritual-bulb var(--dn-cycle) ease-in-out infinite;
+}
+
+@keyframes dn-ritual-bulb {
+  0%, 40%   { transform: scale(1, 1); }
+  44.5%     { transform: scale(1.09, .85); }
+  52%, 100% { transform: scale(1, 1); }
+}
+
+/* ---------- Drop ---------- */
+
+.dn-ritual-drop {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: dn-ritual-drop var(--dn-cycle) infinite;
+}
+
+@keyframes dn-ritual-drop {
+  0%, 43% {
+    opacity: 0;
+    transform: translateY(0) scale(.2);
+    animation-timing-function: cubic-bezier(.2, .7, .3, 1);
+  }
+  48% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0) scale(.95, 1.12);
+    animation-timing-function: cubic-bezier(.55, 0, .9, .5); /* gravity */
+  }
+  53.5% {
+    opacity: 1;
+    transform: translateY(20px) scale(.85, 1.2);
+  }
+  54.5%, 100% {
+    opacity: 0;
+    transform: translateY(22px) scale(.3);
+  }
+}
+
+/* ---------- Skin response ---------- */
+
+.dn-ritual-ripple {
+  opacity: 0;
+  vector-effect: non-scaling-stroke;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: dn-ritual-ripple var(--dn-cycle) ease-out infinite;
+}
+
+@keyframes dn-ritual-ripple {
+  0%, 53.5% { opacity: 0; transform: scale(.4); }
+  55%       { opacity: .85; transform: scale(.7); }
+  70%, 100% { opacity: 0; transform: scale(5); }
+}
+
+.dn-ritual-bloom {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: dn-ritual-bloom var(--dn-cycle) ease-out infinite;
+}
+
+@keyframes dn-ritual-bloom {
+  0%, 53.5% { opacity: 0;   transform: scale(.2); }
+  57%       { opacity: .95; transform: scale(.6); }
+  70%       { opacity: .7;  transform: scale(1.3); }
+  86%       { opacity: .2;  transform: scale(1.5); }
+  94%, 100% { opacity: 0;   transform: scale(1.6); }
+}
+
+/* the signature moment: light travels across the face after absorption */
+.dn-ritual-sweep {
+  opacity: 0;
+  transform: translateX(150px);
+  animation: dn-ritual-sweep var(--dn-cycle) ease-in-out infinite;
+}
+
+@keyframes dn-ritual-sweep {
+  0%, 55%   { opacity: 0; transform: translateX(150px); }
+  59%       { opacity: 1; }
+  73%       { opacity: 1; transform: translateX(300px); }
+  77%, 100% { opacity: 0; transform: translateX(300px); }
+}
+
+.dn-ritual-flush {
+  opacity: 0;
+  animation: dn-ritual-flush var(--dn-cycle) ease-in-out infinite;
+}
+
+@keyframes dn-ritual-flush {
+  0%, 54% { opacity: 0; }
+  63%     { opacity: .3; }
+  84%, 100% { opacity: 0; }
+}
+
+.dn-ritual-sparkle {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: dn-ritual-sparkle var(--dn-cycle) ease-in-out infinite;
+}
+
+@keyframes dn-ritual-sparkle {
+  0%, 56%   { opacity: 0; transform: scale(0) rotate(0deg); }
+  62%       { opacity: 1; transform: scale(1) rotate(45deg); }
+  72%, 100% { opacity: 0; transform: scale(0) rotate(90deg); }
+}
+
+/* ---------- Caption ---------- */
+
+.dn-ritual-caption {
+  width: 100%;
+  margin-top: 14px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.dn-ritual-lines {
+  position: relative;
+  width: 100%;
+  height: 24px;
+}
+
+.dn-ritual-line {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--dn-ritual-font, "Fraunces", Georgia, "Times New Roman", serif);
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1.4;
+  letter-spacing: .01em;
+  color: var(--dn-ritual-ink, var(--dn-ink));
+  white-space: nowrap;
+  transition:
+    opacity .7s var(--dn-ease),
+    transform .7s var(--dn-ease),
+    filter .7s var(--dn-ease);
+}
+
+.dn-ritual-line[data-state="active"] { opacity: 1; transform: translateY(0); filter: blur(0); }
+.dn-ritual-line[data-state="before"] { opacity: 0; transform: translateY(-9px); filter: blur(3px); }
+.dn-ritual-line[data-state="after"]  { opacity: 0; transform: translateY(9px);  filter: blur(3px); }
+
+/* segmented progress — one segment per step, filling over its step */
+.dn-ritual-steps {
+  display: flex;
+  gap: 6px;
+}
+
+.dn-ritual-step {
+  position: relative;
+  width: 34px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, .16);
+  overflow: hidden;
+}
+
+.dn-ritual-step i {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.dn-ritual-step[data-state="done"] i { transform: scaleX(1); }
+
+.dn-ritual-step[data-state="active"] i {
+  animation: dn-ritual-fillbar var(--dn-step) linear forwards;
+}
+
+@keyframes dn-ritual-fillbar {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ---------- Reduced motion: a calm, finished still frame ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .dn-ritual-orbit,
+  .dn-ritual-pipette,
+  .dn-ritual-fill,
+  .dn-ritual-bulb,
+  .dn-ritual-drop,
+  .dn-ritual-ripple,
+  .dn-ritual-bloom,
+  .dn-ritual-sweep,
+  .dn-ritual-flush,
+  .dn-ritual-sparkle,
+  .dn-ritual-step i {
+    animation: none !important;
+  }
+
+  .dn-ritual-pipette { transform: none; }
+  .dn-ritual-drop,
+  .dn-ritual-ripple,
+  .dn-ritual-sweep,
+  .dn-ritual-sparkle { display: none; }
+  .dn-ritual-bloom { opacity: .35; transform: scale(1); }
+  .dn-ritual-line { transition: none; }
+  .dn-ritual-step[data-state="active"] i { transform: scaleX(1); }
+}
