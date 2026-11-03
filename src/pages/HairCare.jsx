@@ -99,13 +99,37 @@ function drift(e) {
 }
 
 // Sidebar model photo in an arched frame.
-function LiveModel() {
+function LiveModel({ profile }) {
+  const boxes = [
+    ["a", "Hair type", profile.hair_type],
+    ["b", "Length", profile.hair_length],
+    ["c", "Texture", profile.hair_texture],
+    ["d", "Scalp", profile.scalp_condition],
+  ];
+
   return (
     <div className="hl-model">
       <div className="hl-frame">
         <img src={heroModel} alt="" />
         <span className="hl-sheen" />
       </div>
+      {boxes.map(([pos, label, value]) => (
+        <div key={pos} className={`hl-float hl-float-${pos}`}>
+          <small>{label}</small>
+          <AnimatePresence mode="wait">
+            <motion.b
+              key={value}
+              initial={{ opacity: 0, y: 8, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22 }}
+            >
+              {value}
+            </motion.b>
+          </AnimatePresence>
+          <span key={value} className="hl-flash" />
+        </div>
+      ))}
     </div>
   );
 }
@@ -862,7 +886,7 @@ export default function HairCare() {
             </div>
 
             <aside className="haircare-live" aria-label="Live profile preview">
-              <LiveModel />
+              <LiveModel profile={profile} />
               <div className="haircare-live-copy">
                 <h4>Your hair profile</h4>
                 <p>Your answers appear here as you choose them.</p>
