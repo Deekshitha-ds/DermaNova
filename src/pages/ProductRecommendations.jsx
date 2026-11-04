@@ -229,9 +229,23 @@ function ProductCard({
             className="relative z-10 h-full w-full object-contain drop-shadow-[0_7px_10px_rgba(70,45,100,0.08)] transition-transform duration-500 ease-out group-hover:scale-[1.07]"
           />
         ) : (
-          <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-[18px] border border-white/90 bg-white/70 text-[#b19bda] shadow-sm">
-            <HiOutlineShoppingBag className="h-7 w-7" />
-          </div>
+         <div className="relative flex h-[170px] w-full items-center justify-center overflow-hidden rounded-[20px] bg-gradient-to-br from-[#f5efff] to-[#fff0f7]">
+
+  {image && !imageFailed ? (
+    <img
+      src={image}
+      alt={name}
+      loading="lazy"
+      onError={() => setImageFailed(true)}
+      className="absolute inset-0 h-full w-full object-contain object-center scale-110"
+    />
+  ) : (
+    <div className="flex h-full w-full items-center justify-center">
+      <HiOutlineShoppingBag className="text-3xl text-[#b58bd8]" />
+    </div>
+  )}
+
+</div>
         )}
       </div>
 

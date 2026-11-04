@@ -280,6 +280,13 @@ function ScanOption({ glyph, title, status, text, children }) {
         </div>
       </div>
 
+      
+      <p className="text-sm text-ink/40 mt-8">
+        Progress charts, product recommendations, and the AI assistant plug into this
+        dashboard in the next build modules.
+      </p>
+=======
+
       <p className="mt-5 max-w-sm text-[15px] leading-7 text-violet-900/65">{text}</p>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">{children}</div>
@@ -503,6 +510,8 @@ export default function Dashboard() {
 
 
       </main>
+
     </div>
+    
   );
 }

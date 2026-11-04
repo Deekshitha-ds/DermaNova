@@ -10,6 +10,9 @@ import {
   getSavedScans,
   unsaveScan,
 } from "../api/savedscans";
+import {
+  HiOutlineSparkles,
+} from "react-icons/hi";
 
 const PETALS = [
   { left: "8%", size: 26, delay: 0, dur: 16 },
@@ -351,13 +354,18 @@ export default function SavedScans() {
                   Complete a skin analysis and use “Save Scan” to keep the report here.
                 </p>
 
-                <button
-                  type="button"
-                  onClick={() => navigate("/scan/skin")}
-                  className="mt-6 rounded-xl bg-lavender-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-lavender-700"
-                >
-                  Start a Skin Scan
-                </button>
+                
+                
+              <button
+                type="button"
+                onClick={() => navigate("/scan/skin")}
+                className="mt-6 inline-flex items-center justify-center gap-2 rounded-[16px] bg-gradient-to-br from-[#9271e0] to-[#e45fa4] px-5 py-3 text-sm font-semibold text-white shadow-[0_7px_18px_rgba(190,102,190,0.20)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(190,102,190,0.28)]"
+              >
+                <HiOutlineSparkles className="h-4 w-4" />
+                Start a Skin Scan
+              </button>
+
+
               </div>
             </GlassCard>
           )}
