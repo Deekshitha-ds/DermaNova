@@ -281,13 +281,8 @@ export default function NovaChatbot() {
 
         <span className="launcher-online" />
 
-        <span className="launcher-spark spark-one">
-          ✦
-        </span>
-
-        <span className="launcher-spark spark-two">
-          ✧
-        </span>
+        
+      
       </button>
     );
   }
