@@ -132,6 +132,7 @@ function LiveModel({ profile }) {
           <span key={value} className="hl-flash" />
         </div>
       ))}
+<<<<<<< HEAD
     </div>
   );
 }
@@ -208,6 +209,8 @@ function RoutineLoader() {
           </div>
         ))}
       </div>
+=======
+>>>>>>> af2f43e396c832699514dddc5cdcf22e58951b6c
     </div>
   );
 }
