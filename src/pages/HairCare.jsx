@@ -1,4 +1,5 @@
 
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AnimatePresence,
@@ -18,6 +19,7 @@ import {
   HiOutlineShoppingBag,
   HiOutlineExternalLink,
   HiOutlineBookmark,
+  HiOutlinePlay,
 } from "react-icons/hi";
 
 import heroModel from "./hairCare-model.jpg";
@@ -99,12 +101,112 @@ function drift(e) {
 }
 
 // Sidebar model photo in an arched frame.
-function LiveModel() {
+function LiveModel({ profile }) {
+  const boxes = [
+    ["a", "Hair type", profile.hair_type],
+    ["b", "Length", profile.hair_length],
+    ["c", "Texture", profile.hair_texture],
+    ["d", "Scalp", profile.scalp_condition],
+  ];
+
   return (
     <div className="hl-model">
       <div className="hl-frame">
         <img src={heroModel} alt="" />
         <span className="hl-sheen" />
+      </div>
+      {boxes.map(([pos, label, value]) => (
+        <div key={pos} className={`hl-float hl-float-${pos}`}>
+          <small>{label}</small>
+          <AnimatePresence mode="wait">
+            <motion.b
+              key={value}
+              initial={{ opacity: 0, y: 8, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22 }}
+            >
+              {value}
+            </motion.b>
+          </AnimatePresence>
+          <span key={value} className="hl-flash" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const LOADER_STEPS = [
+  "Reading your hair profile",
+  "Matching your scalp needs",
+  "Choosing the right product types",
+  "Finding products for your routine",
+];
+
+// Premium loader: orbiting rings, drawing strand, live steps, progress and product skeletons.
+function RoutineLoader() {
+  const [step, setStep] = useState(0);
+  const [pct, setPct] = useState(6);
+
+  useEffect(() => {
+    const stepTimer = setInterval(
+      () => setStep((n) => Math.min(n + 1, LOADER_STEPS.length - 1)),
+      1800
+    );
+    const pctTimer = setInterval(() => setPct((v) => v + (94 - v) * 0.07), 160);
+    return () => {
+      clearInterval(stepTimer);
+      clearInterval(pctTimer);
+    };
+  }, []);
+
+  return (
+    <div className="hlz-card">
+      <div className="hlz-stage" aria-hidden="true">
+        <span className="hlz-halo" />
+        <span className="hlz-ring hlz-ring-a"><i /></span>
+        <span className="hlz-ring hlz-ring-b"><i /></span>
+        <span className="hlz-ring hlz-ring-c"><i /></span>
+        <div className="hlz-core">
+          <svg viewBox="0 0 60 80">
+            <defs>
+              <linearGradient id="hlz-g" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#9271e0" />
+                <stop offset="1" stopColor="#ec62a3" />
+              </linearGradient>
+            </defs>
+            <path className="hlz-strand" d="M30 4 C6 20 54 36 30 52 C10 66 40 72 30 78" />
+            <path className="hlz-strand hlz-strand-b" d="M16 8 C-4 24 36 40 16 56" />
+            <path className="hlz-strand hlz-strand-c" d="M44 8 C64 24 24 40 44 56" />
+          </svg>
+        </div>
+      </div>
+
+      <h3 className="hlz-title">Creating your hair routine</h3>
+      <p className="hlz-sub">Hand-picking products that suit your hair.</p>
+
+      <div className="hlz-progress">
+        <div className="hlz-bar"><span style={{ width: `${pct}%` }} /></div>
+        <b>{Math.round(pct)}%</b>
+      </div>
+
+      <ul className="hlz-steps">
+        {LOADER_STEPS.map((label, i) => (
+          <li key={label} className={i < step ? "is-done" : i === step ? "is-active" : ""}>
+            <span className="hlz-tick">{i < step ? <HiOutlineCheckCircle /> : <i />}</span>
+            {label}
+          </li>
+        ))}
+      </ul>
+
+      <div className="hlz-skeletons" aria-hidden="true">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="hlz-skel" style={{ animationDelay: `${i * 0.25}s` }}>
+            <span className="hlz-skel-img" />
+            <span className="hlz-skel-line" />
+            <span className="hlz-skel-line is-short" />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -196,6 +298,47 @@ function getHairProductKey(product) {
     .toLowerCase();
 }
 
+// Does a product belong to a routine step's category ("Conditioner or hair mask" -> Conditioner, Hair mask)?
+function matchesStepCategory(product, stepCategory) {
+  const norm = (v) => String(v || "").toLowerCase().trim();
+  const productCategory = norm(product.category);
+  if (!productCategory || !stepCategory) return false;
+  return norm(stepCategory)
+    .split(/\s+or\s+|,|\/|&|\band\b/)
+    .map((t) => t.trim())
+    .filter(Boolean)
+    .some((t) => productCategory.includes(t) || t.includes(productCategory));
+}
+
+// Opens YouTube results for this exact step, tailored to the person's hair type.
+function tutorialUrl(item, hairType) {
+  const query = [
+    "how to",
+    item.product_category || item.step,
+    "for",
+    hairType,
+    "hair tutorial",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+}
+function productTutorialUrl(product, hairType) {
+  const productName = getProductName(product);
+  const brand = product.brand || "";
+
+  const query = [
+    brand,
+    productName,
+    "how to use",
+    hairType,
+    "hair tutorial",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+}
 function getProductName(product) {
   return product.name || product.product_name || "Hair-care product";
 }
@@ -627,11 +770,7 @@ export default function HairCare() {
               ))}
             </div>
 
-            <div className="hh-card">
-              <h4>Radiant hair, confident you</h4>
-              <i />
-              <HiOutlineSparkles />
-            </div>
+            
           </div>
         </motion.section>
 
@@ -862,7 +1001,7 @@ export default function HairCare() {
             </div>
 
             <aside className="haircare-live" aria-label="Live profile preview">
-              <LiveModel />
+              <LiveModel profile={profile} />
               <div className="haircare-live-copy">
                 <h4>Your hair profile</h4>
                 <p>Your answers appear here as you choose them.</p>
@@ -902,8 +1041,7 @@ export default function HairCare() {
                   role="status"
                   aria-live="polite"
                 >
-                  <span className="haircare-loading-orb" />
-                  <p>Putting together your routine...</p>
+                  <RoutineLoader />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -1032,6 +1170,71 @@ export default function HairCare() {
                             {item.product_category}
                           </span>
                         )}
+
+                        {(() => {
+                          const stepProducts = products.filter((prod) =>
+                            matchesStepCategory(prod, item.product_category)
+                          );
+
+                          return (
+                            <div className="hr-extras">
+                              <div className="hr-head">
+                                <span>
+                                  <HiOutlineShoppingBag />
+                                  {stepProducts.length > 0
+                                    ? `${stepProducts.length} product${stepProducts.length > 1 ? "s" : ""} for this step`
+                                    : "Products for this step"}
+                                </span>
+                                <a
+                                  className="hr-tutorial"
+                                  href={tutorialUrl(item, profile.hair_type)}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <HiOutlinePlay />
+                                  Watch tutorial
+                                </a>
+                              </div>
+
+                              {stepProducts.length > 0 ? (
+                                <div className="hr-products">
+                                  {stepProducts.map((prod, i) => {
+                                    const link = prod.purchase_link || prod.url || "";
+                                    const img = prod.image || prod.image_url || "";
+                                    return (
+                                      <div className="hr-card" key={`${getHairProductKey(prod)}-${i}`}>
+                                        <span className="hr-thumb">
+                                          {img ? (
+                                            <img src={img} alt="" loading="lazy" />
+                                          ) : (
+                                            <HiOutlineBeaker />
+                                          )}
+                                        </span>
+                                        <strong className="hr-name">{getProductName(prod)}</strong>
+                                        <span className="hr-price">
+                                          {formatPrice(prod.price)}
+                                          {getProductStore(prod) && <em> · {getProductStore(prod)}</em>}
+                                        </span>
+                                        {link ? (
+                                          <a className="hr-shop" href={link} target="_blank" rel="noopener noreferrer">
+                                            Shop now
+                                            <HiOutlineExternalLink />
+                                          </a>
+                                        ) : (
+                                          <span className="hr-shop is-off">Link unavailable</span>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              ) : (
+                                <p className="hr-none">
+                                  No matching products were found for this step yet.
+                                </p>
+                              )}
+                            </div>
+                          );
+                        })()}
                       </div>
                     </motion.article>
                   ))}
@@ -1216,21 +1419,34 @@ export default function HairCare() {
                             </p>
                           )}
 
-                          {purchaseLink ? (
-                            <a
-                              className="haircare-shop-link"
-                              href={purchaseLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <HiOutlineExternalLink />
-                              Shop product
-                            </a>
-                          ) : (
-                            <span className="haircare-unavailable-link">
-                              Purchase link unavailable
-                            </span>
-                          )}
+                          
+{purchaseLink ? (
+  <a
+    className="haircare-shop-link"
+    href={purchaseLink}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <HiOutlineExternalLink />
+    Shop product
+  </a>
+) : (
+  <span className="haircare-unavailable-link">
+    Purchase link unavailable
+  </span>
+)}
+
+<a
+  className="haircare-tutorial-link"
+  href={productTutorialUrl(product, profile.hair_type)}
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <HiOutlinePlay />
+  Watch YouTube Tutorial
+  <HiOutlineExternalLink />
+</a>
+
 
                           <button
                             type="button"

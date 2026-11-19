@@ -1,358 +1,473 @@
-import React, { useState } from "react";
-import "./Assistant.css";
+import { useState } from "react";
+import {
+  HiOutlineSparkles,
+  HiOutlineBeaker,
+  HiOutlineShoppingBag,
+  HiOutlineTrendingUp,
+  HiOutlineHeart,
+  HiOutlinePaperAirplane,
+  HiOutlineRefresh,
+  HiOutlineChatAlt2,
+} from "react-icons/hi";
+
 import { sendAssistantMessage } from "../api/assistant";
+import "./Assistant.css";
 
 const consultations = [
   {
-    id: "skin",
-    icon: "✧",
+    id: "skin_analysis",
     title: "Skin Analysis",
-    description: "Understand your skin scan and detected concerns.",
-    prompt: "Please explain my latest skin analysis results in detail.",
+    description: "Understand your skin concerns and learn what your skin may need.",
+    icon: HiOutlineSparkles,
+    label: "Skin",
   },
   {
-    id: "ingredients",
-    icon: "⚗",
+    id: "ingredient_guide",
     title: "Ingredient Guide",
-    description: "Learn about skincare ingredients and their benefits.",
-    prompt: "Explain the most useful skincare ingredients and how to use them.",
+    description: "Explore skincare ingredients and their common uses.",
+    icon: HiOutlineBeaker,
+    label: "Ingredients",
   },
   {
-    id: "products",
-    icon: "♧",
+    id: "product_consultation",
     title: "Product Consultation",
-    description: "Understand product recommendations and suitability.",
-    prompt: "Help me understand which skincare products may suit my skin.",
+    description: "Learn how to compare products and choose suitable options.",
+    icon: HiOutlineShoppingBag,
+    label: "Products",
   },
   {
-    id: "progress",
-    icon: "↗",
+    id: "progress_insights",
     title: "Progress Insights",
-    description: "Understand changes across your saved skin scans.",
-    prompt: "Help me understand my skin progress over time.",
+    description: "Reflect on your routine and track changes over time.",
+    icon: HiOutlineTrendingUp,
+    label: "Progress",
   },
 ];
 
 const features = [
   {
-    icon: "✧",
+    icon: HiOutlineHeart,
     title: "Skin Insights",
-    description: "Understand your skin and its unique needs.",
+    description: "Understand common skin concerns.",
   },
   {
-    icon: "♡",
+    icon: HiOutlineBeaker,
     title: "Skincare Education",
-    description: "Discover ingredients and skincare knowledge.",
+    description: "Learn about ingredients and routines.",
   },
   {
-    icon: "✦",
+    icon: HiOutlineSparkles,
     title: "Personalized Guidance",
-    description: "Explore skincare guidance for your journey.",
+    description: "Get suggestions based on your questions.",
   },
 ];
 
 export default function Assistant() {
-  const [question, setQuestion] = useState("");
-  const [selectedTopic, setSelectedTopic] = useState("general");
-  const [messages, setMessages] = useState([]);
+  const [consultationType, setConsultationType] = useState(
+    "skin_analysis"
+  );
+  const [message, setMessage] = useState("");
+  const [conversationHistory, setConversationHistory] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [notice, setNotice] = useState("");
+  const [error, setError] = useState("");
 
-  const chooseTopic = (topic) => {
-    setSelectedTopic(topic.id);
-    setQuestion(topic.prompt);
-    setNotice("");
+  const selectedConsultation = consultations.find(
+    (item) => item.id === consultationType
+  );
 
-    document.getElementById("assistant-question")?.focus();
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const trimmedMessage = message.trim();
 
-    const trimmedQuestion = question.trim();
+    if (!trimmedMessage || loading) return;
 
-    if (!trimmedQuestion || loading) return;
+    setError("");
 
-    setNotice("");
+    const userMessage = {
+      role: "user",
+      content: trimmedMessage,
+    };
 
-    // Keep the previous conversation for context.
-    const previousHistory = messages.map((message) => ({
-      role: message.role === "assistant" ? "model" : "user",
-      text: message.text,
-    }));
+    const updatedHistory = [...conversationHistory, userMessage];
 
-    // Show the user's message immediately.
-    setMessages((previous) => [
-      ...previous,
-      { role: "user", text: trimmedQuestion },
-    ]);
-
-    setQuestion("");
+    setConversationHistory(updatedHistory);
+    setMessage("");
     setLoading(true);
 
     try {
+      const formattedHistory = conversationHistory.map((item) => ({
+        role: item.role === "assistant" ? "model" : "user",
+        content: item.content,
+      }));
+
       const response = await sendAssistantMessage({
-        message: trimmedQuestion,
-        consultationType: selectedTopic,
-        conversationHistory: previousHistory,
+        message: trimmedMessage,
+        consultationType,
+        conversationHistory: formattedHistory,
       });
 
-      if (!response?.reply) {
-        throw new Error("The Assistant returned an empty response.");
-      }
+      const assistantReply =
+        response?.reply ||
+        response?.message ||
+        response?.response ||
+        "I couldn't generate a response. Please try again.";
 
-      setMessages((previous) => [
-        ...previous,
-        { role: "assistant", text: response.reply },
+      setConversationHistory([
+        ...updatedHistory,
+        {
+          role: "assistant",
+          content: assistantReply,
+        },
       ]);
-    } catch (error) {
-      console.error("Assistant API error:", error);
+    } catch (err) {
+      console.error("Assistant request failed:", err);
 
-      const errorMessage =
-        error.response?.data?.detail ||
-        error.message ||
-        "Unable to connect to Nova AI. Please try again.";
-
-      setNotice(errorMessage);
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Something went wrong. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const startNewConsultation = () => {
-    setMessages([]);
-    setQuestion("");
-    setSelectedTopic("general");
-    setNotice("");
+  const handleNewChat = () => {
+    setConversationHistory([]);
+    setMessage("");
+    setError("");
+  };
+
+  const handleTopicChange = (topic) => {
+    if (loading) return;
+
+    setConsultationType(topic);
+    setError("");
   };
 
   return (
-    <div className="assistant-page">
-      {/* HERO SECTION */}
+    <main className="assistant-page">
+      <div className="assistant-orb assistant-orb-one" />
+      <div className="assistant-orb assistant-orb-two" />
+      <div className="assistant-orb assistant-orb-three" />
 
-      <section className="assistant-hero">
-        <div className="assistant-hero-content">
-          <span className="assistant-eyebrow">
-            ✨ DERMANOVA INTELLIGENCE
-          </span>
+      <div className="assistant-shell">
+        {/* Hero */}
+        <section className="assistant-hero">
+          <div className="assistant-hero-copy">
+            <div className="assistant-brand">
+              <span className="assistant-brand-icon">
+                <HiOutlineSparkles />
+              </span>
+              <span>DERMANOVA AI</span>
+              <i />
+            </div>
 
-          <h1>
-            Your Personal
-            <br />
-            <span>Skin Consultation</span>
-          </h1>
-
-          <p>
-            Understand your skin better with personalized insights,
-            ingredient knowledge and intelligent skincare guidance.
-          </p>
-
-          {/* THREE INTERACTIVE FEATURE CARDS */}
-
-          <div className="assistant-hero-tags">
-            {features.map((feature) => (
-              <div className="hero-feature" key={feature.title}>
-                <span className="hero-feature-icon">
-                  {feature.icon}
-                </span>
-
-                <span className="hero-feature-text">
-                  {feature.title}
-                </span>
-
-                <span className="hero-feature-tooltip">
-                  {feature.description}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ANIMATED DIAMOND DESIGN */}
-
-        <div className="assistant-orb">
-          <div className="diamond-orbit orbit-one"></div>
-          <div className="diamond-orbit orbit-two"></div>
-          <div className="diamond-glow"></div>
-
-          <div className="assistant-orb-inner">
-            <div className="diamond-symbol">✧</div>
-          </div>
-
-          <span className="diamond-spark spark-one">✦</span>
-          <span className="diamond-spark spark-two">✧</span>
-          <span className="diamond-spark spark-three">✦</span>
-          <span className="diamond-spark spark-four">·</span>
-
-          <div className="assistant-orb-caption">
-            Your skincare journey, understood.
-          </div>
-        </div>
-      </section>
-
-      {/* CONSULTATION CARDS */}
-
-      <section className="consultation-section">
-        <div className="assistant-section-heading">
-          <div>
             <span className="assistant-eyebrow">
-              EXPLORE YOUR SKIN
+              YOUR PERSONAL SKINCARE COMPANION
             </span>
 
-            <h2>How can we help you today?</h2>
+            <h1 className="assistant-title">
+              A little more
+              <br />
+              <span>care, a lot more glow.</span>
+            </h1>
 
-            <p>Choose a consultation to get started.</p>
-          </div>
-        </div>
+            <p className="assistant-subtitle">
+              Have questions about your skin, ingredients, or routine?
+              Explore skincare knowledge with your personal AI assistant.
+            </p>
 
-        <div className="consultation-grid">
-          {consultations.map((item) => (
-            <button
-              type="button"
-              key={item.id}
-              className={`consultation-card ${
-                selectedTopic === item.id ? "active" : ""
-              }`}
-              onClick={() => chooseTopic(item)}
-              disabled={loading}
-            >
-              <div className="consultation-icon">
-                {item.icon}
-              </div>
-
-              <h3>{item.title}</h3>
-
-              <p>{item.description}</p>
-
-              <span className="consultation-link">
-                Explore consultation <span>→</span>
+            <div className="assistant-hero-tags">
+              <span>
+                <HiOutlineSparkles /> Skin insights
               </span>
-            </button>
-          ))}
-        </div>
-      </section>
+              <span>
+                <HiOutlineBeaker /> Ingredient education
+              </span>
+              <span>
+                <HiOutlineHeart /> Everyday care
+              </span>
+            </div>
+          </div>
 
-      {/* PERSONALIZED CONSULTATION SECTION */}
+          <div className="assistant-hero-art" aria-hidden="true">
+            <div className="assistant-art-glow" />
+            <div className="assistant-art-orbit assistant-orbit-a" />
+            <div className="assistant-art-orbit assistant-orbit-b" />
 
-      <section className="consultation-chat-section">
-        <div className="chat-intro">
-          <span className="assistant-eyebrow">
-            PERSONALIZED CONSULTATION
-          </span>
+            
+            <span className="assistant-art-star star-one">✦</span>
+            <span className="assistant-art-star star-two">✧</span>
+            <span className="assistant-art-star star-three">✦</span>
 
-          <h2>Let's understand your skin.</h2>
+           
+          </div>
+        </section>
 
-          <p>
-            Have a specific question? Tell us what you would
-            like to understand about your skincare journey.
-          </p>
-        </div>
+        {/* Features */}
+        <section className="assistant-features" aria-label="Assistant features">
+          {features.map((feature) => {
+            const Icon = feature.icon;
 
-        <div className="consultation-chat-card">
-          <div className="consultation-welcome">
-            <div className="consultation-avatar">✧</div>
+            return (
+              <article className="assistant-feature" key={feature.title}>
+                <div className="assistant-feature-icon">
+                  <Icon />
+                </div>
 
+                <div>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.description}</p>
+                </div>
+              </article>
+            );
+          })}
+        </section>
+
+        {/* Consultation topics */}
+        <section className="assistant-consultation">
+          <div className="assistant-section-heading">
             <div>
-              <h3>DermaNova Skin Consultant</h3>
-
+              <span className="assistant-section-kicker">
+                LET'S GET STARTED
+              </span>
+              <h2>What would you like to explore?</h2>
               <p>
-                Welcome! Explore your skin concerns, learn about
-                ingredients and make more informed skincare choices.
+                Choose a topic to guide your conversation.
               </p>
             </div>
+
+            <div className="assistant-heading-decoration">
+              <HiOutlineSparkles />
+            </div>
           </div>
 
-          {/* CONVERSATION MESSAGES */}
+          <div className="assistant-topic-grid">
+            {consultations.map((topic) => {
+              const Icon = topic.icon;
+              const isSelected = consultationType === topic.id;
 
-          {messages.length > 0 && (
-            <div className="assistant-messages" aria-live="polite">
-              {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`assistant-message ${
-                    message.role === "user"
-                      ? "user-message"
-                      : "ai-message"
+              return (
+                <button
+                  type="button"
+                  key={topic.id}
+                  className={`assistant-topic-card ${
+                    isSelected ? "is-selected" : ""
                   }`}
+                  onClick={() => handleTopicChange(topic.id)}
+                  aria-pressed={isSelected}
+                  disabled={loading}
                 >
-                  <div className="message-avatar">
-                    {message.role === "user" ? "You" : "✧"}
-                  </div>
-
-                  <div className="message-content">
-                    <span className="message-sender">
-                      {message.role === "user"
-                        ? "You"
-                        : "DermaNova AI"}
+                  <div className="assistant-topic-top">
+                    <span className="assistant-topic-icon">
+                      <Icon />
                     </span>
 
-                    <p>{message.text}</p>
+                    {isSelected && (
+                      <span className="assistant-selected-mark">
+                        <HiOutlineSparkles />
+                      </span>
+                    )}
+                  </div>
+
+                  <span className="assistant-topic-label">
+                    {topic.label}
+                  </span>
+
+                  <h3>{topic.title}</h3>
+                  <p>{topic.description}</p>
+
+                  
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Chat */}
+        <section className="assistant-chat-section" id="assistant-chat">
+          <div className="assistant-chat-heading">
+            <div>
+              <span className="assistant-section-kicker">
+                YOUR CONVERSATION
+              </span>
+              <h2>Let's talk skincare.</h2>
+              <p>
+                Ask a question and explore reliable skincare information.
+              </p>
+            </div>
+
+            {conversationHistory.length > 0 && (
+              <button
+                type="button"
+                className="assistant-new-chat"
+                onClick={handleNewChat}
+                disabled={loading}
+              >
+                <HiOutlineRefresh />
+                New chat
+              </button>
+            )}
+          </div>
+
+          <div className="assistant-chat-card">
+            <div className="assistant-chat-topbar">
+              <div className="assistant-chat-avatar">
+                <HiOutlineSparkles />
+              </div>
+
+              <div className="assistant-chat-identity">
+                <strong>DermaNova Assistant</strong>
+                <span>
+                  <i />
+                  Ready to help you learn
+                </span>
+              </div>
+
+              <span className="assistant-chat-topic">
+                {selectedConsultation?.label || "Skin"}
+              </span>
+            </div>
+
+            <div
+              className="assistant-messages"
+              aria-live="polite"
+              aria-label="Conversation messages"
+            >
+              {conversationHistory.length === 0 ? (
+                <div className="assistant-welcome">
+                  <div className="assistant-welcome-icon">
+                    <HiOutlineChatAlt2 />
+                  </div>
+
+                  <h3>Welcome to your skincare space.</h3>
+
+                  <p>
+                    I'm here to help you understand skincare, ingredients,
+                    and everyday routines. What would you like to know?
+                  </p>
+
+                  <div className="assistant-suggestions">
+                    {[
+                      "How do I build a simple skincare routine?",
+                      "What is the purpose of niacinamide?",
+                      "How can I understand my skin type?",
+                    ].map((suggestion) => (
+                      <button
+                        type="button"
+                        key={suggestion}
+                        onClick={() => setMessage(suggestion)}
+                        disabled={loading}
+                      >
+                        {suggestion}
+                        <span>↗</span>
+                      </button>
+                    ))}
                   </div>
                 </div>
-              ))}
+              ) : (
+                conversationHistory.map((item, index) => (
+                  <div
+                    key={`${item.role}-${index}`}
+                    className={`assistant-message-row ${
+                      item.role === "user" ? "user-row" : "bot-row"
+                    }`}
+                  >
+                    {item.role === "assistant" && (
+                      <span className="assistant-message-avatar">
+                        <HiOutlineSparkles />
+                      </span>
+                    )}
+
+                    <div
+                      className={`assistant-message ${
+                        item.role === "user"
+                          ? "user-message"
+                          : "bot-message"
+                      }`}
+                    >
+                      <span className="assistant-message-author">
+                        {item.role === "user" ? "You" : "DermaNova"}
+                      </span>
+
+                      <p>{item.content}</p>
+                    </div>
+                  </div>
+                ))
+              )}
+
+              {loading && (
+                <div className="assistant-message-row bot-row">
+                  <span className="assistant-message-avatar">
+                    <HiOutlineSparkles />
+                  </span>
+
+                  <div className="assistant-message bot-message assistant-typing">
+                    <span className="assistant-message-author">
+                      DermaNova
+                    </span>
+                    <div className="assistant-typing-dots">
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
 
-          {loading && (
-            <div className="assistant-loading" role="status">
-              <span className="message-avatar">✧</span>
-              <span>Nova is preparing your skincare guidance...</span>
-            </div>
-          )}
+            {error && (
+              <div className="assistant-error" role="alert">
+                {error}
+              </div>
+            )}
 
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="assistant-question">
-              What would you like to know?
-            </label>
+            <form className="assistant-input-area" onSubmit={handleSubmit}>
+              <div className="assistant-input-wrap">
+                <textarea
+                  value={message}
+                  onChange={(event) => setMessage(event.target.value)}
+                  placeholder="Ask me anything about skincare..."
+                  rows={1}
+                  aria-label="Your skincare question"
+                  disabled={loading}
+                  onKeyDown={(event) => {
+                    if (
+                      event.key === "Enter" &&
+                      !event.shiftKey
+                    ) {
+                      event.preventDefault();
+                      event.currentTarget.form?.requestSubmit();
+                    }
+                  }}
+                />
 
-            <textarea
-              id="assistant-question"
-              value={question}
-              onChange={(e) => {
-                setQuestion(e.target.value);
-                setNotice("");
-              }}
-              placeholder="For example: Why am I experiencing dark spots, and what skincare steps can I consider?"
-              rows={4}
-              disabled={loading}
-            />
+                <button
+                  type="submit"
+                  className="assistant-send-button"
+                  disabled={loading || !message.trim()}
+                  aria-label="Send message"
+                >
+                  <HiOutlinePaperAirplane />
+                </button>
+              </div>
 
-            <div className="consultation-form-footer">
-              <span>✧ Detailed skincare guidance</span>
+              <span className="assistant-input-hint">
+                Press Enter to send · Shift + Enter for a new line
+              </span>
+            </form>
+          </div>
 
-              <button
-                type="submit"
-                disabled={!question.trim() || loading}
-              >
-                {loading ? "Thinking..." : "Continue"}
-                {!loading && <span> →</span>}
-              </button>
-            </div>
-          </form>
-
-          {notice && (
-            <div className="assistant-notice" role="alert">
-              {notice}
-            </div>
-          )}
-
-          {messages.length > 0 && !loading && (
-            <button
-              type="button"
-              className="assistant-new-chat"
-              onClick={startNewConsultation}
-            >
-              Start a new consultation
-            </button>
-          )}
-        </div>
-
-        <p className="assistant-disclaimer">
-          DermaNova provides AI-generated skincare information
-          for educational purposes. It does not replace professional
-          medical advice or diagnosis.
-        </p>
-      </section>
-    </div>
+          <p className="assistant-disclaimer">
+            <HiOutlineHeart />
+            DermaNova AI provides general skincare education, not medical
+            diagnosis or treatment. For persistent or concerning skin
+            problems, consult a qualified healthcare professional.
+          </p>
+        </section>
+      </div>
+    </main>
   );
 }
