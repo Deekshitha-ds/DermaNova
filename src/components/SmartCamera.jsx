@@ -35,9 +35,7 @@ export default function SmartCamera({ onResult,autoUpload = false, uploadOnly = 
   const captureCanvasRef = useRef(null);
   const containerRef = useRef(null);
   const fileInputRef = useRef(null);
-  const [result, setResult] = useState(() =>
-  uploadOnly ? null : getStoredScan()
-);
+  const [result, setResult] = useState(null);
 
   const holdStartRef = useRef(null);
   const animationRef = useRef(null);
@@ -49,11 +47,8 @@ export default function SmartCamera({ onResult,autoUpload = false, uploadOnly = 
 
   const [videoAspect, setVideoAspect] = useState(4 / 3);
 
-  const [phase, setPhase] = useState(() =>
-  !uploadOnly && getStoredScan()
-    ? "result"
-    : "scanning"
-);
+  const [phase, setPhase] = useState("scanning");
+
 
   const [holdProgress, setHoldProgress] = useState(0);
 
@@ -63,13 +58,16 @@ export default function SmartCamera({ onResult,autoUpload = false, uploadOnly = 
 
 
   useEffect(() => {
-  if (!result?.processed_image) return;
+  if (!result?.processed_image) {
+    setProcessedImage(null);
+    return;
+  }
 
   const imageUrl = result.processed_image.startsWith("http")
     ? result.processed_image
     : `http://127.0.0.1:8000${result.processed_image}`;
 
-  setProcessedImage(imageUrl);
+  setProcessedImage(`${imageUrl}?t=${Date.now()}`);
 }, [result]);
 
 
@@ -243,10 +241,15 @@ useEffect(() => {
 
     isUploading.current = true;
 
+    setResult(null);
+    setProcessedImage(null);
+    setCapturedImage(null);
+
+    sessionStorage.removeItem("dermanova_last_scan");
+
     setSubmitError("");
 
     setPhase("uploading");
-
     try {
 
       const blob = await captureFrame();
@@ -629,9 +632,16 @@ const handleImageUpload = async (event) => {
     return;
   }
 
+  setResult(null);
+  setProcessedImage(null);
+
+  sessionStorage.removeItem("dermanova_last_scan");
+
   setCapturedImage(URL.createObjectURL(file));
+
   try {
 
+    setSubmitError("");
     setPhase("uploading");
 
     const faceMeta = {

@@ -341,7 +341,7 @@
 .hl-float-d { bottom: 9%; right: -30px; animation-delay: -3.4s; }
 @media (max-width: 900px) { .hl-float { display: none; } }
 @media (prefers-reduced-motion: reduce) { .hl-float, .hl-flash { animation: none !important; } }
-<<<<<<< HEAD
+
 
 /* Premium loader */
 .haircare-loading { display: block; padding: 40px 20px; background: rgba(250, 247, 255, 0.9); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); }
@@ -437,5 +437,3 @@
   color: white;
   transform: translateY(-2px);
 }
-=======
->>>>>>> af2f43e396c832699514dddc5cdcf22e58951b6c

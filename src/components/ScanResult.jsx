@@ -141,10 +141,11 @@ const handleLoadRecommendations = async () => {
    import.meta.env.VITE_BACKEND_URL ||
   "http://127.0.0.1:8000";
 
-  const processedImageUrl = result.processed_image
-  ? result.processed_image.startsWith("http")
-    ? result.processed_image
-    : `${backendBaseUrl}${result.processed_image}`
+  const processedImageUrl = result?.processed_image
+  ? `${result.processed_image.startsWith("http")
+      ? result.processed_image
+      : `${backendBaseUrl}${result.processed_image}`
+    }?scan=${analysisId}&t=${new Date(result.created_at || Date.now()).getTime()}`
   : null;
   console.log("Analysis ID:", analysisId);
   console.log("Processed image path:", result?.processed_image);
@@ -531,6 +532,7 @@ const handleLoadRecommendations = async () => {
         <div className="relative overflow-hidden rounded-[28px] border border-lavender-100 bg-[#f7f4ff] shadow-inner">
 
           <img
+            key={`${analysisId}-${processedImageUrl}`}
             src={processedImageUrl}
             alt="DermaNova facial skin analysis visualization"
             className="block w-full max-h-[720px] object-contain"
